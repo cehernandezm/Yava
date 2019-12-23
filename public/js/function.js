@@ -507,7 +507,13 @@ $("#reportButton").on('click',function(e){
  */
 function analizarCodigoOLCEV(){
     let ed = editorActual.editor;
-    console.log(ed.getValue());
+    let codigo = ed.getValue();
+
+    GramaticaOLCEV.parse(codigo);
+    let instrucciones = GramaticaOLCEV.arbol.raiz;
+    instrucciones.forEach(element => {
+        console.log(element.ejecutar());
+    });
 }
 
 
