@@ -1,0 +1,180 @@
+body {
+    overflow: hidden;
+}
+
+.nav {
+    background-color: #21252b;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #7f8388;
+    font-size: 13;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.nav .nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    color: #ffff;
+    background-color: #282c34;
+    border-top: 0px solid #020202;
+    border-right: 1px solid #020202;
+    border-bottom: 0px solid #020202;
+    border-left: 1px solid #020202;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.nav .nav-tabs .nav-item.show .nav-link,
+.nav-tabs :hover {
+    background-color: #282c34;
+    border: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.nav .nav-tabs .nav-item.show .nav-link,
+.nav-tabs {
+    border: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.navbar-navEditable {
+    height: 100%;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.newFile {
+    border: 0;
+    margin-left: -15px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background-color: #21252b;
+}
+
+.textArea {
+    max-height: 100%;
+    overflow-y: hidden;
+}
+
+h7 {
+    font-family: "Courier New", Courier, monospace;
+    color: white;
+    margin-left: 15px;
+    margin-top: 5px;
+}
+
+.consolaTarget {
+    position: absolute;
+    bottom: 5%;
+    background-color: #282a36;
+    z-index: 1000;
+    height:25%;
+    width: 100%;
+    overflow-y: auto;
+    display: none;
+    border-top: 3px solid #474a4f;
+    border-right: 0px solid #2eb9ce;
+    border-bottom: 0px solid #2eb9ce;
+    border-left: 0px solid #2eb9ce;
+}
+
+.debugTarget {
+    display: none;
+    position: absolute;
+    right: 46%;
+    top: 50px;
+    width: 8%;
+    z-index: 100;
+    height: 5%;
+    background-color: #21252b;
+    -webkit-box-shadow: 4px 4px 5px 0px rgba(2, 2, 3, 1);
+    -moz-box-shadow: 4px 4px 5px 0px rgba(2, 2, 3, 1);
+    box-shadow: 4px 4px 5px 0px rgba(2, 2, 3, 1);
+}
+
+.messageError {
+    font-family: "Courier New", Courier, monospace;
+    color: #e53935;
+    margin-left: 5px;
+}
+
+.message {
+    font-family: "Courier New", Courier, monospace;
+    color: #e0e0e0;
+    margin-left: 5px;
+}
+
+.CodeMirror-selected {
+    background-color: blue !important;
+}
+
+.styled-background {
+    background-color: #2196f3;
+}
+
+.bodyInfo {
+    visibility: hidden;
+    position: absolute;
+    right: 5%;
+    top: 25%;
+    width: 20%;
+    z-index: 100;
+    height: 40%;
+}
+
+.stackInfo {
+    height: 100%;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.heapInfo {
+    height: 100%;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.tableStack {
+    overflow-y: auto;
+    height: 90%;
+    margin-left: -15%;
+    width: 130%;
+}
+
+.head {
+    text-align: center;
+    color: white;
+    justify-content: center;
+    font-family: 'entypo', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    background-color: #E64C65;
+}
+
+.elements {
+    width: 100%;
+    margin-top: 0px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.element {
+    background-color: #50597B;
+    margin-bottom: 3px;
+    text-align: center;
+    color: white;
+    font-family: 'entypo', sans-serif;
+    border-bottom: 1px solid #76B7B2;
+}

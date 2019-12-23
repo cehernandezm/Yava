@@ -1,0 +1,14 @@
+{
+  "name": "yaba",
+  "version": "1.0.0",
+  "description": "Proyecto 2 de Compiladores 2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Carlos Hernandez",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

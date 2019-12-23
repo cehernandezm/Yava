@@ -1,0 +1,192 @@
+<html>
+
+<head>
+    <title>
+        YAVA
+    </title>
+    <link rel="stylesheet" type="text/css" href="../theme/dracula.css" />
+    <link rel="stylesheet" href="../css/BootsTrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/BootsTrap/bootstrap.css" />
+    <link rel="stylesheet" href="../css/CodeMirror/codemirror.css" />
+    
+
+    <link rel="stylesheet" href="../css/Principal/plantilla.css" />
+
+    <script type="text/javascript" src="../js/Configuracion/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../js/CodeMirror/codemirror.js"></script>
+    <script type="text/javascript" src="../js/Bootstrap/popper.min.js"></script>
+    <script type="text/javascript" src="../js/Bootstrap/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="../mode/clike.js"></script>
+    <script type="text/javascript" src="../mode/pascal.js"></script>
+    <script type="text/javascript" src="../mode/gas.js"></script>
+    <script type="text/javascript" src="../js/Editores/configEditores.js"></script>
+</head>
+
+<body>
+    <!--                  CONTENEDOR                                  -->
+    <div class="container-fluid">
+        <!--                              MENU DE ACCIONES               -->
+        <div class="row" style="height: 5%;">
+            <!--                         PESTAÑAS                          -->
+            <div class="col-md-9">
+                <nav class="nav-tab">
+                    <div class="nav nav-tabs  navbar-navEditable" id="nav-tab" role="tablist"></div>
+                </nav>
+            </div>
+            <!--                         FIN PESTAÑAS                                     -->
+            <div class="col-md-3" style="background-color:#21252B;border:0;margin-bottom:1px;">
+                <div class="dropdown">
+                    <!--                                      NEW FILE BUTTON                        -->
+                    <img class="dropdown-toggle newFile" id="dropdownMenuButton" data-toggle="dropdown"
+                        aria-haspopup="true" src="../images/file.png" title="File" width="30px" height="30px">
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="newOLCEV" href="#">New OLCEV</a>
+                        <a class="dropdown-item" id="new3D" href="#">New 3D</a>
+                        <a class="dropdown-item" id="openOLCEV" href="#">Open OLCEV</a>
+                        <input type="file" id="filePascal" style="display: none;" multiple onchange="handleFilePascal(this.files)"/>
+                        <a class="dropdown-item" id="open3D" href="#">Open 3D</a>
+                        <input type="file" id="file3D" style="display: none;" multiple onchange="handleFile3D(this.files)"/>
+                        <a class="dropdown-item" id="saveFile" href="#">Save File</a>
+                    </div>
+                    <!--                                     DEBUG BUTTON                           -->
+                    <img src="../images/debug.png" id="debugButton" width="30px" height="30px" title="DEBUG CODE"
+                        style="margin-left:10px ;" />
+                    <!--                                    PLAY BUTTON                             -->
+                    <img src="../images/play.png" id="playButton" width="35px" height="35px" style="margin-left: 10px;"
+                        title="EJECUTAR CODIGO" />
+                    <!--                                   TRANSLATE BUTTON                    -->
+                    <img src="../images/traductor.png" id="translateButton" width="30px" height="30px"
+                        style="margin-left: 10px;" title="TRADUCIR CODIGO A ASSEMBLER" />
+
+                    <!--                                  OPTIMIZAR BUTTON                      -->
+                    <img src="../images/optimizacion.png" id="optimizarButton" width="30px" height="30px"
+                        style="margin-left:10px" title="OPTIMIZAR CODIGO 3D" />
+                    <!--                                   REPORTS BUTTON                           -->
+                    <img src="../images/reporte.png" id="reportButton" width="30px" height="30px"
+                        style="margin-left:10px" title="GENERAR REPORTE" />
+                </div>
+            </div>
+        </div>
+        <!--                         FIN MENU ACCIONES          -->
+        <!--                         EDTIORES                   -->
+        <div class="row" style="background-color:#282C34; height: 90%;margin-top: 2px; ">
+            <!--                    CONSOLA                        -->
+            <div id="espacioEditores" class="tab-content textArea" style="width: 100%;">
+                <div id="consolaTarget" class="consolaTarget"></div>
+                <!--                      OPCIONES DEBUG                                                -->
+                <div id="debugTarget" class="debugTarget">
+                    <img id="nextStep" src="../images/next.png" width="30px" height="30px" style="margin-left: 15px;" />
+                    <img id="stopDebug" src="../images/stop.png" width="30px" height="30px"
+                        style="margin-left: 15px;" />
+                </div>
+                <!--                    FIN OPCIONES DEBUG                      -->
+
+                <!--                  DIVS CON INFORMACION DEL STACK Y EL HEAP -->
+                <div id="bodyInfo" class="bodyInfo row">
+                    <!--              STACK                -->
+                    <div class="stackInfo col-md-5 ">
+                        <div class="head">
+                            Stack
+                        </div>
+                        <div id="elementsStack" class="elements">
+
+                        </div>
+                    </div>
+                    <!--              FIN STACK              -->
+                    <div class="col-md-2"></div>
+                    <div class="heapInfo col-md-5">
+                        <div class="head">
+                            Heap
+                        </div>
+                        <div id="elementsHeap" class="elements">
+
+                        </div>
+                    </div>
+                </div>
+                <!--                  FIN DIVS CON INFORMACION DEL STACK Y EL HEAP -->
+            </div>
+        </div>
+        <!--                   FIN EDITORES                       -->
+        <div class="row" style="background-color:#21252B; height: 5%;">
+            <h7 id="consolaClick"> > consola </h7>
+        </div>
+    </div>
+    <!--                 FIN  CONTENEDOR                                  -->
+
+
+
+
+
+    <!--                MODAL CON RESULTADO DE REGLAS APLICADAS PARA OPTIMIZACION                  -->
+    <div class="modal" tabindex="-1" role="dialog" id="modalOptimizacion">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">REGLAS APLICADAS</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <th>Linea</th>
+                            <th>Regla</th>
+                            <th>Detalle</th>
+                        </thead>
+                        <tbody id="bodyOptimizacion">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <!--                MODAL CON RESULTADO DE STACK                 -->
+     <div class="modal" tabindex="-1" role="dialog" id="modalStack">
+        <div class="modal-dialog" role="document" style="min-width:100%;min-height:100vh">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <th>NO.</th>
+                            <th>ID</th>
+                            <th>AMBITO</th>
+                            <th>ARCHIVO</th>
+                            <th>CONSTANTE</th>
+                            <th>PARAMETRO</th>
+                            <th>POSICION(ABSOLUTA)</th>
+                            <th>POSICION(RELATIVA)</th>
+                            <th>REFERENCIA</th>
+                            <th>TIPO</th>
+                        </thead>
+                        <tbody id="bodyModalStack">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../js/function.js"></script>
+
+<!--                              ASSEMBLER                                 -->
+
+
+<!--                                  SOCKETS                                         -->
+
+
+<!--                                  OPTIMIZAR CODIGO                    -->
+
+
+</html>
