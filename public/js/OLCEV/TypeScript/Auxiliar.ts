@@ -43,4 +43,36 @@ class Auxiliar{
         return {visibilidad: visibilidad,isStatic:isStatic,isFinal:isFinal,isAbstract:isAbstract} ;
     }
 
+    /**
+     * METODO ENCARGADO DE CREAR UN 
+     * AMBITO LINEAL EN STRING
+     * @param ambito ARREGLO DE LOS AMBITOS
+     */
+    public static crearAmbito(ambito:Array<String>):String{
+        let codigo:String = "";
+        ambito.forEach(element => {
+            codigo += element + "_";
+        });
+        return codigo;
+    }
+
+    /**
+     * METODO QUE SERVIRA PARA CLONAR UN ENTORNO
+     * @param entorno ENTORNO A CLONAR
+     */
+    public static clonarEntorno(entorno:Entorno):Entorno{
+        let e: Entorno = new Entorno(entorno.archivo);
+        e.listaSimbolos = entorno.listaSimbolos;
+        e.listaBreak = entorno.listaBreak;
+        e.listaContinue = entorno.listaContinue;
+        e.ambito = entorno.ambito;
+        e.etiquetaSalida = entorno.etiquetaSalida;
+        e.posRelativaStack = entorno.posRelativaStack;
+        e.clase = entorno.clase;
+        e.localizacion = entorno.localizacion;
+
+
+        return e;
+    }
+
 }

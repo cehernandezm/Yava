@@ -11,6 +11,8 @@
 "+"                                             return 'MAS'
 "{"                                             return 'LLAVEIZQ'
 "}"                                             return 'LLAVEDER'
+"("                                             return 'PARIZQ'
+")"                                             return 'PARDER'
 ";"                                             return 'PNTCOMA'
 [\'\‘\’].[\'\’\‘]                               return 'CARACTER'
 [\"\“\”](([^\"\“\”\\])*([\\].)*)*[\"\“\”]       return 'CADENA'
@@ -34,7 +36,7 @@
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
-.                                               { console.err("Error");}//ERRORES
+.                                               { console.log("Error"); }//ERRORES
 /lex
 
 %left MAS
@@ -67,6 +69,9 @@ declaracionClase : CLASS ID LLAVEIZQ  bloqueClase LLAVEDER                      
                  | modificador CLASS ID EXTENDS ID LLAVEIZQ bloqueClase LLAVEDER                    { $$ = new Clase($1,$3,$7,$5,@1.first_linea,@1.first_column)}
                  ;
 
+// ####################################################
+// #################### MODIFICADORES #################
+// ####################################################
 
 modificador : modificador PROTECTED                                         { $$ = $1; $$.push(Modificador.PROTECTED); }
             | modificador PRIVATE                                           { $$ = $1; $$.push(Modificador.PRIVATE); }
@@ -82,20 +87,37 @@ modificador : modificador PROTECTED                                         { $$
             | FINAL                                                         { $$ = []; $$.push(Modificador.FINAL); }
             ;
 
-
+//#############################################################
+//################### INSTRUCCIONES DE UNA CLASE ##############
+//#############################################################
 bloqueClase : bloqueClase bloque                            { $$ = $1; $$.push($2); }
             | bloque                                        { $$ = []; $$.push($1); }
             ;
 
 bloque : declaracionVariable PNTCOMA                                { $$ = $1; }
+       | declaracionConstructor                                     { $$ = $1; }
        ;
 
 
+//########################################################################
+//################# DECLARACION DE CONSTRUCTORES #########################
+//########################################################################
+declaracionConstructor : PUBLIC ID PARIZQ PARDER LLAVEIZQ LLAVEDER                { $$ = new Constructor($2,[],[],@1.first_linea,@1.first_column); }
+                       ;
+
+
+
+
+//####################################################
+//################ DECLARACION DE VARIABLES ##########
+//####################################################
 declaracionVariable : modificador tipo ID                   { $$ = new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_linea,@1.first_column); }
                     | tipo ID                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_linea,@1.first_column); }
                     ;
 
-
+//#######################################################################
+//##################### TIPOS DE DATOS ##################################
+//#######################################################################
 tipo : STRING                                       { $$ = new Valor(Tipo.STRING,""); }
      | INT                                          { $$ = new Valor(Tipo.INT,""); }
      | DOUBLE                                       { $$ = new Valor(Tipo.DOUBLE,""); }

@@ -15,6 +15,7 @@ var Nodo = /** @class */ (function (_super) {
     __extends(Nodo, _super);
     function Nodo(codigo, resultado, tipo, valor) {
         var _this = _super.call(this, tipo, valor) || this;
+        _this.codigo = [];
         _this.codigo = codigo;
         _this.resultado = resultado;
         return _this;

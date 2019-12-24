@@ -1,5 +1,5 @@
 class Nodo extends Valor{
-    codigo:Array<String>;
+    codigo:Array<String> = [];
     resultado:String;
     rol:String;
     estructura:number;

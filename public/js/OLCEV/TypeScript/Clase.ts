@@ -8,6 +8,15 @@ class Clase implements Instruccion {
     l: number;
     c: number;
 
+    /**
+     * CONSTRUCTOR DE LA CLASE
+     * @param modificiador Modificador que afectara a la clase
+     * @param nombre nombre de la clase
+     * @param instrucciones lista de instrucciones
+     * @param extender nombre de la clase a la que extendera
+     * @param l linea de la instruccion
+     * @param c columna de la instruccion
+     */
     constructor(modificiador: Array<Modificador>, nombre: String, instrucciones: Array<Instruccion>, extender: String, l: number, c: number) {
         this.modificador = modificiador;
         this.nombre = nombre;
@@ -18,10 +27,21 @@ class Clase implements Instruccion {
     }
 
 
+    /**
+     * ESTA CLASE NO IMPLEMENTA EL METODO EJECUTAR
+     * @param entorno Entorno actual
+     */
     ejecutar(entorno:Entorno): Object {
         return null;
     }
 
+    /**
+     * PRIMERA PASADA DE LA CLASE
+     * Donde se alamcenara en listaClase
+     * se obtendra su tamaño
+     * atributos y metodos
+     * @param entorno Entorno Actual
+     */
     primeraPasada(entorno: Entorno): Object {
         let claseTemp: Simbolo = getClase(this.nombre);
         if (claseTemp != null) {
@@ -114,9 +134,49 @@ class Clase implements Instruccion {
         s.entorno = entorno;
         agregarClase(s);
 
+        entorno.clase = this.nombre;
+        /**
+         * ALMACENAMOS TODOS SUS ATRIBUTOS
+         */
         this.instrucciones.forEach(element => {
             if(element instanceof Declaracion) element.ejecutar(entorno);
         });
+
+        /**
+         * BUSCAMOS SI TIENE UN CONSTRUCTOR 
+         * DE LO CONTRARIO GENERAMOS UNO 
+         * AUTOMATICAMENTE
+         */
+        let flag:Boolean = false;
+        this.instrucciones.forEach(element => {
+            if(element instanceof Constructor) {
+                let e: Entorno = Auxiliar.clonarEntorno(entorno);
+                element.primeraPasada(e);
+                flag = true;
+            }
+        });
+
+        if(!flag){
+            let nodo:Nodo = new Nodo();
+            nodo.codigo = [];
+            nodo.codigo.push(";#############################");
+            nodo.codigo.push(";########CONSTRUCTOR " + this.nombre);
+            nodo.codigo.push(";#############################");
+            nodo.codigo.push("proc " + this.nombre + "{");
+            
+            entorno.listaSimbolos.forEach(s => {
+                //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
+                if(s.localizacion == Localizacion.STACK) nodo.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0","iniciando variable: " + s.id));
+                else{
+                    let pos:String = Auxiliar.generarTemporal();
+                    nodo.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                    nodo.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa,"Nos movemos hacia la variable que necesitamos"));
+                    nodo.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0","Iniciando variable: " + s.id));
+                }
+            });
+            nodo.codigo.push("}");
+            return nodo;
+        }
         return true;
     }
 }

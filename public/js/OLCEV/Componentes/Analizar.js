@@ -5,10 +5,12 @@ var Analizar = /** @class */ (function () {
     Analizar.prototype.ejecutar = function (id) {
         this.instrucciones.forEach(function (clase) {
             var entorno = new Entorno(id);
-            entorno.ambito = id;
-            if (clase instanceof Clase)
-                clase.primeraPasada(entorno);
-            console.log(entorno);
+            entorno.ambito.push(id);
+            if (clase instanceof Clase) {
+                var resultado = clase.primeraPasada(entorno);
+                console.log(resultado);
+            }
+            //console.log(entorno);
         });
     };
     return Analizar;

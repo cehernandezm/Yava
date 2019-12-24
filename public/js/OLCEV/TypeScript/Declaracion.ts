@@ -28,7 +28,7 @@ class Declaracion extends Valor implements Instruccion{
      * @param entorno Entorno actual
      */
     ejecutar(entorno:Entorno):Object{
-        let s:Simbolo = entorno.buscarSimbolo(this.id);
+        let s:Simbolo = entorno.buscarSimbolo(this.id,Auxiliar.crearAmbito(entorno.ambito));
         //---------------------------------------------- Si ya existe una variable con ese nombre
         if(s != null){
             let mensaje:MensajeError = new MensajeError("Semantico","El identificador: " + this.id + " ya existe",entorno.archivo,this.l,this.c);
@@ -106,7 +106,7 @@ class Declaracion extends Valor implements Instruccion{
         let simbolo:Simbolo = new Simbolo();
         simbolo.id = this.id;
         simbolo.rol = Rol.VARIABLE;
-        simbolo.insIntanciada = false;
+        simbolo.isNul = false;
         simbolo.tipo = this.tipo;
         
         simbolo.posRelativa = entorno.getPosRelativa();
@@ -118,7 +118,7 @@ class Declaracion extends Valor implements Instruccion{
             simbolo.posAbsoluta = -1;
         }
         simbolo.atributo = atributo;
-        simbolo.ambito = entorno.ambito;
+        simbolo.ambito = Auxiliar.crearAmbito(entorno.ambito);
 
         entorno.agregarSimbolo(simbolo);
         return true;

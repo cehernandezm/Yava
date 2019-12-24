@@ -37,6 +37,34 @@ var Auxiliar = /** @class */ (function () {
     Auxiliar.crearObjectoAtributos = function (visibilidad, isFinal, isStatic, isAbstract) {
         return { visibilidad: visibilidad, isStatic: isStatic, isFinal: isFinal, isAbstract: isAbstract };
     };
+    /**
+     * METODO ENCARGADO DE CREAR UN
+     * AMBITO LINEAL EN STRING
+     * @param ambito ARREGLO DE LOS AMBITOS
+     */
+    Auxiliar.crearAmbito = function (ambito) {
+        var codigo = "";
+        ambito.forEach(function (element) {
+            codigo += element + "_";
+        });
+        return codigo;
+    };
+    /**
+     * METODO QUE SERVIRA PARA CLONAR UN ENTORNO
+     * @param entorno ENTORNO A CLONAR
+     */
+    Auxiliar.clonarEntorno = function (entorno) {
+        var e = new Entorno(entorno.archivo);
+        e.listaSimbolos = entorno.listaSimbolos;
+        e.listaBreak = entorno.listaBreak;
+        e.listaContinue = entorno.listaContinue;
+        e.ambito = entorno.ambito;
+        e.etiquetaSalida = entorno.etiquetaSalida;
+        e.posRelativaStack = entorno.posRelativaStack;
+        e.clase = entorno.clase;
+        e.localizacion = entorno.localizacion;
+        return e;
+    };
     Auxiliar.temporal = 0;
     Auxiliar.posicion = 0;
     return Auxiliar;

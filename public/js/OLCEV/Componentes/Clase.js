@@ -1,4 +1,13 @@
 var Clase = /** @class */ (function () {
+    /**
+     * CONSTRUCTOR DE LA CLASE
+     * @param modificiador Modificador que afectara a la clase
+     * @param nombre nombre de la clase
+     * @param instrucciones lista de instrucciones
+     * @param extender nombre de la clase a la que extendera
+     * @param l linea de la instruccion
+     * @param c columna de la instruccion
+     */
     function Clase(modificiador, nombre, instrucciones, extender, l, c) {
         this.modificador = modificiador;
         this.nombre = nombre;
@@ -7,9 +16,20 @@ var Clase = /** @class */ (function () {
         this.l = l;
         this.c = c;
     }
+    /**
+     * ESTA CLASE NO IMPLEMENTA EL METODO EJECUTAR
+     * @param entorno Entorno actual
+     */
     Clase.prototype.ejecutar = function (entorno) {
         return null;
     };
+    /**
+     * PRIMERA PASADA DE LA CLASE
+     * Donde se alamcenara en listaClase
+     * se obtendra su tamaño
+     * atributos y metodos
+     * @param entorno Entorno Actual
+     */
     Clase.prototype.primeraPasada = function (entorno) {
         var _this = this;
         var claseTemp = getClase(this.nombre);
@@ -98,10 +118,48 @@ var Clase = /** @class */ (function () {
         var s = new Simbolo(this.nombre, Rol.CLASE, tam, Auxiliar.crearObjectoAtributos(visibilidad, isFinal, isStatic, isAbstract), this.instrucciones);
         s.entorno = entorno;
         agregarClase(s);
+        entorno.clase = this.nombre;
+        /**
+         * ALMACENAMOS TODOS SUS ATRIBUTOS
+         */
         this.instrucciones.forEach(function (element) {
             if (element instanceof Declaracion)
                 element.ejecutar(entorno);
         });
+        /**
+         * BUSCAMOS SI TIENE UN CONSTRUCTOR
+         * DE LO CONTRARIO GENERAMOS UNO
+         * AUTOMATICAMENTE
+         */
+        var flag = false;
+        this.instrucciones.forEach(function (element) {
+            if (element instanceof Constructor) {
+                var e = Auxiliar.clonarEntorno(entorno);
+                element.primeraPasada(e);
+                flag = true;
+            }
+        });
+        if (!flag) {
+            var nodo_1 = new Nodo();
+            nodo_1.codigo = [];
+            nodo_1.codigo.push(";#############################");
+            nodo_1.codigo.push(";########CONSTRUCTOR " + this.nombre);
+            nodo_1.codigo.push(";#############################");
+            nodo_1.codigo.push("proc " + this.nombre + "{");
+            entorno.listaSimbolos.forEach(function (s) {
+                //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
+                if (s.localizacion == Localizacion.STACK)
+                    nodo_1.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0", "iniciando variable: " + s.id));
+                else {
+                    var pos = Auxiliar.generarTemporal();
+                    nodo_1.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                    nodo_1.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
+                    nodo_1.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
+                }
+            });
+            nodo_1.codigo.push("}");
+            return nodo_1;
+        }
         return true;
     };
     return Clase;

@@ -8,7 +8,7 @@ class Simbolo{
     atributo:Object;
     dimensiones:number;
     isParam : Boolean;
-    insIntanciada : Boolean;
+    isNul : Boolean;
     localizacion:Localizacion;
     instrucciones:Array<Instruccion>;
     entorno:Entorno;
@@ -32,6 +32,7 @@ class Simbolo{
         this.tam = tam;
         this.atributo = atributo;
         this.instrucciones = instrucciones;
+        this.isNul = true;
     }
     
 

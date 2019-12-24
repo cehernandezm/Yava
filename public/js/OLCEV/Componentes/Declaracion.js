@@ -36,7 +36,7 @@ var Declaracion = /** @class */ (function (_super) {
      */
     Declaracion.prototype.ejecutar = function (entorno) {
         var _this = this;
-        var s = entorno.buscarSimbolo(this.id);
+        var s = entorno.buscarSimbolo(this.id, Auxiliar.crearAmbito(entorno.ambito));
         //---------------------------------------------- Si ya existe una variable con ese nombre
         if (s != null) {
             var mensaje = new MensajeError("Semantico", "El identificador: " + this.id + " ya existe", entorno.archivo, this.l, this.c);
@@ -107,7 +107,7 @@ var Declaracion = /** @class */ (function (_super) {
         var simbolo = new Simbolo();
         simbolo.id = this.id;
         simbolo.rol = Rol.VARIABLE;
-        simbolo.insIntanciada = false;
+        simbolo.isNul = false;
         simbolo.tipo = this.tipo;
         simbolo.posRelativa = entorno.getPosRelativa();
         if (isStatic) {
@@ -119,7 +119,7 @@ var Declaracion = /** @class */ (function (_super) {
             simbolo.posAbsoluta = -1;
         }
         simbolo.atributo = atributo;
-        simbolo.ambito = entorno.ambito;
+        simbolo.ambito = Auxiliar.crearAmbito(entorno.ambito);
         entorno.agregarSimbolo(simbolo);
         return true;
     };

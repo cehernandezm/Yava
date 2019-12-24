@@ -5,6 +5,7 @@ var Simbolo = /** @class */ (function () {
         this.tam = tam;
         this.atributo = atributo;
         this.instrucciones = instrucciones;
+        this.isNul = true;
     }
     return Simbolo;
 }());
