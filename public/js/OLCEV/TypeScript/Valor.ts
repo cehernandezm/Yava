@@ -9,21 +9,7 @@ class Valor{
     }
 
 
-    getTipo():Tipo{
-        return this.tipo;
-    }
-
-    setTipo(tipo:Tipo){
-        this.tipo = tipo;
-    }
-
-    getValor():Object{
-        return this.valor;
-    }
-
-    setValor(valor:Object){
-        this.valor = valor;
-    }
+    
 }
 
 
@@ -32,6 +18,7 @@ enum Tipo{
     DOUBLE,
     STRING,
     CHAR,
+    BOOLEAN,
     ID
 };
 
@@ -39,3 +26,29 @@ enum Tipo{
 enum Operacion{
     SUMA
 };
+
+enum Modificador{
+    PUBLIC,
+    PROTECTED,
+    PRIVATE,
+    STATIC,
+    FINAL,
+    ABSTRACT
+}
+
+enum Visibilidad{
+    PUBLIC,
+    PROTECTED,
+    PRIVATE
+}
+
+enum Localizacion{
+    HEAP,
+    STACK
+}
+
+enum Rol{
+    CLASE,
+    VARIABLE
+}
+

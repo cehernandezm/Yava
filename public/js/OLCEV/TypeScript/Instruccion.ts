@@ -1,3 +1,4 @@
 interface Instruccion{
-    ejecutar(ambito:Ambito):Object;
+    ejecutar(entorno:Entorno):Object;
+    primeraPasada(entorno:Entorno):Object;
 }

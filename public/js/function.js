@@ -20,6 +20,9 @@
  */
 
 
+var listaClases = [];
+
+
 var listaSalida = [];
 var listaEtiquetas = [];
 var listaFuncion = [];
@@ -508,12 +511,10 @@ $("#reportButton").on('click',function(e){
 function analizarCodigoOLCEV(){
     let ed = editorActual.editor;
     let codigo = ed.getValue();
-
+    listaClases = [];
     GramaticaOLCEV.parse(codigo);
-    let instrucciones = GramaticaOLCEV.arbol.raiz;
-    instrucciones.forEach(element => {
-        console.log(element.ejecutar());
-    });
+    let analizar = GramaticaOLCEV.arbol.raiz;
+    analizar.ejecutar("principal");
 }
 
 
@@ -853,4 +854,23 @@ function isTemporal(linea){
 function operadoresLogicos(operador){
     let operadores  = ["je","jne","jg","jl","jge","jle"];
     return operadores.find(element => element === operador.toLowerCase());
+}
+
+
+/**
+ * METODO PARA AGREGAR CLASES
+ */
+function agregarClase(clase){
+    listaClases.push(clase);
+}
+
+/**
+ * METODO PARA BUSCAR CLASES
+ * @param id Nombre de la clase a buscar
+ */
+function getClase(id){
+    for(let i = 0; i < listaClases.length; i++){
+        if(listaClases[i].id === id) return listaClases[i]
+    }
+    return null;
 }

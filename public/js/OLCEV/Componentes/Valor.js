@@ -3,18 +3,6 @@ var Valor = /** @class */ (function () {
         this.tipo = tipo;
         this.valor = valor;
     }
-    Valor.prototype.getTipo = function () {
-        return this.tipo;
-    };
-    Valor.prototype.setTipo = function (tipo) {
-        this.tipo = tipo;
-    };
-    Valor.prototype.getValor = function () {
-        return this.valor;
-    };
-    Valor.prototype.setValor = function (valor) {
-        this.valor = valor;
-    };
     return Valor;
 }());
 var Tipo;
@@ -23,7 +11,8 @@ var Tipo;
     Tipo[Tipo["DOUBLE"] = 1] = "DOUBLE";
     Tipo[Tipo["STRING"] = 2] = "STRING";
     Tipo[Tipo["CHAR"] = 3] = "CHAR";
-    Tipo[Tipo["ID"] = 4] = "ID";
+    Tipo[Tipo["BOOLEAN"] = 4] = "BOOLEAN";
+    Tipo[Tipo["ID"] = 5] = "ID";
 })(Tipo || (Tipo = {}));
 ;
 var Operacion;
@@ -31,3 +20,28 @@ var Operacion;
     Operacion[Operacion["SUMA"] = 0] = "SUMA";
 })(Operacion || (Operacion = {}));
 ;
+var Modificador;
+(function (Modificador) {
+    Modificador[Modificador["PUBLIC"] = 0] = "PUBLIC";
+    Modificador[Modificador["PROTECTED"] = 1] = "PROTECTED";
+    Modificador[Modificador["PRIVATE"] = 2] = "PRIVATE";
+    Modificador[Modificador["STATIC"] = 3] = "STATIC";
+    Modificador[Modificador["FINAL"] = 4] = "FINAL";
+    Modificador[Modificador["ABSTRACT"] = 5] = "ABSTRACT";
+})(Modificador || (Modificador = {}));
+var Visibilidad;
+(function (Visibilidad) {
+    Visibilidad[Visibilidad["PUBLIC"] = 0] = "PUBLIC";
+    Visibilidad[Visibilidad["PROTECTED"] = 1] = "PROTECTED";
+    Visibilidad[Visibilidad["PRIVATE"] = 2] = "PRIVATE";
+})(Visibilidad || (Visibilidad = {}));
+var Localizacion;
+(function (Localizacion) {
+    Localizacion[Localizacion["HEAP"] = 0] = "HEAP";
+    Localizacion[Localizacion["STACK"] = 1] = "STACK";
+})(Localizacion || (Localizacion = {}));
+var Rol;
+(function (Rol) {
+    Rol[Rol["CLASE"] = 0] = "CLASE";
+    Rol[Rol["VARIABLE"] = 1] = "VARIABLE";
+})(Rol || (Rol = {}));
