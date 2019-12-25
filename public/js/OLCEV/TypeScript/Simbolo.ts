@@ -12,7 +12,6 @@ class Simbolo{
     localizacion:Localizacion;
     instrucciones:Array<Instruccion>;
     entorno:Entorno;
-    ambito:String;
 
 
     constructor()
@@ -33,6 +32,7 @@ class Simbolo{
         this.atributo = atributo;
         this.instrucciones = instrucciones;
         this.isNul = true;
+        this.localizacion = localizacion;
     }
     
 

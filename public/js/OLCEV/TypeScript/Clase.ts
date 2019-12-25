@@ -43,6 +43,8 @@ class Clase implements Instruccion {
      * @param entorno Entorno Actual
      */
     primeraPasada(entorno: Entorno): Object {
+        let salida:Nodo = new Nodo();
+        salida.codigo = [];
         let claseTemp: Simbolo = getClase(this.nombre);
         if (claseTemp != null) {
             let mensaje: MensajeError = new MensajeError("Semantico", "La clase: " + this.nombre + " ya existe", entorno.archivo, this.l, this.c);
@@ -151,18 +153,27 @@ class Clase implements Instruccion {
         this.instrucciones.forEach(element => {
             if(element instanceof Constructor) {
                 let e: Entorno = Auxiliar.clonarEntorno(entorno);
-                element.primeraPasada(e);
+                e.localizacion = Localizacion.STACK;
+                e.posRelativaStack = 1;
+                let resultado: Object = element.primeraPasada(e);
+                if(!(resultado instanceof MensajeError)){
+                    let nodo:Nodo = resultado as Nodo;
+                    salida.codigo = salida.codigo.concat(nodo.codigo);
+                }
                 flag = true;
             }
         });
 
+        /**
+         * SI NO SE ENCONTRO NINGUN CONSTRUCTOR SE CREA UNO CON TODOS LOS ATRIBUTOS
+         */
         if(!flag){
             let nodo:Nodo = new Nodo();
             nodo.codigo = [];
             nodo.codigo.push(";#############################");
             nodo.codigo.push(";########CONSTRUCTOR " + this.nombre);
             nodo.codigo.push(";#############################");
-            nodo.codigo.push("proc " + this.nombre + "{");
+            nodo.codigo.push("proc contructor_" + this.nombre + "{");
             
             entorno.listaSimbolos.forEach(s => {
                 //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
@@ -175,8 +186,8 @@ class Clase implements Instruccion {
                 }
             });
             nodo.codigo.push("}");
-            return nodo;
+            salida.codigo = salida.codigo.concat(nodo.codigo);
         }
-        return true;
+        return salida;
     }
 }

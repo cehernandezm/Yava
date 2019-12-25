@@ -515,9 +515,23 @@ function analizarCodigoOLCEV(){
     listaClases = [];
     GramaticaOLCEV.parse(codigo);
     let analizar = GramaticaOLCEV.arbol.raiz;
-    analizar.ejecutar("principal");
+    let nodo = analizar.ejecutar("principal");
+    let texto = obtenerCodigo(nodo.codigo);
+    new3D(texto);
 }
 
+/**
+ * METODO QUE SE ENCARGARA DE RECORRER
+ * EL ARREGLO DE TEXTO Y NOS
+ * DEVUELVE UN TEXTO PLANO
+ */
+function obtenerCodigo(codigo){
+    let texto = "";
+    codigo.forEach(element => {
+        texto += element + "\n";
+    });
+    return texto;
+}
 
 
 

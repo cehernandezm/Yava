@@ -8,15 +8,14 @@ var Entorno = /** @class */ (function () {
         this.posRelativaStack = 0;
         this.archivo = archivo;
         this.listaSimbolos = [];
-        this.ambito = [];
     }
     /**
      * METODO PARA OBTENER UNA VARIABLE
      * @param id NOMBRE DE LA VARIABLE
      */
-    Entorno.prototype.buscarSimbolo = function (id, ambito) {
+    Entorno.prototype.buscarSimbolo = function (id) {
         for (var i = this.listaSimbolos.length - 1; i >= 0; i--) {
-            if (this.listaSimbolos[i].id === id && ambito === this.listaSimbolos[i].ambito)
+            if (this.listaSimbolos[i].id === id)
                 return this.listaSimbolos[i];
         }
         return null;

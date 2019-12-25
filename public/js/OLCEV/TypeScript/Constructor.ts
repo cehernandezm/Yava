@@ -1,9 +1,9 @@
-class Constructor implements Instruccion{
-    id:String;
-    parametros:Array<Parametro>;
-    instrucciones:Array<Instruccion>;
-    l:number;
-    c:number;
+class Constructor implements Instruccion {
+    id: String;
+    parametros: Array<Parametro>;
+    instrucciones: Array<Instruccion>;
+    l: number;
+    c: number;
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -13,31 +13,50 @@ class Constructor implements Instruccion{
      * @param l linea de la instruccion
      * @param c columna de la instruccion
      */
-    constructor(id:String,parametros:Array<Parametro>,instrucciones:Array<Instruccion>,l:number,c:number){
+    constructor(id: String, parametros: Array<Parametro>, instrucciones: Array<Instruccion>, l: number, c: number) {
         this.id = id;
         this.parametros = parametros;
         this.instrucciones = instrucciones;
         this.l = l;
         this.c = c;
     }
-    
-    
+
+
     ejecutar(entorno: Entorno): Object {
         return "";
     }
-    
+
     /**
      * ESTA CLASE NO TIENE PRIMERA PASADA
      * @param entorno Entorno actual
      */
     primeraPasada(entorno: Entorno): Object {
-        if(entorno.clase !== this.id){
-            let mensaje:MensajeError = new MensajeError("Semantico","El nombre de la clase es: " + entorno.clase + " y el del constructor es: " + this.id,entorno.archivo,this.l,this.c);
+        if (entorno.clase !== this.id) {
+            let mensaje: MensajeError = new MensajeError("Semantico", "El nombre de la clase es: " + entorno.clase + " y el del constructor es: " + this.id, entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
 
-        return "";
+        let salida: Nodo = new Nodo();
+        salida.codigo = [];
+        salida.codigo.push(";#############################");
+        salida.codigo.push(";########CONSTRUCTOR " + this.id);
+        salida.codigo.push(";#############################");
+        salida.codigo.push("proc contructor_" + this.id + "{");
+
+
+
+        this.instrucciones.forEach(element => {
+            let resultado:Object = element.ejecutar(entorno);
+            if(!(resultado instanceof MensajeError)){
+                let nodo:Nodo = resultado as Nodo;
+                salida.codigo = salida.codigo.concat(nodo.codigo);
+            }
+        });
+
+
+        salida.codigo.push("}");
+        return salida;
     }
 
 

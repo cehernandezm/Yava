@@ -32,6 +32,8 @@ var Clase = /** @class */ (function () {
      */
     Clase.prototype.primeraPasada = function (entorno) {
         var _this = this;
+        var salida = new Nodo();
+        salida.codigo = [];
         var claseTemp = getClase(this.nombre);
         if (claseTemp != null) {
             var mensaje = new MensajeError("Semantico", "La clase: " + this.nombre + " ya existe", entorno.archivo, this.l, this.c);
@@ -135,17 +137,26 @@ var Clase = /** @class */ (function () {
         this.instrucciones.forEach(function (element) {
             if (element instanceof Constructor) {
                 var e = Auxiliar.clonarEntorno(entorno);
-                element.primeraPasada(e);
+                e.localizacion = Localizacion.STACK;
+                e.posRelativaStack = 1;
+                var resultado = element.primeraPasada(e);
+                if (!(resultado instanceof MensajeError)) {
+                    var nodo = resultado;
+                    salida.codigo = salida.codigo.concat(nodo.codigo);
+                }
                 flag = true;
             }
         });
+        /**
+         * SI NO SE ENCONTRO NINGUN CONSTRUCTOR SE CREA UNO CON TODOS LOS ATRIBUTOS
+         */
         if (!flag) {
             var nodo_1 = new Nodo();
             nodo_1.codigo = [];
             nodo_1.codigo.push(";#############################");
             nodo_1.codigo.push(";########CONSTRUCTOR " + this.nombre);
             nodo_1.codigo.push(";#############################");
-            nodo_1.codigo.push("proc " + this.nombre + "{");
+            nodo_1.codigo.push("proc contructor_" + this.nombre + "{");
             entorno.listaSimbolos.forEach(function (s) {
                 //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
                 if (s.localizacion == Localizacion.STACK)
@@ -158,9 +169,9 @@ var Clase = /** @class */ (function () {
                 }
             });
             nodo_1.codigo.push("}");
-            return nodo_1;
+            salida.codigo = salida.codigo.concat(nodo_1.codigo);
         }
-        return true;
+        return salida;
     };
     return Clase;
 }());

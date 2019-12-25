@@ -7,16 +7,22 @@ class Analizar {
 
 
 
-    ejecutar(id: String) {
-
+    ejecutar(id: String):Object {
+        let nodo:Nodo = new Nodo();
+        nodo.codigo = [];
+        nodo.codigo = nodo.codigo.concat(Auxiliar.funcionTrunk().codigo);
+        nodo.codigo = nodo.codigo.concat(Auxiliar.functionNumberToCadena().codigo);
         this.instrucciones.forEach(clase => {
             let entorno: Entorno = new Entorno(id);
-            entorno.ambito.push(id);
             if (clase instanceof Clase) {
                 let resultado:Object = clase.primeraPasada(entorno);
-                console.log(resultado);
+                if(!(resultado instanceof MensajeError)){
+                    let res:Nodo = resultado as Nodo;
+                    nodo.codigo = nodo.codigo.concat(res.codigo);
+                }
             }
             //console.log(entorno);
         });
+        return nodo;
     }
 }

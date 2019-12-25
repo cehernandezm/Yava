@@ -8,12 +8,18 @@
 "-"[0-9]+                                       return 'ENTERO'
 [0-9]+("."[0-9]+)                               return 'DECIMAL'
 [0-9]+                                          return 'ENTERO'
+
 "+"                                             return 'MAS'
+"="                                             return 'IGUAL'
+
+
 "{"                                             return 'LLAVEIZQ'
 "}"                                             return 'LLAVEDER'
 "("                                             return 'PARIZQ'
 ")"                                             return 'PARDER'
 ";"                                             return 'PNTCOMA'
+
+
 [\'\‘\’].[\'\’\‘]                               return 'CARACTER'
 [\"\“\”](([^\"\“\”\\])*([\\].)*)*[\"\“\”]       return 'CADENA'
 
@@ -39,6 +45,7 @@
 .                                               { console.log("Error"); }//ERRORES
 /lex
 
+%right IGUAL
 %left MAS
 %start inicio
 
@@ -66,7 +73,7 @@ contenido : contenido declaracionClase                          { $$ = $1; $$.pu
 declaracionClase : CLASS ID LLAVEIZQ  bloqueClase LLAVEDER                                          { $$ = new Clase(null,$2,$4,null,@1.first_line,@1.first_column); }
                  | CLASS ID EXTENDS ID LLAVEIZQ bloqueClase LLAVEDER                                { $$ = new Clase(null,$2,$6,$4,@1.first_line,@1.first_column);}
                  | modificador CLASS ID LLAVEIZQ bloqueClase LLAVEDER                              { $$ = new Clase($1,$3,$5,null,@1.first_line,@1.first_column); }
-                 | modificador CLASS ID EXTENDS ID LLAVEIZQ bloqueClase LLAVEDER                    { $$ = new Clase($1,$3,$7,$5,@1.first_linea,@1.first_column)}
+                 | modificador CLASS ID EXTENDS ID LLAVEIZQ bloqueClase LLAVEDER                    { $$ = new Clase($1,$3,$7,$5,@1.first_line,@1.first_column)}
                  ;
 
 // ####################################################
@@ -102,17 +109,44 @@ bloque : declaracionVariable PNTCOMA                                { $$ = $1; }
 //########################################################################
 //################# DECLARACION DE CONSTRUCTORES #########################
 //########################################################################
-declaracionConstructor : PUBLIC ID PARIZQ PARDER LLAVEIZQ LLAVEDER                { $$ = new Constructor($2,[],[],@1.first_linea,@1.first_column); }
+declaracionConstructor : PUBLIC ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                { $$ = new Constructor($2,[],$6,@1.first_line,@1.first_column); }
                        ;
 
+//######################################################################################
+//##################### INSTRUCCIONES PARA METODOS #####################################
+//######################################################################################
+
+instrucciones : instrucciones instruccion                                         { $$ = $1; $$ = $$.concat($2); }
+              | instruccion                                                       { $$ = $1; }
+              ;
+
+instruccion : declaracionLocal PNTCOMA                                                    { $$ = $1; }
+            | asignacion_statement PNTCOMA                                                { $$ = $1; }
+            ;
 
 
 
-//####################################################
-//################ DECLARACION DE VARIABLES ##########
-//####################################################
-declaracionVariable : modificador tipo ID                   { $$ = new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_linea,@1.first_column); }
-                    | tipo ID                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_linea,@1.first_column); }
+
+//########################################################################################
+//############################### ASIGNACION #############################################
+//########################################################################################
+asignacion_statement : ID IGUAL expresion                               {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column)); }
+                     ;
+
+
+//########################################################################################
+//##################### DECLARACION DE VARIABLES LOCALES #################################
+//########################################################################################
+declaracionLocal : modificador tipo ID                           { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
+                 | tipo ID                                       { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
+                 ;
+
+
+//###################################################################
+//################ DECLARACION DE VARIABLES DE CLASE ################
+//###################################################################
+declaracionVariable : modificador tipo ID                   { $$ = new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column); }
+                    | tipo ID                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
                     ;
 
 //#######################################################################
@@ -131,9 +165,13 @@ expresion : aritmetica              { $$ = $1; }
           | primitivo               { $$ = $1; }
           ;
 
-aritmetica : expresion MAS expresion { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_linea,@1.first_column);}
+aritmetica : expresion MAS expresion { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
            ;
 
+
+//#########################################################################################
+//################################# DATOS PRIMITIVOS #####################################
+//#######################################################################################
 primitivo : ENTERO                  {$$ = new Primitivo(Tipo.INT,$1,@1.first_line,@1.first_column);}
           | DECIMAL                 {$$ = new Primitivo(Tipo.DOUBLE,$1,@1.first_line,@1.first_column);}
           | CARACTER                {$$ = new Primitivo(Tipo.CHAR,$1,@1.first_line,@1.first_column);}

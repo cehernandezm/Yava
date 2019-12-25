@@ -7,7 +7,6 @@ class Entorno{
     posRelativaStack:number;
     archivo:String;
     listaSimbolos:Array<Simbolo>
-    ambito:Array<String>;
     clase:String;
 
     constructor(archivo:String){
@@ -19,7 +18,6 @@ class Entorno{
         this.posRelativaStack = 0;
         this.archivo = archivo;
         this.listaSimbolos = [];
-        this.ambito = [];
 
     }
 
@@ -29,9 +27,9 @@ class Entorno{
      * METODO PARA OBTENER UNA VARIABLE
      * @param id NOMBRE DE LA VARIABLE
      */
-    public buscarSimbolo(id:String,ambito:String):Simbolo{
+    public buscarSimbolo(id:String):Simbolo{
         for(let i = this.listaSimbolos.length - 1; i >= 0; i--){
-            if(this.listaSimbolos[i].id === id && ambito === this.listaSimbolos[i].ambito) return this.listaSimbolos[i];
+            if(this.listaSimbolos[i].id === id ) return this.listaSimbolos[i];
         }
         return null;
     }

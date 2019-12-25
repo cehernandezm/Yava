@@ -27,7 +27,21 @@ var Constructor = /** @class */ (function () {
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
-        return "";
+        var salida = new Nodo();
+        salida.codigo = [];
+        salida.codigo.push(";#############################");
+        salida.codigo.push(";########CONSTRUCTOR " + this.id);
+        salida.codigo.push(";#############################");
+        salida.codigo.push("proc contructor_" + this.id + "{");
+        this.instrucciones.forEach(function (element) {
+            var resultado = element.ejecutar(entorno);
+            if (!(resultado instanceof MensajeError)) {
+                var nodo = resultado;
+                salida.codigo = salida.codigo.concat(nodo.codigo);
+            }
+        });
+        salida.codigo.push("}");
+        return salida;
     };
     return Constructor;
 }());

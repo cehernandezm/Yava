@@ -14,7 +14,7 @@ var prefEditorAssembler = {
 
 var prefEditor3D = {
     lineNumbers : true,
-    mode : "text/x-csrc",
-    theme : "dracula",
+    mode : "text/x-java",
+    theme : "3024-night",
     gutters: ["CodeMirror-linenumbers", "breakpoints"]
 }
