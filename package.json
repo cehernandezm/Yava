@@ -4,7 +4,7 @@
   "description": "Proyecto 2 de Compiladores 2",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Carlos Hernandez",
   "license": "ISC",
