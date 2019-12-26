@@ -407,7 +407,7 @@ $("#debugButton").on("click", function (e) {
     let ambito = new Ambito();
     let listaInstrucciones = getInstrucciones();
     if (listaInstrucciones != null) {
-        instruccionesDebug = new Instruccion(listaInstrucciones, ambito);
+        instruccionesDebug = new Instruccion3D(listaInstrucciones, ambito);
         ambitoActual = ambito;
         let index = instruccionesDebug.ejecutarDebugger(firstIndex);
         recorrerStack();
@@ -543,7 +543,7 @@ function ejecutar3D() {
     let ambito = new Ambito();
     let listaInstrucciones = getInstrucciones();
     if (listaInstrucciones != null) {
-        let instruccionCuerpo = new Instruccion(listaInstrucciones, ambito);
+        let instruccionCuerpo = new Instruccion3D(listaInstrucciones, ambito);
         instruccionCuerpo.ejecutar();
     }
 
@@ -616,63 +616,7 @@ function addMessage(mensaje) {
     $("#consolaTarget").append(salida);
 }
 
-/**
- * SE ENCARGARA DE TRADUCIR DE 3D A ASSEMBLER
- */
-$("#translateButton").on("click", function (e) {
-    if (editorActual.tipo === 1) {
-        //------------------------------------------ RECORRIDO QUE EJECUTARA TODO EL CODIGO ------------------------------------------
-        let ambito = new Ambito3D();
-        let listaInstrucciones = getInstrucciones3D();
-        if (listaInstrucciones != null) {
-            let codigo = "";
 
-            /**
-             * ALMACENAMOS LAS ETIQUETAS
-             */
-            listaInstrucciones.forEach(element => {
-                if (element instanceof Etiqueta3D) element.ejecutarFirst(ambito);
-            });
-
-            /**
-             * HACE UNA PASADA BUSCANDO FUNCIONES
-             */
-            listaInstrucciones.forEach(element => {
-                if (element instanceof Funcion3D) {
-                    let encontrado = ambito.buscarFuncion(element.nombre.toLowerCase());
-                    if (encontrado != null)
-                        addMensajeError(
-                            "Semantico",
-                            "La funcion: " + element.nombre.toLowerCase() + " ya existe",
-                            element.l,
-                            element.c
-                        );
-                    else ambito.agregarFuncion(element.nombre.toLowerCase());
-                }
-            });
-
-            listaInstrucciones.forEach(element => {
-                if (!(element instanceof Funcion3D)) {
-                    let res = element.ejecutar(ambito);
-                    if (!(res instanceof Error3D)) codigo += "\n" + res.codigo;
-
-                }
-            });
-
-            let codigoTemp = "";
-            listaInstrucciones.forEach(element => {
-                if (element instanceof Funcion3D) {
-                    let res = element.ejecutar(ambito);
-                    if (!(res instanceof Error3D)) codigoTemp += "\n" + res.getcodigo();
-                }
-            })
-
-            armarAssembler(codigo, ambito.getTemporales(), codigoTemp);
-
-
-        }
-    }
-});
 
 /**
  * SE ENCARGARA DE OPTIMIZAR CODIGO 3D
@@ -772,33 +716,6 @@ function getInstrucciones3D() {
     return listaInstrucciones;
 }
 
-
-/**
- * FUNCION ENCARGADA DE ARMAR EL CUERPO DEL ASSEMBLER
- * @param {*} cuerpo 
- * @param {*} ambito
- */
-function armarAssembler(cuerpo, listaTemporales, funciones) {
-    let codigo = Generador.getEncabezado();
-    codigo += "\n" + Generador.getDeclaraciones(listaTemporales);
-    codigo += "\n.CODE";
-    codigo += "\nMAIN PROC FAR";
-    codigo += "\nMOV AX,@DATA";
-    codigo += "\nMOV DS,AX";
-    codigo += "\nMOV H,0d";
-    codigo += "\nMOV P,0d";
-    codigo += "\n" + cuerpo;
-    codigo += "\nMOV AH,4CH";
-    codigo += "\nINT 21H";
-    codigo += "\nMAIN ENDP";
-    codigo += "\n" + Generador.funcionPrint();
-    codigo += "\n" + Generador.funcionPotencia();
-    codigo += "\n" + funciones;
-    codigo += "\nEND MAIN";
-    newAssembler(codigo);
-    //console.log(codigo);
-
-}
 
 
 /**
