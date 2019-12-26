@@ -23,7 +23,7 @@ var Aritmetica = /** @class */ (function () {
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
         switch (this.operacion) {
-            case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo);
+            case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo, entorno);
         }
     };
     /**
@@ -32,7 +32,7 @@ var Aritmetica = /** @class */ (function () {
      * @param der Operando derecho
      * @param salida nodo de resultado
      */
-    Aritmetica.prototype.suma = function (izq, der, salida) {
+    Aritmetica.prototype.suma = function (izq, der, salida, entorno) {
         if ((izq.tipo === Tipo.INT && der.tipo === Tipo.DOUBLE) || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.INT)
             || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.CHAR) || (izq.tipo === Tipo.CHAR && der.tipo === Tipo.DOUBLE)
             || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.DOUBLE)) {
@@ -50,7 +50,20 @@ var Aritmetica = /** @class */ (function () {
             salida.resultado = temporal;
             return salida;
         }
-        return salida;
+        else if (izq.tipo === Tipo.STRING || der.tipo === Tipo.STRING) {
+            salida.tipo = Tipo.STRING;
+            var temporal = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = H + 0", "Inicio de la nueva cadena"));
+            salida.codigo = salida.codigo.concat(Auxiliar.concatenar(izq.resultado, izq.tipo, entorno).codigo);
+            salida.codigo = salida.codigo.concat(Auxiliar.concatenar(der.resultado, der.tipo, entorno).codigo);
+            salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0", "Fin de la cadena"));
+            salida.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentamos el Heap"));
+            salida.resultado = temporal;
+            return salida;
+        }
+        var mensaje = new MensajeError("Semantico", "No se puede sumar: " + izq.tipo + " con: " + der.tipo, entorno.archivo, this.l, this.c);
+        Auxiliar.agregarError(mensaje);
+        return mensaje;
     };
     /**
      * ESTA CLASE NO TIENE PRIMERA PASADA

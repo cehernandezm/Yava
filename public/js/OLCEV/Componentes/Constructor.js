@@ -14,14 +14,11 @@ var Constructor = /** @class */ (function () {
         this.l = l;
         this.c = c;
     }
-    Constructor.prototype.ejecutar = function (entorno) {
-        return "";
-    };
     /**
-     * ESTA CLASE NO TIENE PRIMERA PASADA
-     * @param entorno Entorno actual
+     * METODO DE LA CLASE PADRE
+     * @param entorno Entorno Actual
      */
-    Constructor.prototype.primeraPasada = function (entorno) {
+    Constructor.prototype.ejecutar = function (entorno) {
         if (entorno.clase !== this.id) {
             var mensaje = new MensajeError("Semantico", "El nombre de la clase es: " + entorno.clase + " y el del constructor es: " + this.id, entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
@@ -42,6 +39,17 @@ var Constructor = /** @class */ (function () {
         });
         salida.codigo.push("}");
         return salida;
+    };
+    /**
+     * Se encargara de verificar cuantas declaraciones tiene el constructor
+     * @param entorno Entorno actual
+     */
+    Constructor.prototype.primeraPasada = function (entorno) {
+        this.instrucciones.forEach(function (element) {
+            if (element instanceof Declaracion)
+                entorno.tamaño++;
+        });
+        return "";
     };
     return Constructor;
 }());

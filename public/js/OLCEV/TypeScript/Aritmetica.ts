@@ -33,7 +33,7 @@ class Aritmetica implements Instruccion {
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
         switch (this.operacion) {
-            case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo);
+            case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo,entorno);
         }
 
 
@@ -46,7 +46,7 @@ class Aritmetica implements Instruccion {
      * @param der Operando derecho
      * @param salida nodo de resultado
      */
-    suma(izq: Nodo, der: Nodo, salida: Nodo): Object {
+    suma(izq: Nodo, der: Nodo, salida: Nodo,entorno:Entorno): Object {
         if ((izq.tipo === Tipo.INT && der.tipo === Tipo.DOUBLE) || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.INT)
             || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.CHAR) || (izq.tipo === Tipo.CHAR && der.tipo === Tipo.DOUBLE)
             || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.DOUBLE)) {
@@ -64,7 +64,21 @@ class Aritmetica implements Instruccion {
             salida.resultado = temporal;
             return salida;
         }
-        return salida;
+        else if(izq.tipo === Tipo.STRING || der.tipo === Tipo.STRING){
+            salida.tipo = Tipo.STRING;
+            let temporal:String = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = H + 0","Inicio de la nueva cadena"));
+            salida.codigo = salida.codigo.concat(Auxiliar.concatenar(izq.resultado,izq.tipo,entorno).codigo);
+            salida.codigo = salida.codigo.concat(Auxiliar.concatenar(der.resultado,der.tipo,entorno).codigo);
+            salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0","Fin de la cadena"));
+            salida.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentamos el Heap"));
+            salida.resultado = temporal;
+            return salida;
+
+        }
+        let mensaje:MensajeError = new MensajeError("Semantico","No se puede sumar: " + izq.tipo + " con: " + der.tipo,entorno.archivo,this.l,this.c);
+        Auxiliar.agregarError(mensaje);
+        return mensaje;
     }
 
 

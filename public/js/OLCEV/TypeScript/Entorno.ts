@@ -7,6 +7,7 @@ class Entorno{
     posRelativaStack:number;
     archivo:String;
     listaSimbolos:Array<Simbolo>
+    tamaño:number;
     clase:String;
 
     constructor(archivo:String){

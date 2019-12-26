@@ -21,16 +21,11 @@ class Constructor implements Instruccion {
         this.c = c;
     }
 
-
-    ejecutar(entorno: Entorno): Object {
-        return "";
-    }
-
     /**
-     * ESTA CLASE NO TIENE PRIMERA PASADA
-     * @param entorno Entorno actual
+     * METODO DE LA CLASE PADRE
+     * @param entorno Entorno Actual
      */
-    primeraPasada(entorno: Entorno): Object {
+    ejecutar(entorno: Entorno): Object {
         if (entorno.clase !== this.id) {
             let mensaje: MensajeError = new MensajeError("Semantico", "El nombre de la clase es: " + entorno.clase + " y el del constructor es: " + this.id, entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
@@ -47,9 +42,9 @@ class Constructor implements Instruccion {
 
 
         this.instrucciones.forEach(element => {
-            let resultado:Object = element.ejecutar(entorno);
-            if(!(resultado instanceof MensajeError)){
-                let nodo:Nodo = resultado as Nodo;
+            let resultado: Object = element.ejecutar(entorno);
+            if (!(resultado instanceof MensajeError)) {
+                let nodo: Nodo = resultado as Nodo;
                 salida.codigo = salida.codigo.concat(nodo.codigo);
             }
         });
@@ -57,6 +52,17 @@ class Constructor implements Instruccion {
 
         salida.codigo.push("}");
         return salida;
+    }
+
+    /**
+     * Se encargara de verificar cuantas declaraciones tiene el constructor
+     * @param entorno Entorno actual
+     */
+    primeraPasada(entorno: Entorno): Object {
+        this.instrucciones.forEach(element => {
+            if(element instanceof Declaracion) entorno.tamaño++;
+        });
+        return "";
     }
 
 
