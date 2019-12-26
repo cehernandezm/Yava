@@ -40,6 +40,8 @@ var Primitivo = /** @class */ (function (_super) {
                 return new Nodo([], ascii, this.tipo, "");
             case Tipo.STRING:
                 return this.setearCadena(this.valor.toString());
+            case Tipo.BOOLEAN:
+                return new Nodo([], this.valor.toString(), this.tipo, "");
         }
     };
     /**

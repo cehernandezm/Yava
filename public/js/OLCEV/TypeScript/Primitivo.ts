@@ -32,6 +32,9 @@ class Primitivo extends Valor implements Instruccion{
 
             case Tipo.STRING:
                 return this.setearCadena(this.valor.toString());
+            
+            case Tipo.BOOLEAN:
+                return new Nodo([],this.valor.toString(),this.tipo,"");
         }
         
     }

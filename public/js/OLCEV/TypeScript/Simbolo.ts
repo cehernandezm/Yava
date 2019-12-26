@@ -12,7 +12,8 @@ class Simbolo{
     localizacion:Localizacion;
     instrucciones:Array<Instruccion>;
     entorno:Entorno;
-
+    verdaderas:Array<String> = null;
+    falsas:Array<String> = null;
 
     constructor()
     /**

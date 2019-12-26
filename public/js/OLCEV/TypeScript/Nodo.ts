@@ -3,6 +3,8 @@ class Nodo extends Valor{
     resultado:String;
     rol:String;
     estructura:number;
+    verdaderas:Array<String> = null;
+    falsas:Array<String> = null;
 
     constructor()
     constructor(codigo:Array<String>)

@@ -16,6 +16,8 @@ var Nodo = /** @class */ (function (_super) {
     function Nodo(codigo, resultado, tipo, valor) {
         var _this = _super.call(this, tipo, valor) || this;
         _this.codigo = [];
+        _this.verdaderas = null;
+        _this.falsas = null;
         _this.codigo = codigo;
         _this.resultado = resultado;
         return _this;

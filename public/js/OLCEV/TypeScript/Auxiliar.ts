@@ -188,52 +188,22 @@ class Auxiliar{
         return nodo;
     }
 
-    
     /**
-     * METODO QUE SE ENCARGA DE CONCATENAR DOS EXPRESIONES
-     * Y DE VOLVER UN STRING
-     * @param valor POSICION/PRIMITVO
-     * @param tipo  DE EXPRESION A CONCATENAR
-     * @param entorno ENTORNO ACTUAL
+     * METODO QUE ESCRIBE LAS ETIQUETAS EN 3D
+     * @param etiquetas ETIQUETAS A ESCRIBIR
      */
-    public static concatenar(valor:String,tipo:Tipo,entorno:Entorno):Nodo{
+    public static escribirEtiquetas(etiquetas:Array<String>):Nodo{
         let nodo:Nodo = new Nodo();
         nodo.codigo = [];
-        switch(tipo){
-            case Tipo.INT:
-            case Tipo.DOUBLE:
-                let posicion:String = this.generarTemporal();
-                nodo.codigo.push(";########## " + valor + " to String ###################");
-                nodo.codigo.push(this.crearLinea("P = P + " + entorno.tamaño,"Simulacion de cambio de ambito"));
-                nodo.codigo.push(this.crearLinea(posicion + " = P + 0","Nos posicionamos en el parametro 0"));
-                nodo.codigo.push(this.crearLinea("Stack[" + posicion + "] = " + valor,"Almacenamos el numero a convertir a String"));
-                nodo.codigo.push(this.crearLinea("call numberToCadena","Llamamos al metodo encargado de realizar el casteo"));
-                nodo.codigo.push(this.crearLinea("P = P - " + entorno.tamaño,"Terminal simulacion de cambio de ambito"));
-                return nodo;
-            
-            case Tipo.CHAR:
-                let ascii:number = valor.charCodeAt(0);
-                nodo.codigo.push(this.crearLinea("Heap[H] = " + ascii,"Almacenamos el ascii del caracter: " + valor));
-                nodo.codigo.push(this.crearLinea("H = H + 1","Aumentamos el Heap"));
-                return nodo;
 
-            case Tipo.STRING:
-                nodo.codigo.push(";################# ADJUNTANDO CADENA: " + valor + " #####################");
-                let aux:String = this.generarTemporal();
-                let v:String = this.generarEtiqueta();
-                let f:String = this.generarEtiqueta();
-                nodo.codigo.push(v + ":");
-                nodo.codigo.push(this.crearLinea(aux + " = Heap[" + valor + "]","Almacenamos el primer valor de la cadena"));
-                nodo.codigo.push(this.crearLinea(this.saltoCondicional(aux + " == " + 0,f),"Si se cumple estamos al final de la cadena"));
-                nodo.codigo.push(this.crearLinea("Heap[H] = " + aux,"Almacenamos el valor en una nueva posicion"));
-                nodo.codigo.push(this.crearLinea("H = H + 1","Aumentamos el Heap"));
-                nodo.codigo.push(this.crearLinea(valor + " = " + valor + " + 1","Aumentamos la posicion de la cadena"));
-                nodo.codigo.push(this.saltoIncondicional(v));
-                nodo.codigo.push(f + ":");
-                return nodo;
-        }
+        etiquetas.forEach(element => {
+            nodo.codigo.push(element + ":");
+        });
 
         return nodo;
     }
+
+    
+    
 
 }

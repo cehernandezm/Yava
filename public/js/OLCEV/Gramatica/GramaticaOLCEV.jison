@@ -38,6 +38,8 @@
 "char"                                          return 'CHAR'
 "boolean"                                       return 'BOOLEAN'
 "String"                                        return 'STRING'
+"true"                                          return 'TRUE'
+"false"                                         return 'FALSE'
 
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
@@ -177,6 +179,8 @@ primitivo : ENTERO                  {$$ = new Primitivo(Tipo.INT,$1,@1.first_lin
           | CARACTER                {$$ = new Primitivo(Tipo.CHAR,$1,@1.first_line,@1.first_column);}
           | CADENA                  {$$ = new Primitivo(Tipo.STRING,$1,@1.first_line,@1.first_column);}
           | ID                      {$$ = new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column);}
+          | TRUE                    {$$ = new Primitivo(Tipo.BOOLEAN,"1",@1.first_line,@1.first_column)}
+          | FALSE                   {$$ = new Primitivo(Tipo.BOOLEAN,"0",@1.first_line,@1.first_column)}
           ;  
 %%
 
