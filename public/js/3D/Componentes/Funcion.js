@@ -15,7 +15,7 @@ var Funcion = /** @class */ (function () {
         this.posicion = posicion;
     }
     Funcion.prototype.ejecutar = function (ambito) {
-        var instruccion = new Instruccion(this.instrucciones, ambito);
+        var instruccion = new Instruccion3D(this.instrucciones, ambito);
         instruccion.ejecutar();
         return -1;
     };

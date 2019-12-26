@@ -1,11 +1,11 @@
-var Valor = /** @class */ (function () {
-    function Valor(valor) {
+var Valor3D = /** @class */ (function () {
+    function Valor3D(valor) {
         this.dato = valor;
     }
-    Valor.prototype.ejecutar = function (ambito) {
+    Valor3D.prototype.ejecutar = function (ambito) {
         return this.tipoDato(this.dato, ambito);
     };
-    Valor.prototype.tipoDato = function (dato, ambito) {
+    Valor3D.prototype.tipoDato = function (dato, ambito) {
         if (dato.tipo === "int")
             return { tipo: "number", valor: +dato.valor };
         else if (dato.tipo === "double")
@@ -32,5 +32,5 @@ var Valor = /** @class */ (function () {
         else
             return dato.valor;
     };
-    return Valor;
+    return Valor3D;
 }());

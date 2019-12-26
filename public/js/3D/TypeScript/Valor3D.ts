@@ -4,7 +4,7 @@ declare function addMensajeError(tipo:any,mensaje:any,linea:any,columna:any):any
 declare var P:any,H:any;
 
 
-class Valor{
+class Valor3D{
     dato : Object;
 
     constructor(valor:any){

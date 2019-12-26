@@ -29,7 +29,7 @@ var Constructor = /** @class */ (function () {
         salida.codigo.push(";#############################");
         salida.codigo.push(";########CONSTRUCTOR " + this.id);
         salida.codigo.push(";#############################");
-        salida.codigo.push("proc contructor_" + this.id + "{");
+        salida.codigo.push("proc constructor_" + this.id + "{");
         this.instrucciones.forEach(function (element) {
             var resultado = element.ejecutar(entorno);
             if (!(resultado instanceof MensajeError)) {

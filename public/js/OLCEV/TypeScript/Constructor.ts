@@ -37,7 +37,7 @@ class Constructor implements Instruccion {
         salida.codigo.push(";#############################");
         salida.codigo.push(";########CONSTRUCTOR " + this.id);
         salida.codigo.push(";#############################");
-        salida.codigo.push("proc contructor_" + this.id + "{");
+        salida.codigo.push("proc constructor_" + this.id + "{");
 
 
 

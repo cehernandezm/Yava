@@ -28,7 +28,6 @@ class Instruccion3D {
                     );
             }
         });
-
         for (let i = 0; i < this.listaInstrucciones.length; i++) {
             let element = this.listaInstrucciones[i];
             if (element instanceof Etiqueta || element instanceof Funcion) {

@@ -189,7 +189,13 @@ class Auxiliar{
     }
 
     
-
+    /**
+     * METODO QUE SE ENCARGA DE CONCATENAR DOS EXPRESIONES
+     * Y DE VOLVER UN STRING
+     * @param valor POSICION/PRIMITVO
+     * @param tipo  DE EXPRESION A CONCATENAR
+     * @param entorno ENTORNO ACTUAL
+     */
     public static concatenar(valor:String,tipo:Tipo,entorno:Entorno):Nodo{
         let nodo:Nodo = new Nodo();
         nodo.codigo = [];
@@ -221,6 +227,7 @@ class Auxiliar{
                 nodo.codigo.push(this.crearLinea(this.saltoCondicional(aux + " == " + 0,f),"Si se cumple estamos al final de la cadena"));
                 nodo.codigo.push(this.crearLinea("Heap[H] = " + aux,"Almacenamos el valor en una nueva posicion"));
                 nodo.codigo.push(this.crearLinea("H = H + 1","Aumentamos el Heap"));
+                nodo.codigo.push(this.crearLinea(valor + " = " + valor + " + 1","Aumentamos la posicion de la cadena"));
                 nodo.codigo.push(this.saltoIncondicional(v));
                 nodo.codigo.push(f + ":");
                 return nodo;

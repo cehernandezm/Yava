@@ -67,7 +67,7 @@ class Primitivo extends Valor implements Instruccion{
         for(let i = 0; i < cadena.length; i++){
             let temporal:String = Auxiliar.generarTemporal();
             nodo.codigo.push(Auxiliar.crearLinea(temporal + " = H ",""));
-            nodo.codigo.push(Auxiliar.crearLinea("Heap[temporal] = " + cadena.charCodeAt(i),"Guardamos en el Heap el caracter: " + cadena.charAt(i)));
+            nodo.codigo.push(Auxiliar.crearLinea("Heap[" + temporal + "] = " + cadena.charCodeAt(i),"Guardamos en el Heap el caracter: " + cadena.charAt(i)));
             nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentamos el Heap"));
 
             if(i === 0) nodo.resultado = temporal;

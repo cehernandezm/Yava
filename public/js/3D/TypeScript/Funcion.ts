@@ -26,7 +26,7 @@ class Funcion {
     ejecutar(ambito: Ambito) {
 
         
-        let instruccion : Instruccion = new Instruccion(this.instrucciones,ambito);
+        let instruccion : Instruccion3D = new Instruccion3D(this.instrucciones,ambito);
         instruccion.ejecutar();
 
         return -1;

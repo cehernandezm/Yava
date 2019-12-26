@@ -4,20 +4,13 @@
 
 %%
 [ \r\t\n]+                                  {} // ESPACIOS
-\/\/.([^\n])*                               {} // COMENTARIO SIMPLE
-\/\*(.?\n?)*\*\/                             {} // COMENTARIO MULTILINEA
+[;]+.*                                      {} // COMENTARIO SIMPLE
 "-"[0-9]+("."[0-9]+)                        return 'DECIMAL'
 "-"[0-9]+                                   return 'ENTERO'
 [0-9]+("."[0-9]+)                           return 'DECIMAL'
 [0-9]+                                      return 'ENTERO'
-"+"                                         return 'MAS'
-"-"                                         return 'MENOS'
-"*"                                         return 'POR'
-"/"                                         return 'DIVIDIR'
-"%"                                         return 'MODULO'
-"^"                                         return 'POTENCIA'
 
-"="                                         return "IGUAL"
+","                                         return 'COMA'
 ":"                                         return 'DSPUNTOS'
 "("                                         return 'PARIZQ'
 ")"                                         return 'PARDER'
@@ -26,12 +19,22 @@
 "{"                                         return 'LLAVEIZQ'
 "}"                                         return 'LLAVEDER'
 
-"<"                                         return 'MENOR'
-">"                                         return 'MAYOR'
+
 "<="                                        return 'MENORIGUAL'
 ">="                                        return 'MAYORIGUAL'
 "=="                                        return 'IGUALIGUAL'
 "!="                                        return 'DIFERENTE'
+"<"                                         return 'MENOR'
+">"                                         return 'MAYOR'
+
+"+"                                         return 'MAS'
+"-"                                         return 'MENOS'
+"*"                                         return 'POR'
+"/"                                         return 'DIVIDIR'
+"%"                                         return 'MODULO'
+"^"                                         return 'POTENCIA'
+"="                                         return "IGUAL"
+
 
 "HEAP"                                      return 'HEAP'
 "STACK"                                     return 'STACK'
@@ -100,6 +103,7 @@ instruccionF : asignacion                             {$$ = $1;}
 asignacion : var IGUAL e operacion e                        {$$ = new Asignacion3D($3,$5,$4,$1,@1.first_line,@1.first_column,parser.linea);} 
            | estructura CORIZQ e CORDER IGUAL e             {$$ = new Asignacion3D($3,$6,"igual",$1,@1.first_line,@1.first_column,parser.linea);} // H|S [e] = e;
            | var IGUAL e                                    {$$ = new Asignacion3D($3,null,"igual",$1,@1.first_line,@1.first_column,parser.linea);}// T = e        
+           | var IGUAL estructura CORIZQ e CORDER           {$$ = new Asignacion3D(new Valor3D({tipo :$3, valor: 0, linea: @1.first_line, columna: @1.first_column}),$5,"igual",$1,@1.first_line,@1.first_column,parser.linea);}// T = e 
            ;
 
 
@@ -121,11 +125,11 @@ operacion : MAS                                             {$$ = "suma";}
           | POTENCIA                                        {$$ = "potencia";}
           ;
 
-e : ENTERO                                   {$$ = new Valor({tipo : "int", valor: $1, linea: @1.first_line, columna: @1.first_column});}
-  | TEMPORAL                                 {$$ = new Valor({tipo : "temporal", valor: $1, linea: @1.first_line, columna: @1.first_column});}
-  | DECIMAL                                  {$$ = new Valor({tipo: "double", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
-  | H                                        {$$ = new Valor({tipo: "h", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
-  | P                                        {$$ = new Valor({tipo: "p", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
+e : ENTERO                                   {$$ = new Valor3D({tipo : "int", valor: $1, linea: @1.first_line, columna: @1.first_column});}
+  | TEMPORAL                                 {$$ = new Valor3D({tipo : "temporal", valor: $1, linea: @1.first_line, columna: @1.first_column});}
+  | DECIMAL                                  {$$ = new Valor3D({tipo: "double", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
+  | H                                        {$$ = new Valor3D({tipo: "h", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
+  | P                                        {$$ = new Valor3D({tipo: "p", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
   ;
 
 
@@ -152,9 +156,9 @@ operador : IGUALIGUAL                  {$$ = "=="}
 
 
 
-imprimir : PRINT PARIZQ MODULO IE COMA e2 PARDER    { $$ = new Print(0,$6,@1.first_line,@1.first_column,parser.linea); }
-         | PRINT PARIZQ MODULO IC COMA e2 PARDER    { $$ = new Print(1,$6,@1.first_line,@1.first_column,parser.linea); }
-         | PRINT PARIZQ MODULO ID COMA e2 PARDER    { $$ = new Print(2,$6,@1.first_line,@1.first_column,parser.linea); }      
+imprimir : PRINT PARIZQ MODULO IE COMA e PARDER    { $$ = new Print(0,$6,@1.first_line,@1.first_column,parser.linea); }
+         | PRINT PARIZQ MODULO IC COMA e PARDER    { $$ = new Print(1,$6,@1.first_line,@1.first_column,parser.linea); }
+         | PRINT PARIZQ MODULO ID COMA e PARDER    { $$ = new Print(2,$6,@1.first_line,@1.first_column,parser.linea); }      
          ;
 
 
