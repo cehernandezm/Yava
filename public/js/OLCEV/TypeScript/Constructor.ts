@@ -62,6 +62,7 @@ class Constructor implements Instruccion {
         this.instrucciones.forEach(element => {
             if(element instanceof Declaracion) entorno.tamaño++;
         });
+        entorno.tamaño = entorno.tamaño + this.parametros.length;
         return "";
     }
 

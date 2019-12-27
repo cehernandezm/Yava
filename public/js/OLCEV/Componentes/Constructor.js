@@ -49,6 +49,7 @@ var Constructor = /** @class */ (function () {
             if (element instanceof Declaracion)
                 entorno.tamaño++;
         });
+        entorno.tamaño = entorno.tamaño + this.parametros.length;
         return "";
     };
     return Constructor;

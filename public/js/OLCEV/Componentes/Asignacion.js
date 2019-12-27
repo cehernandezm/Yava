@@ -23,6 +23,11 @@ var Asignacion = /** @class */ (function () {
         var salida = new Nodo();
         salida.codigo = [];
         var nodo = result;
+        if (!(Asignacion.casteoImplicito(s.tipo, nodo.tipo))) {
+            var mensaje = new MensajeError("Semantico", "No se le puede asignar un tipo: " + Tipo[nodo.tipo] + " a : " + Tipo[s.tipo], entorno.archivo, this.l, this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
         salida.codigo = salida.codigo.concat(nodo.codigo);
         if (s.atributo['isStatic'] == true)
             salida.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = " + nodo.resultado, " Accedemos a la variable estatica " + s.id));
@@ -47,6 +52,16 @@ var Asignacion = /** @class */ (function () {
      */
     Asignacion.prototype.primeraPasada = function (entorno) {
         return "";
+    };
+    Asignacion.casteoImplicito = function (tipo, tipoValor) {
+        if (tipo === Tipo.INT && tipoValor === Tipo.CHAR)
+            return true;
+        else if (tipo === Tipo.DOUBLE && tipoValor === Tipo.CHAR)
+            return true;
+        else if (tipo === Tipo.DOUBLE && tipoValor === Tipo.INT)
+            return true;
+        else
+            return tipo === tipoValor;
     };
     return Asignacion;
 }());

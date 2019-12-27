@@ -35,6 +35,12 @@ class Asignacion implements Instruccion{
         salida.codigo = [];
 
         let nodo:Nodo = result as Nodo;
+        
+        if(!(Asignacion.casteoImplicito(s.tipo,nodo.tipo))){
+            let mensaje:MensajeError = new MensajeError("Semantico","No se le puede asignar un tipo: " + Tipo[nodo.tipo] + " a : " + Tipo[s.tipo],entorno.archivo,this.l,this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
 
         salida.codigo = salida.codigo.concat(nodo.codigo);
         if(s.atributo['isStatic'] == true) salida.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta  + "] = " + nodo.resultado," Accedemos a la variable estatica " + s.id));
@@ -61,6 +67,14 @@ class Asignacion implements Instruccion{
      */
     primeraPasada(entorno: Entorno): Object {
         return "";
+    }
+
+
+    public static casteoImplicito(tipo:Tipo,tipoValor:Tipo):Boolean{
+        if(tipo === Tipo.INT && tipoValor === Tipo.CHAR) return true;
+        else if(tipo === Tipo.DOUBLE && tipoValor === Tipo.CHAR) return true;
+        else if(tipo === Tipo.DOUBLE && tipoValor === Tipo.INT) return true;
+        else return tipo === tipoValor;
     }
 
 
