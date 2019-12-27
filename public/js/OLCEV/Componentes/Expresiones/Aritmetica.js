@@ -59,8 +59,8 @@ var Aritmetica = /** @class */ (function () {
             salida.tipo = Tipo.STRING;
             var temporal = Auxiliar.generarTemporal();
             salida.codigo.push(Auxiliar.crearLinea(temporal + " = H + 0", "Inicio de la nueva cadena"));
-            salida.codigo = salida.codigo.concat(this.concatenar(izq.resultado, izq.tipo, entorno, izq).codigo);
-            salida.codigo = salida.codigo.concat(this.concatenar(der.resultado, der.tipo, entorno, der).codigo);
+            salida.codigo = salida.codigo.concat(Aritmetica.concatenar(izq.resultado, izq.tipo, entorno, izq).codigo);
+            salida.codigo = salida.codigo.concat(Aritmetica.concatenar(der.resultado, der.tipo, entorno, der).codigo);
             salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0", "Fin de la cadena"));
             salida.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentamos el Heap"));
             salida.resultado = temporal;
@@ -155,7 +155,7 @@ var Aritmetica = /** @class */ (function () {
      * @param tipo  DE EXPRESION A CONCATENAR
      * @param entorno ENTORNO ACTUAL
      */
-    Aritmetica.prototype.concatenar = function (valor, tipo, entorno, actual) {
+    Aritmetica.concatenar = function (valor, tipo, entorno, actual) {
         var nodo = new Nodo();
         nodo.codigo = [];
         switch (tipo) {

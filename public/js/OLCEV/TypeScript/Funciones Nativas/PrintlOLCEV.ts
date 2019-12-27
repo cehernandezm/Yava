@@ -31,7 +31,7 @@ class PrintlOLCEV implements Instruccion{
         let nodo:Nodo = result as Nodo;
         let salida:Nodo = new Nodo([]);
         salida.codigo = salida.codigo.concat(nodo.codigo);
-        
+        salida.codigo.push(";######################### PRINT ##############################");
         if(nodo.tipo === Tipo.INT) salida.codigo.push("print(%e," + nodo.resultado + ")");
         else if(nodo.tipo === Tipo.DOUBLE) salida.codigo.push("print(%d," + nodo.resultado + ")");
         else if(nodo.tipo === Tipo.CHAR) salida.codigo.push("print(%c," + nodo.resultado + ")" );

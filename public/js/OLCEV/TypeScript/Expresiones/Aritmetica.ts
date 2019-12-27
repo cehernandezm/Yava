@@ -76,8 +76,8 @@ class Aritmetica implements Instruccion {
             salida.tipo = Tipo.STRING;
             let temporal:String = Auxiliar.generarTemporal();
             salida.codigo.push(Auxiliar.crearLinea(temporal + " = H + 0","Inicio de la nueva cadena"));
-            salida.codigo = salida.codigo.concat(this.concatenar(izq.resultado,izq.tipo,entorno,izq).codigo);
-            salida.codigo = salida.codigo.concat(this.concatenar(der.resultado,der.tipo,entorno,der).codigo);
+            salida.codigo = salida.codigo.concat(Aritmetica.concatenar(izq.resultado,izq.tipo,entorno,izq).codigo);
+            salida.codigo = salida.codigo.concat(Aritmetica.concatenar(der.resultado,der.tipo,entorno,der).codigo);
             salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0","Fin de la cadena"));
             salida.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentamos el Heap"));
             salida.resultado = temporal;
@@ -185,7 +185,7 @@ class Aritmetica implements Instruccion {
      * @param tipo  DE EXPRESION A CONCATENAR
      * @param entorno ENTORNO ACTUAL
      */
-    private  concatenar(valor:String,tipo:Tipo,entorno:Entorno,actual:Nodo):Nodo{
+    public static  concatenar(valor:String,tipo:Tipo,entorno:Entorno,actual:Nodo):Nodo{
         let nodo:Nodo = new Nodo();
         nodo.codigo = [];
         switch(tipo){

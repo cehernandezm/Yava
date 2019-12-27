@@ -23,6 +23,7 @@ var PrintlOLCEV = /** @class */ (function () {
         var nodo = result;
         var salida = new Nodo([]);
         salida.codigo = salida.codigo.concat(nodo.codigo);
+        salida.codigo.push(";######################### PRINT ##############################");
         if (nodo.tipo === Tipo.INT)
             salida.codigo.push("print(%e," + nodo.resultado + ")");
         else if (nodo.tipo === Tipo.DOUBLE)

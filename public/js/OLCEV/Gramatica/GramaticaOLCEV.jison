@@ -48,6 +48,7 @@
 "print"                                         return 'PRINT'
 "println"                                       return "PRINTLN"
 
+"str"                                           return 'STR'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -151,8 +152,10 @@ asignacion_statement : ID IGUAL expresion                               {$$ = []
 //########################################################################################
 //##################### DECLARACION DE VARIABLES LOCALES #################################
 //########################################################################################
-declaracionLocal : modificador tipo ID                           { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
-                 | tipo ID                                       { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
+declaracionLocal : modificador tipo ID                                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
+                 | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
+                 | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                 | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
                  ;
 
 
@@ -175,8 +178,11 @@ tipo : STRING                                       { $$ = new Valor(Tipo.STRING
 
 
 
-expresion : aritmetica              { $$ = $1; }
-          | primitivo               { $$ = $1; }
+expresion : aritmetica                                          { $$ = $1; }
+          | primitivo                                           { $$ = $1; }
+          | casteo                                              { $$ = $1; }
+          | PARIZQ expresion PARDER                             { $$ = $2; }
+          | str_statement                                       { $$ = $1; }
           ;
 
 aritmetica : expresion MAS expresion                                                { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
@@ -185,6 +191,14 @@ aritmetica : expresion MAS expresion                                            
            | expresion DIVISION expresion                                           { $$ = new Aritmetica($1,$3,Operacion.DIVISION,@1.first_line,@1.first_column);}
            | POW PARIZQ expresion COMA expresion PARDER                             { $$ = new Aritmetica($3,$5,Operacion.POTENCIA,@1.first_line,@1.first_column);}
            ;
+
+
+//#########################################################################################
+//################################# CASTEO EXPLICITO #####################################
+//#######################################################################################
+casteo : PARIZQ tipo PARDER expresion                                               { $$ = new Casteo($2.tipo,$2.valor,$4,@1.first_line,@1.first_column); }
+       ;                                          
+
 
 
 //#########################################################################################
