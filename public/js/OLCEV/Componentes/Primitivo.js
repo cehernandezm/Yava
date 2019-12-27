@@ -42,6 +42,38 @@ var Primitivo = /** @class */ (function (_super) {
                 return this.setearCadena(this.valor.toString());
             case Tipo.BOOLEAN:
                 return new Nodo([], this.valor.toString(), this.tipo, "");
+            case Tipo.ID:
+                var nombre = this.valor.toString();
+                var s = entorno.buscarSimbolo(nombre);
+                //----------------------------------------------- Si no existe la variable ----------------------------------------------------
+                if (s == null) {
+                    var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " no existe", entorno.archivo, this.l, this.c);
+                    Auxiliar.agregarError(mensaje);
+                    return mensaje;
+                }
+                var temporal = Auxiliar.generarTemporal();
+                var nodo = new Nodo([]);
+                nodo.tipo = s.tipo;
+                nodo.atributos = s.atributo;
+                nodo.verdaderas = s.verdaderas;
+                nodo.falsas = s.falsas;
+                nodo.resultado = temporal;
+                if (s.atributo['isStatic'])
+                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]", "Accedemos a la variable estatica " + nombre));
+                else if (s.localizacion === Localizacion.STACK) {
+                    var posicion = Auxiliar.generarTemporal();
+                    nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + s.posRelativa, "Accedemos a la posicion de la variable: " + nombre));
+                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + posicion + "]", "Obtenemos el valor de la variable: " + nombre));
+                }
+                else {
+                    var posicion = Auxiliar.generarTemporal();
+                    var posHeap = Auxiliar.generarTemporal();
+                    nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + 0", "Nos posicionamos en this"));
+                    nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = Stack[" + posicion + "]", "Obtenemos la posicion en Heap de la referencia"));
+                    nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = " + posHeap + " + " + s.posRelativa, "Nos movemos a la posicion del atributo"));
+                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Heap[" + posHeap + "]", "Obtenemos el valor del atributo: " + nombre));
+                }
+                return nodo;
         }
     };
     /**

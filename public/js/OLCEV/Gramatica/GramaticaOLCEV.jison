@@ -45,6 +45,8 @@
 "false"                                         return 'FALSE'
 
 "pow"                                           return 'POW'
+"print"                                         return 'PRINT'
+"println"                                       return "PRINTLN"
 
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
@@ -133,6 +135,7 @@ instrucciones : instrucciones instruccion                                       
 
 instruccion : declaracionLocal PNTCOMA                                                    { $$ = $1; }
             | asignacion_statement PNTCOMA                                                { $$ = $1; }
+            | print_statement PNTCOMA                                                     { $$ = $1; }
             ;
 
 
@@ -195,6 +198,14 @@ primitivo : ENTERO                  {$$ = new Primitivo(Tipo.INT,$1,@1.first_lin
           | TRUE                    {$$ = new Primitivo(Tipo.BOOLEAN,"1",@1.first_line,@1.first_column)}
           | FALSE                   {$$ = new Primitivo(Tipo.BOOLEAN,"0",@1.first_line,@1.first_column)}
           ;  
+//#########################################################################################
+//################################# PRINT | PRINTLN #####################################
+//#######################################################################################
+print_statement : PRINT PARIZQ expresion PARDER 
+                | PRINTLN PARIZQ expresion PARDER 
+                ;
+
+
 %%
 
 parser.arbol ={

@@ -5,6 +5,7 @@ class Nodo extends Valor{
     estructura:number;
     verdaderas:Array<String> = null;
     falsas:Array<String> = null;
+    atributos:Object;
 
     constructor()
     constructor(codigo:Array<String>)
