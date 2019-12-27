@@ -201,8 +201,8 @@ primitivo : ENTERO                  {$$ = new Primitivo(Tipo.INT,$1,@1.first_lin
 //#########################################################################################
 //################################# PRINT | PRINTLN #####################################
 //#######################################################################################
-print_statement : PRINT PARIZQ expresion PARDER 
-                | PRINTLN PARIZQ expresion PARDER 
+print_statement : PRINT PARIZQ expresion PARDER                     { $$ = []; $$.push(new PrintlOLCEV($3,false,@1.first_line,@1.first_column)); }
+                | PRINTLN PARIZQ expresion PARDER                   { $$ = []; $$.push(new PrintlOLCEV($3,true,@1.first_line,@1.first_column)); }
                 ;
 
 
