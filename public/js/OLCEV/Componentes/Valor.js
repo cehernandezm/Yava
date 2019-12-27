@@ -18,6 +18,10 @@ var Tipo;
 var Operacion;
 (function (Operacion) {
     Operacion[Operacion["SUMA"] = 0] = "SUMA";
+    Operacion[Operacion["RESTA"] = 1] = "RESTA";
+    Operacion[Operacion["MULTIPLICACION"] = 2] = "MULTIPLICACION";
+    Operacion[Operacion["DIVISION"] = 3] = "DIVISION";
+    Operacion[Operacion["POTENCIA"] = 4] = "POTENCIA";
 })(Operacion || (Operacion = {}));
 ;
 var Modificador;

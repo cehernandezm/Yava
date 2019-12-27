@@ -12,6 +12,7 @@ class Analizar {
         nodo.codigo = [];
         nodo.codigo = nodo.codigo.concat(Auxiliar.funcionTrunk().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.functionNumberToCadena().codigo);
+        nodo.codigo = nodo.codigo.concat(Auxiliar.funcionPow().codigo);
         this.instrucciones.forEach(clase => {
             let entorno: Entorno = new Entorno(id);
             if (clase instanceof Clase) {

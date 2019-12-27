@@ -11,13 +11,16 @@
 
 "+"                                             return 'MAS'
 "="                                             return 'IGUAL'
-
+"-"                                             return 'MENOS'
+"*"                                             return 'MULTIPLICACION'            
+"/"                                             return 'DIVISION' 
 
 "{"                                             return 'LLAVEIZQ'
 "}"                                             return 'LLAVEDER'
 "("                                             return 'PARIZQ'
 ")"                                             return 'PARDER'
 ";"                                             return 'PNTCOMA'
+","                                             return 'COMA' 
 
 
 [\'\‘\’].[\'\’\‘]                               return 'CARACTER'
@@ -41,6 +44,8 @@
 "true"                                          return 'TRUE'
 "false"                                         return 'FALSE'
 
+"pow"                                           return 'POW'
+
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -48,7 +53,11 @@
 /lex
 
 %right IGUAL
-%left MAS
+%left MAS,MENOS
+%left MULTIPLICACION, DIVISION
+
+%right PARIZQ
+%left PARDER
 %start inicio
 
 %%
@@ -167,7 +176,11 @@ expresion : aritmetica              { $$ = $1; }
           | primitivo               { $$ = $1; }
           ;
 
-aritmetica : expresion MAS expresion { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
+aritmetica : expresion MAS expresion                                                { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
+           | expresion MENOS expresion                                              { $$ = new Aritmetica($1,$3,Operacion.RESTA,@1.first_line,@1.first_column);}
+           | expresion MULTIPLICACION expresion                                     { $$ = new Aritmetica($1,$3,Operacion.MULTIPLICACION,@1.first_line,@1.first_column);}
+           | expresion DIVISION expresion                                           { $$ = new Aritmetica($1,$3,Operacion.DIVISION,@1.first_line,@1.first_column);}
+           | POW PARIZQ expresion COMA expresion PARDER                             { $$ = new Aritmetica($3,$5,Operacion.POTENCIA,@1.first_line,@1.first_column);}
            ;
 
 

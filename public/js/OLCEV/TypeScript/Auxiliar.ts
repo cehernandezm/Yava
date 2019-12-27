@@ -203,6 +203,59 @@ class Auxiliar{
         return nodo;
     }
 
+
+    /**
+     * METODO QUE GENERA EL CODIGO 3D
+     * DE LA FUNCION POW
+     */
+    public static funcionPow():Nodo{
+        let nodo:Nodo = new Nodo();
+        nodo.codigo = [];
+
+        let posicion:String = this.generarTemporal();
+        let base:String = this.generarTemporal();
+        let exponente:String = this.generarTemporal();
+        let retorno:String = this.generarTemporal();
+        let nuevo:String = this.generarTemporal();
+        let v:String = this.generarEtiqueta();
+        let s:String = this.generarEtiqueta();
+
+
+        nodo.codigo.push(";#########################################################################");
+        nodo.codigo.push(";######################### FUNCION NUMBERTOCADENA ########################");
+        nodo.codigo.push(";#########################################################################");
+        nodo.codigo.push("proc funcionPow{");
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 0","Obtenemos la posicion de la base"));
+        nodo.codigo.push(this.crearLinea(base + " = Stack[" + posicion + "] ","Obtenemos el valor de la base"));
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 1","Obtenemos la posicion del exponente"));
+        nodo.codigo.push(this.crearLinea(exponente + " = Stack[" + posicion + "]","Obtenemos el valor del exponente"));
+        nodo.codigo.push(this.crearLinea(this.saltoCondicional(exponente + " > 0",v),"Si el exponente aun no es 0"));
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 2","Posicion del retorno"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicion + "] = 1","Retornamos un valor"));
+        nodo.codigo.push(this.saltoIncondicional(s));
+        nodo.codigo.push(v + ":");
+        nodo.codigo.push(this.crearLinea("P = P + 3","Simulacion de cambio de ambito"));
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 0","Obtenemos la posicion de la base"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicion + "] = " + base ,"Seteamos el valor de la base"));
+        nodo.codigo.push(this.crearLinea(exponente + " = " + exponente  + " -  1","Le quitamos 1 al exponente"));
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 1","Obtenemos la posicion de la exponente"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicion + "] = " + exponente ,"Seteamos el valor del exponente"));
+        nodo.codigo.push("call funcionPow")
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 2","Obtenemos la posicion del retorno"));
+        nodo.codigo.push(this.crearLinea(retorno + " = Stack[" + posicion + "]","Almacenamos el valor que retorno la funcion"));
+        nodo.codigo.push(this.crearLinea("P = P - 3","Fin simulacion de cambio de ambito"));
+        nodo.codigo.push(this.crearLinea(nuevo + " = " + retorno + " * " + base,"Realizamos la multiplicacion"));
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 2","Posicion del retorno"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicion + "] = " + nuevo,"Retornamos un valor"));
+        nodo.codigo.push(s  +  ":");
+        nodo.codigo.push("}");
+        nodo.codigo.push("\n");
+        nodo.codigo.push("\n");
+
+
+        return nodo;
+    }
+
     
     
 

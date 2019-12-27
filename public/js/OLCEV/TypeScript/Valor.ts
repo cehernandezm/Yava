@@ -24,7 +24,11 @@ enum Tipo{
 
 
 enum Operacion{
-    SUMA
+    SUMA,
+    RESTA,
+    MULTIPLICACION,
+    DIVISION,
+    POTENCIA
 };
 
 enum Modificador{

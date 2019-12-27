@@ -30,10 +30,17 @@ class Aritmetica implements Instruccion {
         let nodoDer: Nodo = valueDer as Nodo;
 
         let nodo: Nodo = new Nodo([]);
+        
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
         switch (this.operacion) {
             case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo,entorno);
+            case Operacion.RESTA:
+            case Operacion.MULTIPLICACION:
+            case Operacion.DIVISION: 
+            return this.restaMultiplicacionDivision(nodoIzq,nodoDer,nodo,entorno);
+            case Operacion.POTENCIA: return this.potencia(nodoIzq,nodoDer,nodo,entorno);
+
             
         }
 
@@ -82,6 +89,83 @@ class Aritmetica implements Instruccion {
         return mensaje;
     }
 
+
+     /**
+     * METODO QUE SE ENCARGARA DE RESOLVER LA RESTA/MULTIPLICACION/DIVISION
+     * @param izq Operando izquierdo
+     * @param der Operando derecho
+     * @param salida nodo de resultado
+     */
+    restaMultiplicacionDivision(izq: Nodo, der: Nodo, salida: Nodo,entorno:Entorno): Object {
+        let simbolo:String;
+        let palabra:String;
+
+        if(this.operacion === Operacion.RESTA){
+            simbolo = " - ";
+            palabra = " restar ";
+        }
+        else if(this.operacion === Operacion.MULTIPLICACION){
+            simbolo = " * ";
+            palabra = " multiplicar ";
+        }
+        else{
+            simbolo = " / ";
+            palabra = " dividir ";
+        }
+
+        if ((izq.tipo === Tipo.INT && der.tipo === Tipo.DOUBLE) || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.INT)
+            || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.CHAR) || (izq.tipo === Tipo.CHAR && der.tipo === Tipo.DOUBLE)
+            || (izq.tipo === Tipo.DOUBLE && der.tipo === Tipo.DOUBLE)) {
+            let temporal: String = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + izq.resultado + simbolo + der.resultado, ""));
+            salida.tipo = Tipo.DOUBLE;
+            salida.resultado = temporal;
+            return salida;
+        }
+        else if ((izq.tipo === Tipo.INT && der.tipo === Tipo.CHAR) || (izq.tipo === Tipo.CHAR && der.tipo === Tipo.INT)
+            || (izq.tipo === Tipo.INT && der.tipo === Tipo.INT) || (izq.tipo === Tipo.CHAR && der.tipo === Tipo.CHAR)) {
+            let temporal: String = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + izq.resultado + simbolo + der.resultado, ""));
+            salida.tipo = Tipo.INT;
+            salida.resultado = temporal;
+            return salida;
+        }
+        let mensaje:MensajeError = new MensajeError("Semantico","No se puede "+ palabra   +  ": " + Tipo[izq.tipo] + " con: " + Tipo[der.tipo],entorno.archivo,this.l,this.c);
+        Auxiliar.agregarError(mensaje);
+        return mensaje;
+    }
+
+
+    /**
+     * METODO QUE SE ENCARGA DE RESOLVER UNA 
+     * POTENCIA
+     * @param izq OPERANDO IZQ 
+     * @param der OPERANDO DER
+     * @param salida NODO DE SALIDA
+     * @param entorno ENTORNO ACTUAL
+     */
+    potencia(izq:Nodo,der:Nodo,salida:Nodo,entorno:Entorno):Object{
+        if(izq.tipo === Tipo.STRING || der.tipo === Tipo.STRING || izq.tipo === Tipo.BOOLEAN || der.tipo === Tipo.BOOLEAN){
+            let mensaje:MensajeError = new MensajeError("Semantico","No se puede realizar la potencia de: " + Operacion[izq.tipo] + " con: " + Operacion[der.tipo],entorno.archivo,this.l,this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
+
+        let posicion:String = Auxiliar.generarTemporal();
+        let retorno:String = Auxiliar.generarTemporal();
+        salida.codigo.push(Auxiliar.crearLinea("P = P + " + entorno.tamaño,"Simulacion de cambio de ambito"));
+        salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + 0","Posicion del parametro de base"));
+        salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + izq.resultado,"Almacenamos el valor de la base"));
+        salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + 1","Posicion del parametro de exponente"));
+        salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + der.resultado,"Almacenamos el valor del exponente"));
+        salida.codigo.push(Auxiliar.crearLinea("call funcionPow","Llamamos a la funcion de la potencia"));
+        salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + 2","Posicion del retorno"));
+        salida.codigo.push(Auxiliar.crearLinea(retorno + " = Stack[" + posicion + "]","Obtenemos el valor del retorno"));
+        salida.codigo.push(Auxiliar.crearLinea("P = P - " + entorno.tamaño,"Fin simulacion de cambio de ambito"));
+        salida.resultado = retorno;
+        salida.tipo = Tipo.DOUBLE;
+        return salida;
+    }
 
 
 
