@@ -32,20 +32,14 @@ class Str implements Instruccion{
         salida.codigo = salida.codigo.concat(nodo.codigo);
 
         if(nodo.tipo === Tipo.STRING) return salida;
-        else if(nodo.tipo === Tipo.INT){
-            salida.codigo.push(";############################### CAST INT TO STRING ######################");
-            let posicion:String = Auxiliar.generarTemporal();
+        else if(nodo.tipo === Tipo.INT || nodo.tipo === Tipo.DOUBLE || nodo.tipo === Tipo.CHAR || nodo.tipo === Tipo.BOOLEAN){
+            salida.tipo = Tipo.STRING;
             let temporal:String = Auxiliar.generarTemporal();
-            
-            salida.codigo.push(Auxiliar.crearLinea("P = P + " + entorno.tamaño,"Simulacion de cambio de ambito"));
-            salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + 0","Posicion del parametro"));
-            salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + nodo.resultado,"Almacenamos el numero a convertir"));
-            salida.codigo.push(Auxiliar.crearLinea(temporal + " = H","Almacenamos el inicio de la cadena"));
-            salida.codigo.push("call numberToCadena");
+            salida.codigo.push(";############################### CAST TO STRING ######################");
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = H + 0","Inicio de la nueva cadena"));
+            salida.codigo = salida.codigo.concat(Aritmetica.concatenar(nodo.resultado,nodo.tipo,entorno,nodo).codigo);
             salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0","Fin de la cadena"));
             salida.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentamos el Heap"));
-            salida.codigo.push(Auxiliar.crearLinea("P = P - " + entorno.tamaño,"Fin simulacion de cambio de ambito"));
-            salida.tipo = Tipo.STRING;
             salida.resultado = temporal;
         }
 

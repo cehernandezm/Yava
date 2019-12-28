@@ -49,6 +49,7 @@
 "println"                                       return "PRINTLN"
 
 "str"                                           return 'STR'
+"toInt"                                         return 'TOINT'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -183,6 +184,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | casteo                                              { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
           | str_statement                                       { $$ = $1; }
+          | toint_statement                                     { $$ = $1; }
           ;
 
 aritmetica : expresion MAS expresion                                                { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
@@ -203,6 +205,13 @@ casteo : PARIZQ tipo PARDER expresion                                           
 //###################################### STR #############################################
 //#######################################################################################
 str_statement : STR PARIZQ expresion PARDER                                         { $$ = new Str($3,@1.first_line,@1.first_column); }
+              ;
+
+
+//#########################################################################################
+//###################################### TOINT #############################################
+//#######################################################################################
+toint_statement : TOINT PARIZQ expresion PARDER                                         { $$ = new toInt($3,@1.first_line,@1.first_column); }
               ;
 
 //#########################################################################################

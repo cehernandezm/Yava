@@ -256,6 +256,67 @@ class Auxiliar{
         return nodo;
     }
 
+
+    /**
+     * FUNCION QUE SE ENCARGA DE 
+     * GENERAR CODIGO 3D
+     * PARA LA CONVERSION DE STRING TO 
+     * INT
+     */
+
+    public static stringToNumber():Nodo{
+        let nodo:Nodo = new Nodo([]);
+        let posicion:String = this.generarTemporal();
+        let posicion2:String = this.generarTemporal();
+        let valor:String = this.generarTemporal();
+        let acarreo:String = this.generarTemporal();
+        let retorno:String = this.generarTemporal();
+        let posicionTemporal:String = this.generarTemporal();
+        let v:String = this.generarEtiqueta();
+        let s:String = this.generarEtiqueta();
+        
+
+        nodo.codigo.push(";#########################################################################");
+        nodo.codigo.push(";######################### FUNCION String To Number ########################");
+        nodo.codigo.push(";#########################################################################");
+        nodo.codigo.push("proc stringToNumber{");
+
+        nodo.codigo.push(this.crearLinea(posicion + " = P + 0","Obtenemos la referencia a la posicion de la cadena"));
+        nodo.codigo.push(this.crearLinea(posicion2 + " = P + 1","Obtenemos la posicion del valor acarreado"));
+        nodo.codigo.push(this.crearLinea(posicion + " = Stack[" + posicion + "]","posicion en Heap de la cadena"));
+        nodo.codigo.push(this.crearLinea(valor + " = Heap[" + posicion + "]","valor (caracter)"));
+        nodo.codigo.push(this.crearLinea(acarreo + " = Stack[" + posicion2 + "]","Valor de acarreo" ));
+        nodo.codigo.push(this.crearLinea(this.saltoCondicional(valor  + " == 0",v),"Si es el final de la cadena"));
+        nodo.codigo.push(this.crearLinea(valor + " = " + valor + " - 48","Convertimos el ascii a entero"));
+        nodo.codigo.push(this.crearLinea(this.saltoCondicional(valor + " < 0",v),"Si es menor al ascii 47 entonces no es un numero"));
+        nodo.codigo.push(this.crearLinea(this.saltoCondicional(valor + " > 9",v),"Si es mayor al ascii 57 no es un numero"));
+        nodo.codigo.push(this.crearLinea(retorno + " = " + acarreo + " * 10","Multiplicamos el acarreo por la decena"));
+        nodo.codigo.push(this.crearLinea(retorno + " = " + retorno + " + " + valor,"Le sumamos el valor actual"));
+        nodo.codigo.push(this.crearLinea("P = P + 3","Simulacion de cambio de ambito"));
+        nodo.codigo.push(this.crearLinea(posicionTemporal + " = P + 0","Posicion del primer parametro"));
+        nodo.codigo.push(this.crearLinea(posicion + " = " + posicion + " +  1","Aumentamos en 1 la posicion en Heap de la cadena"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicionTemporal + "] = " + posicion,"Pasamos la posicion del siguiente caracter"));
+        nodo.codigo.push(this.crearLinea(posicionTemporal + " = P + 1","Posicion del segundo parametro"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicionTemporal + "] = " + retorno,"Pasamos el valor del acarreo"));
+        nodo.codigo.push("call stringToNumber");
+        nodo.codigo.push(this.crearLinea(posicionTemporal + " = P + 2","Posicion del retorno"));
+        
+        nodo.codigo.push(this.crearLinea(retorno + " = Stack[" + posicionTemporal + "]","Obtenemos el retorno de la funcion"));
+        nodo.codigo.push(this.crearLinea("P = P - 3","Fin simulacion de cambio de ambito"));
+        nodo.codigo.push(this.crearLinea(posicionTemporal + " = P + 2","Posicion del retorno"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicionTemporal + "] = " + retorno,"retornamos el valor numerico"));
+        nodo.codigo.push(this.saltoIncondicional(s));
+
+        nodo.codigo.push(v + ":");
+        nodo.codigo.push(this.crearLinea(posicion + " = P +  2","Posiciond el retorno"));
+        nodo.codigo.push(this.crearLinea("Stack[" + posicion + "] = " + acarreo,"Retornamos el valor numerico"));
+        nodo.codigo.push(s + ":");
+
+        nodo.codigo.push("}");
+        nodo.codigo.push("\n");
+        nodo.codigo.push("\n");
+        return nodo;
+    }
     
     
 
