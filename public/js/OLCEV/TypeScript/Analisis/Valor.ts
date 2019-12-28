@@ -28,7 +28,12 @@ enum Operacion{
     RESTA,
     MULTIPLICACION,
     DIVISION,
-    POTENCIA
+    POTENCIA,
+    NEGATIVO,
+    INCREMENTOPRE,
+    DECREMENTOPRE,
+    INCREMENTOPOS,
+    DECREMENTOPOS
 };
 
 enum Modificador{

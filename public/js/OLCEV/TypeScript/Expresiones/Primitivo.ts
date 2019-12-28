@@ -51,11 +51,18 @@ class Primitivo extends Valor implements Instruccion{
                 nodo.verdaderas = s.verdaderas;
                 nodo.falsas = s.falsas;
                 nodo.resultado = temporal;
-                if(s.atributo['isStatic'])nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]","Accedemos a la variable estatica " + nombre));
+                
+                if(s.atributo['isStatic']){
+                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]","Accedemos a la variable estatica " + nombre));
+                    nodo.localizacion = Localizacion.STACK;
+                    nodo.posicion = s.posAbsoluta.toString();
+                }
                 else if(s.localizacion === Localizacion.STACK){
                     let posicion:String = Auxiliar.generarTemporal();
                     nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + s.posRelativa,"Accedemos a la posicion de la variable: " + nombre));
                     nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + posicion + "]","Obtenemos el valor de la variable: " + nombre));
+                    nodo.localizacion = Localizacion.STACK;
+                    nodo.posicion = posicion;
                 }
                 else{
                     let posicion:String = Auxiliar.generarTemporal();
@@ -64,6 +71,8 @@ class Primitivo extends Valor implements Instruccion{
                     nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = Stack[" + posicion + "]","Obtenemos la posicion en Heap de la referencia"));
                     nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = " + posHeap + " + " + s.posRelativa,"Nos movemos a la posicion del atributo"));
                     nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Heap[" + posHeap + "]", "Obtenemos el valor del atributo: " + nombre));
+                    nodo.localizacion = Localizacion.HEAP;
+                    nodo.posicion = posHeap;
 
                 }    
                 return nodo;

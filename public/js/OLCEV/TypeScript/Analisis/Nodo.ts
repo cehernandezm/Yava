@@ -1,11 +1,11 @@
 class Nodo extends Valor{
     codigo:Array<String> = [];
     resultado:String;
-    rol:String;
-    estructura:number;
     verdaderas:Array<String> = null;
     falsas:Array<String> = null;
     atributos:Object;
+    localizacion:Localizacion;
+    posicion:String = null;
 
     constructor()
     constructor(codigo:Array<String>)

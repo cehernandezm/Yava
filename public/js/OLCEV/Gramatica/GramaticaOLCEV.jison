@@ -9,6 +9,8 @@
 [0-9]+("."[0-9]+)                               return 'DECIMAL'
 [0-9]+                                          return 'ENTERO'
 
+"++"                                            return 'INCREMENTO'
+"--"                                            return 'DECREMENTO'
 "+"                                             return 'MAS'
 "="                                             return 'IGUAL'
 "-"                                             return 'MENOS'
@@ -61,8 +63,14 @@
 %left MAS,MENOS
 %left MULTIPLICACION, DIVISION
 
+%right UMENOS
+%right INCREMENTO
+%right DECREMENTO
 %right PARIZQ
 %left PARDER
+
+
+
 %start inicio
 
 %%
@@ -186,16 +194,29 @@ expresion : aritmetica                                          { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
           | str_statement                                       { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
+          | unaria                                              { $$ = $1; }
           
           ;
-
+//#########################################################################################
+//################################# ARITMETICAS #####################################
+//#######################################################################################
 aritmetica : expresion MAS expresion                                                { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
            | expresion MENOS expresion                                              { $$ = new Aritmetica($1,$3,Operacion.RESTA,@1.first_line,@1.first_column);}
            | expresion MULTIPLICACION expresion                                     { $$ = new Aritmetica($1,$3,Operacion.MULTIPLICACION,@1.first_line,@1.first_column);}
            | expresion DIVISION expresion                                           { $$ = new Aritmetica($1,$3,Operacion.DIVISION,@1.first_line,@1.first_column);}
            | POW PARIZQ expresion COMA expresion PARDER                             { $$ = new Aritmetica($3,$5,Operacion.POTENCIA,@1.first_line,@1.first_column);}
+           | MENOS expresion %prec UMENOS                                           { $$ = new Unaria($2,Operacion.NEGATIVO,@1.first_line,@1.first_column); }
            ;
 
+//#########################################################################################
+//################################# UNARIAS #####################################
+//#######################################################################################
+
+unaria : INCREMENTO expresion                                           { $$ = new Unaria($2,Operacion.INCREMENTOPRE,@1.first_line,@1.first_column); }
+       | DECREMENTO expresion                                           { $$ = new Unaria($2,Operacion.DECREMENTOPRE,@1.first_line,@1.first_column); }
+       | expresion INCREMENTO                                           { $$ = new Unaria($1,Operacion.INCREMENTOPOS,@1.first_line,@1.first_column); }
+       | expresion DECREMENTO                                           { $$ = new Unaria($1,Operacion.DECREMENTOPOS,@1.first_line,@1.first_column); }
+       ;
 
 //#########################################################################################
 //################################# CASTEO EXPLICITO #####################################

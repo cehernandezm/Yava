@@ -20,6 +20,7 @@ var Analizar = /** @class */ (function () {
             }
             //console.log(entorno);
         });
+        nodo.codigo.push("call constructor_hola");
         return nodo;
     };
     return Analizar;
