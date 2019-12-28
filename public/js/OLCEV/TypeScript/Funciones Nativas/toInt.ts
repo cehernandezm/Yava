@@ -1,6 +1,7 @@
 class toInt implements Instruccion{
     
     expresion:Instruccion;
+    flag:Boolean;
     l:number;
     c:number;
 
@@ -10,8 +11,9 @@ class toInt implements Instruccion{
      * @param l 
      * @param c 
      */
-    constructor(expresion:Instruccion,l:number,c:number){
+    constructor(expresion:Instruccion,flag:Boolean,l:number,c:number){
         this.expresion = expresion;
+        this.flag = flag;
         this.l = l;
         this.c = c;
     }
@@ -29,7 +31,8 @@ class toInt implements Instruccion{
         salida.codigo = salida.codigo.concat(nodo.codigo);
 
         if(nodo.tipo === Tipo.STRING){
-            salida.tipo = Tipo.INT;
+            if(this.flag) salida.tipo = Tipo.INT;
+            else salida.tipo = Tipo.DOUBLE;
             let posicion:String = Auxiliar.generarTemporal();
             let retorno:String = Auxiliar.generarTemporal();
             salida.codigo.push(Auxiliar.crearLinea("P = P + " + entorno.tamaño,"Simulacion de cambio de ambito"));
@@ -45,7 +48,7 @@ class toInt implements Instruccion{
             return salida;
         }
         else{
-            let mensaje:MensajeError = new MensajeError("Semantico","No se puede aplicar la funcion toInt al tipo: " + Tipo[nodo.tipo],entorno.archivo,this.l,this.c);
+            let mensaje:MensajeError = new MensajeError("Semantico","No se puede aplicar la funcion " + ((this.flag) ? "toInt" : "toDouble") + " al tipo: " + Tipo[nodo.tipo],entorno.archivo,this.l,this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }

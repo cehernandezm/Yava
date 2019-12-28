@@ -50,6 +50,7 @@
 
 "str"                                           return 'STR'
 "toInt"                                         return 'TOINT'
+"toDouble"                                      return 'TODOUBLE'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -185,6 +186,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
           | str_statement                                       { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
+          
           ;
 
 aritmetica : expresion MAS expresion                                                { $$ = new Aritmetica($1,$3,Operacion.SUMA,@1.first_line,@1.first_column);}
@@ -209,10 +211,11 @@ str_statement : STR PARIZQ expresion PARDER                                     
 
 
 //#########################################################################################
-//###################################### TOINT #############################################
+//###################################### TOINT | TO DOUBLE ###############################
 //#######################################################################################
-toint_statement : TOINT PARIZQ expresion PARDER                                         { $$ = new toInt($3,@1.first_line,@1.first_column); }
-              ;
+toint_statement : TOINT PARIZQ expresion PARDER                                         { $$ = new toInt($3,true,@1.first_line,@1.first_column); }
+                | TODOUBLE PARIZQ expresion PARDER                                      { $$ = new toInt($3,false,@1.first_line,@1.first_column); }
+                ;
 
 //#########################################################################################
 //################################# DATOS PRIMITIVOS #####################################

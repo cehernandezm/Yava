@@ -5,8 +5,9 @@ var toInt = /** @class */ (function () {
      * @param l
      * @param c
      */
-    function toInt(expresion, l, c) {
+    function toInt(expresion, flag, l, c) {
         this.expresion = expresion;
+        this.flag = flag;
         this.l = l;
         this.c = c;
     }
@@ -22,7 +23,10 @@ var toInt = /** @class */ (function () {
         var nodo = resultado;
         salida.codigo = salida.codigo.concat(nodo.codigo);
         if (nodo.tipo === Tipo.STRING) {
-            salida.tipo = Tipo.INT;
+            if (this.flag)
+                salida.tipo = Tipo.INT;
+            else
+                salida.tipo = Tipo.DOUBLE;
             var posicion = Auxiliar.generarTemporal();
             var retorno = Auxiliar.generarTemporal();
             salida.codigo.push(Auxiliar.crearLinea("P = P + " + entorno.tamaño, "Simulacion de cambio de ambito"));
@@ -38,7 +42,7 @@ var toInt = /** @class */ (function () {
             return salida;
         }
         else {
-            var mensaje = new MensajeError("Semantico", "No se puede aplicar la funcion toInt al tipo: " + Tipo[nodo.tipo], entorno.archivo, this.l, this.c);
+            var mensaje = new MensajeError("Semantico", "No se puede aplicar la funcion " + ((this.flag) ? "toInt" : "toDouble") + " al tipo: " + Tipo[nodo.tipo], entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
