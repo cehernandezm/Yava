@@ -77,6 +77,9 @@
 "default"                                       return 'DEFAULT'
 
 "break"                                         return 'BREAK'
+"continue"                                      return 'CONTINUE'
+
+"while"                                         return 'WHILE'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -183,6 +186,8 @@ instruccion : declaracionLocal PNTCOMA                                          
             | if_superior                                                                 { $$ = []; $$.push($1); }
             | switch_statement                                                            { $$ = []; $$.push($1); }
             | break_statement  PNTCOMA                                                    { $$ = []; $$.push($1); }
+            | while_statement                                                             { $$ = []; $$.push($1); }
+            | continue_statement PNTCOMA                                                  { $$ = []; $$.push($1); }
             ;
 
 
@@ -376,6 +381,18 @@ default_statement : DEFAULT DSPUNTOS instrucciones                          { $$
 //#######################################################################################
 break_statement : BREAK                                             { $$ = new Break(); }
                 ;
+
+
+//#########################################################################################
+//################################# WHILE #####################################
+//#######################################################################################
+while_statement : WHILE expresion LLAVEIZQ instrucciones LLAVEDER                           { $$ = new While($2,$4,@1.first_line,@1.first_column); }
+                ;
+//#########################################################################################
+//################################# CONTINUE #####################################
+//#######################################################################################
+continue_statement : CONTINUE                                                   { $$ = new Continue(); }
+                   ;
 
 %%
 

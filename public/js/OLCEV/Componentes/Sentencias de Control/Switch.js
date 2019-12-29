@@ -30,6 +30,7 @@ var Switch = /** @class */ (function () {
             salida.saltos = salida.saltos.concat(nodo.saltos);
             salida.breaks = salida.breaks.concat(nodo.breaks);
             salida.continue = salida.continue.concat(nodo.continue);
+            salida.retornos = salida.retornos.concat(nodo.retornos);
         });
         salida.codigo.push(";##################### SALTOS DE SALIDA ###############");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(salida.saltos).codigo);

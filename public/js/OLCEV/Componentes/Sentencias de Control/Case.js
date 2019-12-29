@@ -46,6 +46,7 @@ var Case = /** @class */ (function () {
             salida.saltos = salida.saltos.concat(temp.saltos);
             salida.breaks = salida.breaks.concat(temp.breaks);
             salida.continue = salida.continue.concat(temp.continue);
+            salida.retornos = salida.retornos.concat(temp.retornos);
         });
         salida.codigo.push(";######################## FALSAS ####################");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(f).codigo);

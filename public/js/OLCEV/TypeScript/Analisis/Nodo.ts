@@ -9,6 +9,7 @@ class Nodo extends Valor{
     saltos:Array<String> = [];
     breaks:Array<String> = [];
     continue:Array<String> = [];
+    retornos:Array<String> = [];
 
     constructor()
     constructor(codigo:Array<String>)
