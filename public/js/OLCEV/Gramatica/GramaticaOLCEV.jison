@@ -12,10 +12,19 @@
 "++"                                            return 'INCREMENTO'
 "--"                                            return 'DECREMENTO'
 "+"                                             return 'MAS'
-"="                                             return 'IGUAL'
 "-"                                             return 'MENOS'
 "*"                                             return 'MULTIPLICACION'            
 "/"                                             return 'DIVISION' 
+
+
+"<="                                            return 'MENORIGUAL'
+">="                                            return 'MAYORIGUAL'
+"!="                                            return 'DIFERENTE'
+"=="                                            return 'IGUALIGUAL'
+">"                                             return 'MAYOR'
+"<"                                             return 'MENOR'
+
+
 
 "{"                                             return 'LLAVEIZQ'
 "}"                                             return 'LLAVEDER'
@@ -23,6 +32,7 @@
 ")"                                             return 'PARDER'
 ";"                                             return 'PNTCOMA'
 ","                                             return 'COMA' 
+"="                                             return 'IGUAL'
 
 
 [\'\‘\’].[\'\’\‘]                               return 'CARACTER'
@@ -59,15 +69,20 @@
 .                                               { console.log("Error"); }//ERRORES
 /lex
 
-%right IGUAL
-%left MAS,MENOS
-%left MULTIPLICACION, DIVISION
 
-%right UMENOS
-%right INCREMENTO
-%right DECREMENTO
-%right PARIZQ
-%left PARDER
+
+
+%left                               MAS,MENOS
+%left                               MULTIPLICACION, DIVISION
+%right                              UMENOS
+
+
+%left                               MAYOR,MAYORIGUAL,MENOR,MENORIGUAL 
+%left                               DIFERENTE,IGUALIGUAL
+%right                              INCREMENTO
+%right                              DECREMENTO
+%right                              PARIZQ
+
 
 
 
@@ -147,6 +162,7 @@ instrucciones : instrucciones instruccion                                       
 instruccion : declaracionLocal PNTCOMA                                                    { $$ = $1; }
             | asignacion_statement PNTCOMA                                                { $$ = $1; }
             | print_statement PNTCOMA                                                     { $$ = $1; }
+            | unaria PNTCOMA                                                              { $$ = []; $$.push($1); }
             ;
 
 
@@ -189,12 +205,14 @@ tipo : STRING                                       { $$ = new Valor(Tipo.STRING
 
 
 expresion : aritmetica                                          { $$ = $1; }
+          | relacional                                          { $$ = $1; }                                             
           | primitivo                                           { $$ = $1; }
           | casteo                                              { $$ = $1; }
-          | PARIZQ expresion PARDER                             { $$ = $2; }
           | str_statement                                       { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
           | unaria                                              { $$ = $1; }
+          | PARIZQ expresion PARDER                             { $$ = $2; }
+
           
           ;
 //#########################################################################################
@@ -207,11 +225,23 @@ aritmetica : expresion MAS expresion                                            
            | POW PARIZQ expresion COMA expresion PARDER                             { $$ = new Aritmetica($3,$5,Operacion.POTENCIA,@1.first_line,@1.first_column);}
            | MENOS expresion %prec UMENOS                                           { $$ = new Unaria($2,Operacion.NEGATIVO,@1.first_line,@1.first_column); }
            ;
+//#########################################################################################
+//################################# RELACIONALES #####################################
+//#######################################################################################
+
+relacional : expresion MENOR expresion                                                  { $$ = new Relacional($1,$3,"<",@1.first_line,@1.first_column); }
+           | expresion MAYOR expresion                                                  { $$ = new Relacional($1,$3,">",@1.first_line,@1.first_column); }
+           | expresion MENORIGUAL expresion                                             { $$ = new Relacional($1,$3,"<=",@1.first_line,@1.first_column); }
+           | expresion MAYORIGUAL expresion                                             { $$ = new Relacional($1,$3,">=",@1.first_line,@1.first_column); }
+           | expresion IGUALIGUAL expresion                                             { $$ = new Relacional($1,$3,"==",@1.first_line,@1.first_column); }
+           | expresion DIFERENTE expresion                                              { $$ = new Relacional($1,$3,"!=",@1.first_line,@1.first_column); }
+           ;
+
+
 
 //#########################################################################################
 //################################# UNARIAS #####################################
 //#######################################################################################
-
 unaria : INCREMENTO expresion                                           { $$ = new Unaria($2,Operacion.INCREMENTOPRE,@1.first_line,@1.first_column); }
        | DECREMENTO expresion                                           { $$ = new Unaria($2,Operacion.DECREMENTOPRE,@1.first_line,@1.first_column); }
        | expresion INCREMENTO                                           { $$ = new Unaria($1,Operacion.INCREMENTOPOS,@1.first_line,@1.first_column); }

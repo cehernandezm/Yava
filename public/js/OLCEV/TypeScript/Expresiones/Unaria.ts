@@ -32,7 +32,7 @@ class Unaria implements Instruccion{
         let nodo:Nodo = resultado as Nodo;
         //----------------------------------------------------------- SI NO ES DE TIPO NUMERICO ------------------------------------------------
         if(nodo.tipo != Tipo.INT && nodo.tipo != Tipo.DOUBLE){
-            let mensaje:MensajeError = new MensajeError("Semantico","No se puede aplicar " + Operacion[this.operacion] + " en este tipo: " + nodo.tipo,entorno.archivo,this.l,this.c);
+            let mensaje:MensajeError = new MensajeError("Semantico","No se puede aplicar " + Operacion[this.operacion] + " en este tipo: " + Tipo[nodo.tipo],entorno.archivo,this.l,this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }

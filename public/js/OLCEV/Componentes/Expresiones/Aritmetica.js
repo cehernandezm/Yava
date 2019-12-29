@@ -21,7 +21,11 @@ var Aritmetica = /** @class */ (function () {
         var nodoDer = valueDer;
         var nodo = new Nodo([]);
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
+        if (nodoIzq.tipo === Tipo.BOOLEAN)
+            nodoIzq = this.arreglarBoolean(nodoIzq, nodo);
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
+        if (nodoDer.tipo === Tipo.BOOLEAN)
+            nodoDer = this.arreglarBoolean(nodoDer, nodo);
         switch (this.operacion) {
             case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo, entorno);
             case Operacion.RESTA:
@@ -189,59 +193,53 @@ var Aritmetica = /** @class */ (function () {
                 nodo.codigo.push(f + ":");
                 return nodo;
             case Tipo.BOOLEAN:
-                if (actual.verdaderas === null) {
-                    var verdadera = Auxiliar.generarEtiqueta();
-                    var salto = Auxiliar.generarEtiqueta();
-                    nodo.codigo.push(";############### CONCATENANDO BOOLEAN #########################");
-                    nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valor + " == 0", verdadera), "Si es un false"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 116", "t"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 114", "r"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 117", "u"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101", "e"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.saltoIncondicional(salto));
-                    nodo.codigo.push(verdadera + ":");
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 102", "f"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 97", "a"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 108", "l"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 115", "s"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101", "e"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(salto + ":");
-                }
-                else {
-                    var salto = Auxiliar.generarEtiqueta();
-                    nodo.codigo.push(";############### CONCATENANDO BOOLEAN #########################");
-                    nodo.codigo = nodo.codigo.concat(Auxiliar.escribirEtiquetas(actual.verdaderas).codigo);
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 116", "t"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 114", "r"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 117", "u"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101", "e"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.saltoIncondicional(salto));
-                    nodo.codigo = nodo.codigo.concat(Auxiliar.escribirEtiquetas(actual.falsas).codigo);
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 102", "f"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 97", "a"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 108", "l"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 115", "s"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101", "e"));
-                    nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
-                    nodo.codigo.push(salto + ":");
-                }
+                var verdadera = Auxiliar.generarEtiqueta();
+                var salto = Auxiliar.generarEtiqueta();
+                nodo.codigo.push(";############### CONCATENANDO BOOLEAN #########################");
+                nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valor + " == 0", verdadera), "Si es un false"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 116", "t"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 114", "r"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 117", "u"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101", "e"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.saltoIncondicional(salto));
+                nodo.codigo.push(verdadera + ":");
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 102", "f"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 97", "a"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 108", "l"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 115", "s"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101", "e"));
+                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentar Heap"));
+                nodo.codigo.push(salto + ":");
+        }
+        return nodo;
+    };
+    /**
+     * METODO ENCARGADO DE ARREGLAR LOS
+     * BOOLEANS
+     * @param nodo
+     * @param salida
+     */
+    Aritmetica.prototype.arreglarBoolean = function (nodo, salida) {
+        if (nodo.verdaderas != null) {
+            var temporal = Auxiliar.generarTemporal();
+            var salto = Auxiliar.generarEtiqueta();
+            salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodo.verdaderas).codigo);
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = 1", "Verdadero"));
+            salida.codigo.push(Auxiliar.saltoIncondicional(salto));
+            salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodo.falsas).codigo);
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = 0", "Falsa"));
+            salida.codigo.push(salto + ":");
+            nodo.resultado = temporal;
+            nodo.verdaderas = null;
+            nodo.falsas = null;
         }
         return nodo;
     };

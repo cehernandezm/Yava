@@ -30,9 +30,11 @@ class Aritmetica implements Instruccion {
         let nodoDer: Nodo = valueDer as Nodo;
 
         let nodo: Nodo = new Nodo([]);
-        
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
+        if(nodoIzq.tipo === Tipo.BOOLEAN) nodoIzq = this.arreglarBoolean(nodoIzq,nodo);
+
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
+        if(nodoDer.tipo === Tipo.BOOLEAN) nodoDer = this.arreglarBoolean(nodoDer,nodo);
         switch (this.operacion) {
             case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo,entorno);
             case Operacion.RESTA:
@@ -222,7 +224,6 @@ class Aritmetica implements Instruccion {
                 return nodo;
 
             case Tipo.BOOLEAN:
-            if(actual.verdaderas === null){
                 let verdadera:String = Auxiliar.generarEtiqueta();
                 let salto:String = Auxiliar.generarEtiqueta();
                 nodo.codigo.push(";############### CONCATENANDO BOOLEAN #########################");
@@ -248,35 +249,32 @@ class Aritmetica implements Instruccion {
                 nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101","e"));
                 nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
                 nodo.codigo.push(salto + ":");
-            }
-            else{
-                let salto:String = Auxiliar.generarEtiqueta();
-                nodo.codigo.push(";############### CONCATENANDO BOOLEAN #########################");
-                nodo.codigo = nodo.codigo.concat(Auxiliar.escribirEtiquetas(actual.verdaderas).codigo);
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 116","t"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 114","r"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 117","u"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101","e"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.saltoIncondicional(salto));
-                nodo.codigo = nodo.codigo.concat(Auxiliar.escribirEtiquetas(actual.falsas).codigo);
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 102","f"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 97","a"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 108","l"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 115","s"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 101","e"));
-                nodo.codigo.push(Auxiliar.crearLinea("H = H + 1","Aumentar Heap"));
-                nodo.codigo.push(salto + ":");
-            }
+            
         }
 
+        return nodo;
+    }
+
+    /**
+     * METODO ENCARGADO DE ARREGLAR LOS
+     * BOOLEANS
+     * @param nodo 
+     * @param salida 
+     */
+    private  arreglarBoolean(nodo:Nodo,salida:Nodo):Nodo{
+        if(nodo.verdaderas != null){
+            let temporal:String = Auxiliar.generarTemporal();
+            let salto:String = Auxiliar.generarEtiqueta();
+            salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodo.verdaderas).codigo);
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = 1","Verdadero"));
+            salida.codigo.push(Auxiliar.saltoIncondicional(salto));
+            salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodo.falsas).codigo);
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = 0","Falsa"));
+            salida.codigo.push(salto + ":");
+            nodo.resultado = temporal;
+            nodo.verdaderas = null;
+            nodo.falsas = null;
+        }
         return nodo;
     }
 

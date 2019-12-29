@@ -24,7 +24,7 @@ var Unaria = /** @class */ (function () {
         var nodo = resultado;
         //----------------------------------------------------------- SI NO ES DE TIPO NUMERICO ------------------------------------------------
         if (nodo.tipo != Tipo.INT && nodo.tipo != Tipo.DOUBLE) {
-            var mensaje = new MensajeError("Semantico", "No se puede aplicar " + Operacion[this.operacion] + " en este tipo: " + nodo.tipo, entorno.archivo, this.l, this.c);
+            var mensaje = new MensajeError("Semantico", "No se puede aplicar " + Operacion[this.operacion] + " en este tipo: " + Tipo[nodo.tipo], entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
