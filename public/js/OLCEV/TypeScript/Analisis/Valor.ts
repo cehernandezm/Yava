@@ -33,7 +33,10 @@ enum Operacion{
     INCREMENTOPRE,
     DECREMENTOPRE,
     INCREMENTOPOS,
-    DECREMENTOPOS
+    DECREMENTOPOS,
+    OR,
+    AND,
+    NEGACION
 };
 
 enum Modificador{

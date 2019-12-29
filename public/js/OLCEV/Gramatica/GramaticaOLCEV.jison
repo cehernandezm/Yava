@@ -34,6 +34,9 @@
 ","                                             return 'COMA' 
 "="                                             return 'IGUAL'
 
+"||"                                            return 'OR'
+"&&"                                            return 'AND'
+"!"                                             return 'NEGACION'
 
 [\'\‘\’].[\'\’\‘]                               return 'CARACTER'
 [\"\“\”](([^\"\“\”\\])*([\\].)*)*[\"\“\”]       return 'CADENA'
@@ -74,9 +77,11 @@
 
 %left                               MAS,MENOS
 %left                               MULTIPLICACION, DIVISION
+%right                              NEGACION
 %right                              UMENOS
 
-
+%left                               OR
+%left                               AND
 %left                               MAYOR,MAYORIGUAL,MENOR,MENORIGUAL 
 %left                               DIFERENTE,IGUALIGUAL
 %right                              INCREMENTO
@@ -205,7 +210,8 @@ tipo : STRING                                       { $$ = new Valor(Tipo.STRING
 
 
 expresion : aritmetica                                          { $$ = $1; }
-          | relacional                                          { $$ = $1; }                                             
+          | relacional                                          { $$ = $1; }
+          | logica                                              { $$ = $1; }                                             
           | primitivo                                           { $$ = $1; }
           | casteo                                              { $$ = $1; }
           | str_statement                                       { $$ = $1; }
@@ -236,8 +242,13 @@ relacional : expresion MENOR expresion                                          
            | expresion IGUALIGUAL expresion                                             { $$ = new Relacional($1,$3,"==",@1.first_line,@1.first_column); }
            | expresion DIFERENTE expresion                                              { $$ = new Relacional($1,$3,"!=",@1.first_line,@1.first_column); }
            ;
-
-
+//#########################################################################################
+//################################# LOGICAS #####################################
+//#######################################################################################
+logica : expresion OR expresion                                                          { $$ = new Logica($1,$3,Operacion.OR,@1.first_line,@1.first_column); }
+       | expresion AND expresion                                                         { $$ = new Logica($1,$3,Operacion.AND,@1.first_line,@1.first_column); }
+       |           NEGACION expresion                                                    { $$ = new Logica($2,null,Operacion.NEGACION,@1.first_line,@1.first_column); }
+       ;
 
 //#########################################################################################
 //################################# UNARIAS #####################################
