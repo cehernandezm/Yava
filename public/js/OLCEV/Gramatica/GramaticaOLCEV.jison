@@ -80,6 +80,7 @@
 "continue"                                      return 'CONTINUE'
 
 "while"                                         return 'WHILE'
+"do"                                            return 'DO'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -188,6 +189,7 @@ instruccion : declaracionLocal PNTCOMA                                          
             | break_statement  PNTCOMA                                                    { $$ = []; $$.push($1); }
             | while_statement                                                             { $$ = []; $$.push($1); }
             | continue_statement PNTCOMA                                                  { $$ = []; $$.push($1); }
+            | dowhile_statement PNTCOMA                                                   { $$ = []; $$.push($1); }
             ;
 
 
@@ -393,6 +395,12 @@ while_statement : WHILE expresion LLAVEIZQ instrucciones LLAVEDER               
 //#######################################################################################
 continue_statement : CONTINUE                                                   { $$ = new Continue(); }
                    ;
+
+//#########################################################################################
+//################################# DO WHILE #####################################
+//#######################################################################################
+dowhile_statement : DO LLAVEIZQ instrucciones LLAVEDER WHILE PARIZQ expresion PARDER                { $$ = new DoWhile($7,$3,@1.first_line,@1.first_column); }
+                  ;
 
 %%
 
