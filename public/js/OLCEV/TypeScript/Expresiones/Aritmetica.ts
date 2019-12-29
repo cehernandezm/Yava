@@ -31,10 +31,10 @@ class Aritmetica implements Instruccion {
 
         let nodo: Nodo = new Nodo([]);
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
-        if(nodoIzq.tipo === Tipo.BOOLEAN) nodoIzq = this.arreglarBoolean(nodoIzq,nodo);
+        if(nodoIzq.tipo === Tipo.BOOLEAN) nodoIzq = Aritmetica.arreglarBoolean(nodoIzq,nodo);
 
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
-        if(nodoDer.tipo === Tipo.BOOLEAN) nodoDer = this.arreglarBoolean(nodoDer,nodo);
+        if(nodoDer.tipo === Tipo.BOOLEAN) nodoDer = Aritmetica.arreglarBoolean(nodoDer,nodo);
         switch (this.operacion) {
             case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo,entorno);
             case Operacion.RESTA:
@@ -261,7 +261,7 @@ class Aritmetica implements Instruccion {
      * @param nodo 
      * @param salida 
      */
-    private  arreglarBoolean(nodo:Nodo,salida:Nodo):Nodo{
+    public static  arreglarBoolean(nodo:Nodo,salida:Nodo):Nodo{
         if(nodo.verdaderas != null){
             let temporal:String = Auxiliar.generarTemporal();
             let salto:String = Auxiliar.generarEtiqueta();

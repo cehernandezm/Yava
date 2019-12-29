@@ -22,10 +22,10 @@ var Aritmetica = /** @class */ (function () {
         var nodo = new Nodo([]);
         nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
         if (nodoIzq.tipo === Tipo.BOOLEAN)
-            nodoIzq = this.arreglarBoolean(nodoIzq, nodo);
+            nodoIzq = Aritmetica.arreglarBoolean(nodoIzq, nodo);
         nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
         if (nodoDer.tipo === Tipo.BOOLEAN)
-            nodoDer = this.arreglarBoolean(nodoDer, nodo);
+            nodoDer = Aritmetica.arreglarBoolean(nodoDer, nodo);
         switch (this.operacion) {
             case Operacion.SUMA: return this.suma(nodoIzq, nodoDer, nodo, entorno);
             case Operacion.RESTA:
@@ -227,7 +227,7 @@ var Aritmetica = /** @class */ (function () {
      * @param nodo
      * @param salida
      */
-    Aritmetica.prototype.arreglarBoolean = function (nodo, salida) {
+    Aritmetica.arreglarBoolean = function (nodo, salida) {
         if (nodo.verdaderas != null) {
             var temporal = Auxiliar.generarTemporal();
             var salto = Auxiliar.generarEtiqueta();

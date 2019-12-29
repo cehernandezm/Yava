@@ -24,6 +24,8 @@
 ">"                                             return 'MAYOR'
 "<"                                             return 'MENOR'
 
+"?"                                             return 'TERNARIO'
+":"                                             return 'DSPUNTOS'
 
 
 "{"                                             return 'LLAVEIZQ'
@@ -74,6 +76,7 @@
 
 
 
+%right                              TERNARIO,DSPUNTOS
 
 %left                               MAS,MENOS
 %left                               MULTIPLICACION, DIVISION
@@ -214,6 +217,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | logica                                              { $$ = $1; }                                             
           | primitivo                                           { $$ = $1; }
           | casteo                                              { $$ = $1; }
+          | ternario                                            { $$ = $1; }
           | str_statement                                       { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
           | unaria                                              { $$ = $1; }
@@ -259,6 +263,11 @@ unaria : INCREMENTO expresion                                           { $$ = n
        | expresion DECREMENTO                                           { $$ = new Unaria($1,Operacion.DECREMENTOPOS,@1.first_line,@1.first_column); }
        ;
 
+//#########################################################################################
+//################################# TERNARIO #####################################
+//#######################################################################################
+ternario : PARIZQ expresion PARDER TERNARIO expresion DSPUNTOS expresion                { $$ = new Ternario($2,$5,$7,@1.first_line,@1.first_column); }
+         ;
 //#########################################################################################
 //################################# CASTEO EXPLICITO #####################################
 //#######################################################################################

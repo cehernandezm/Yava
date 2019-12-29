@@ -36,10 +36,10 @@ var Logica = /** @class */ (function () {
                 return mensaje;
             }
             salida.codigo = salida.codigo.concat(nodoIzq.codigo);
-            nodoIzq = this.arreglarBoolean(nodoIzq, salida);
+            nodoIzq = Logica.arreglarBoolean(nodoIzq, salida);
             salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodoIzq.falsas).codigo);
             salida.codigo = salida.codigo.concat(nodoDer.codigo);
-            nodoDer = this.arreglarBoolean(nodoDer, salida);
+            nodoDer = Logica.arreglarBoolean(nodoDer, salida);
             salida.verdaderas = nodoIzq.verdaderas;
             salida.verdaderas = salida.verdaderas.concat(nodoDer.verdaderas);
             salida.falsas = nodoDer.falsas;
@@ -52,10 +52,10 @@ var Logica = /** @class */ (function () {
                 return mensaje;
             }
             salida.codigo = salida.codigo.concat(nodoIzq.codigo);
-            nodoIzq = this.arreglarBoolean(nodoIzq, salida);
+            nodoIzq = Logica.arreglarBoolean(nodoIzq, salida);
             salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodoIzq.verdaderas).codigo);
             salida.codigo = salida.codigo.concat(nodoDer.codigo);
-            nodoDer = this.arreglarBoolean(nodoDer, salida);
+            nodoDer = Logica.arreglarBoolean(nodoDer, salida);
             salida.verdaderas = nodoDer.verdaderas;
             salida.falsas = nodoIzq.falsas;
             salida.falsas = salida.falsas.concat(nodoDer.falsas);
@@ -68,7 +68,7 @@ var Logica = /** @class */ (function () {
                 return mensaje;
             }
             salida.codigo = salida.codigo.concat(nodoIzq.codigo);
-            nodoIzq = this.arreglarBoolean(nodoIzq, salida);
+            nodoIzq = Logica.arreglarBoolean(nodoIzq, salida);
             var v = nodoIzq.verdaderas;
             var f = nodoIzq.falsas;
             salida.falsas = v;
@@ -89,7 +89,7 @@ var Logica = /** @class */ (function () {
      * @param nodo
      * @param salida
      */
-    Logica.prototype.arreglarBoolean = function (nodo, salida) {
+    Logica.arreglarBoolean = function (nodo, salida) {
         if (nodo.verdaderas === null) {
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();

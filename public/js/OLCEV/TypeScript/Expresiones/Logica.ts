@@ -48,12 +48,12 @@ class Logica implements Instruccion {
                 return mensaje;
             }
             salida.codigo = salida.codigo.concat(nodoIzq.codigo);
-            nodoIzq = this.arreglarBoolean(nodoIzq, salida);
+            nodoIzq = Logica.arreglarBoolean(nodoIzq, salida);
 
 
             salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodoIzq.falsas).codigo);
             salida.codigo = salida.codigo.concat(nodoDer.codigo);
-            nodoDer = this.arreglarBoolean(nodoDer, salida);
+            nodoDer = Logica.arreglarBoolean(nodoDer, salida);
 
             salida.verdaderas = nodoIzq.verdaderas;
             salida.verdaderas = salida.verdaderas.concat(nodoDer.verdaderas);
@@ -69,12 +69,12 @@ class Logica implements Instruccion {
                 return mensaje;
             }
             salida.codigo = salida.codigo.concat(nodoIzq.codigo);
-            nodoIzq = this.arreglarBoolean(nodoIzq, salida);
+            nodoIzq = Logica.arreglarBoolean(nodoIzq, salida);
 
 
             salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(nodoIzq.verdaderas).codigo);
             salida.codigo = salida.codigo.concat(nodoDer.codigo);
-            nodoDer = this.arreglarBoolean(nodoDer, salida);
+            nodoDer = Logica.arreglarBoolean(nodoDer, salida);
 
             salida.verdaderas = nodoDer.verdaderas;
             salida.falsas = nodoIzq.falsas;
@@ -88,7 +88,7 @@ class Logica implements Instruccion {
                 return mensaje;
             }
             salida.codigo = salida.codigo.concat(nodoIzq.codigo);
-            nodoIzq = this.arreglarBoolean(nodoIzq, salida);
+            nodoIzq = Logica.arreglarBoolean(nodoIzq, salida);
             let v:Array<String> = nodoIzq.verdaderas;
             let f:Array<String> = nodoIzq.falsas;
             
@@ -113,7 +113,7 @@ class Logica implements Instruccion {
      * @param nodo 
      * @param salida 
      */
-    private arreglarBoolean(nodo: Nodo, salida: Nodo): Nodo {
+    public static arreglarBoolean(nodo: Nodo, salida: Nodo): Nodo {
         if (nodo.verdaderas === null) {
             let v: String = Auxiliar.generarEtiqueta();
             let f: String = Auxiliar.generarEtiqueta();
