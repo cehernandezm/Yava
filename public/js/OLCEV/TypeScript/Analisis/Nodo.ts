@@ -6,6 +6,9 @@ class Nodo extends Valor{
     atributos:Object;
     localizacion:Localizacion;
     posicion:String = null;
+    saltos:Array<String> = [];
+    breaks:Array<String> = [];
+    continue:Array<String> = [];
 
     constructor()
     constructor(codigo:Array<String>)

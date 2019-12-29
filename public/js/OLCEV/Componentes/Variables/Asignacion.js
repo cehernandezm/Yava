@@ -47,11 +47,12 @@ var Asignacion = /** @class */ (function () {
         return salida;
     };
     /**
-     * ESTA ACCION NO TIENE PRIMERA PASADA
+     * EN LA PRIMERA PASADA RETORNA UN 0 PUES NO
+     * SE CREA UNA VARIABLE
      * @param entorno Entorno Actual
      */
     Asignacion.prototype.primeraPasada = function (entorno) {
-        return "";
+        return 0;
     };
     Asignacion.casteoImplicito = function (tipo, tipoValor) {
         if (tipo === Tipo.INT && tipoValor === Tipo.CHAR)

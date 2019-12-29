@@ -27,7 +27,7 @@ var Declaracion = /** @class */ (function (_super) {
      * @param entorno Entorno Actual
      */
     Declaracion.prototype.primeraPasada = function (entorno) {
-        return "";
+        return 1;
     };
     /**
      * METODO CUANDO SE EJECUTE

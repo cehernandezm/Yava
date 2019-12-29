@@ -45,12 +45,13 @@ var Constructor = /** @class */ (function () {
      * @param entorno Entorno actual
      */
     Constructor.prototype.primeraPasada = function (entorno) {
+        var i = 1; //--------------------------- THIS --------------------------------------------
         this.instrucciones.forEach(function (element) {
-            if (element instanceof Declaracion)
-                entorno.tamaño++;
+            var x = +element.primeraPasada(entorno);
+            i += x;
         });
-        entorno.tamaño = entorno.tamaño + this.parametros.length;
-        return "";
+        entorno.tamaño = i + this.parametros.length;
+        return entorno.tamaño;
     };
     return Constructor;
 }());

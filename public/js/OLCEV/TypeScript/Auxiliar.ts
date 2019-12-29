@@ -67,11 +67,15 @@ class Auxiliar{
      */
     public static clonarEntorno(entorno:Entorno):Entorno{
         let e: Entorno = new Entorno(entorno.archivo);
-        e.listaSimbolos = entorno.listaSimbolos;
+        e.listaSimbolos = [];
+        e.listaSimbolos = e.listaSimbolos.concat(entorno.listaSimbolos);
         e.listaBreak = entorno.listaBreak;
         e.listaContinue = entorno.listaContinue;
         e.etiquetaSalida = entorno.etiquetaSalida;
         e.clase = entorno.clase;
+        e.archivo = entorno.archivo;
+        e.posRelativaStack = entorno.posRelativaStack;
+        e.tamaño = entorno.tamaño;
 
 
         return e;

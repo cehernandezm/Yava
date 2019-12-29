@@ -18,7 +18,6 @@ var Analizar = /** @class */ (function () {
                     nodo.codigo = nodo.codigo.concat(res.codigo);
                 }
             }
-            //console.log(entorno);
         });
         nodo.codigo.push("call constructor_hola");
         return nodo;

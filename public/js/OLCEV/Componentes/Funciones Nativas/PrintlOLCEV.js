@@ -90,11 +90,11 @@ var PrintlOLCEV = /** @class */ (function () {
         return salida;
     };
     /**
-     * ESTA CLASE NO TIENE PRIMERA PASADA
+     * ESTA CLASE EN SU PRIMERA PASADA RETORNA UN 0
      * @param entorno ENTORNO ACTUAL
      */
     PrintlOLCEV.prototype.primeraPasada = function (entorno) {
-        return null;
+        return 0;
     };
     return PrintlOLCEV;
 }());

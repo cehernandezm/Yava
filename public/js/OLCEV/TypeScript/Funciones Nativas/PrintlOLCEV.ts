@@ -97,11 +97,11 @@ class PrintlOLCEV implements Instruccion{
         
     }    
     /**
-     * ESTA CLASE NO TIENE PRIMERA PASADA
+     * ESTA CLASE EN SU PRIMERA PASADA RETORNA UN 0
      * @param entorno ENTORNO ACTUAL
      */
     primeraPasada(entorno: Entorno): Object {
-        return null;
+        return 0;
     }
 
 

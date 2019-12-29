@@ -139,7 +139,6 @@ var Clase = /** @class */ (function () {
                 var e = Auxiliar.clonarEntorno(entorno);
                 e.localizacion = Localizacion.STACK;
                 e.posRelativaStack = 1;
-                e.tamaño = 1; //----- Su tamaño inicialmente es uno porque tiene como parametro 0 un this que es la referencia para atributos---------
                 element.primeraPasada(e); //----- Realizamos la primera pasada obteniendo el tamaño total del constructor
                 var resultado = element.ejecutar(e);
                 if (!(resultado instanceof MensajeError)) {

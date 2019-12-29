@@ -69,6 +69,9 @@
 "toInt"                                         return 'TOINT'
 "toDouble"                                      return 'TODOUBLE'
 
+"if"                                            return 'IF'
+"else"                                          return 'ELSE'
+
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
 .                                               { console.log("Error"); }//ERRORES
@@ -171,6 +174,7 @@ instruccion : declaracionLocal PNTCOMA                                          
             | asignacion_statement PNTCOMA                                                { $$ = $1; }
             | print_statement PNTCOMA                                                     { $$ = $1; }
             | unaria PNTCOMA                                                              { $$ = []; $$.push($1); }
+            | if_superior                                                                 { $$ = []; $$.push($1); }
             ;
 
 
@@ -305,8 +309,36 @@ primitivo : ENTERO                  {$$ = new Primitivo(Tipo.INT,$1,@1.first_lin
 print_statement : PRINT PARIZQ expresion PARDER                     { $$ = []; $$.push(new PrintlOLCEV($3,false,@1.first_line,@1.first_column)); }
                 | PRINTLN PARIZQ expresion PARDER                   { $$ = []; $$.push(new PrintlOLCEV($3,true,@1.first_line,@1.first_column)); }
                 ;
+//#########################################################################################
+//################################# IF SUPERIOR#####################################
+//#######################################################################################
+if_superior : if_sentence                                           { $$ = []; $$.push($1); $$ = new If_Superior($$); }
+            | if_sentence elseif_sup                                { $$ = []; $$.push($1); $$ = $$.concat($2); $$ = new If_Superior($$); }
+            | if_sentence elseif_sup else_sentence                  { $$ = []; $$.push($1); $$ = $$.concat($2); $$.push($3); $$ = new If_Superior($$); }
+            | if_sentence else_sentence                             { $$ = []; $$.push($1); $$.push($2); $$ = new If_Superior($$); }
+            ;
+
+//#########################################################################################
+//################################# IF #####################################
+//#######################################################################################
+if_sentence : IF expresion LLAVEIZQ instrucciones LLAVEDER                  { $$ = new If($2,$4,@1.first_line,@1.first_column); }
+            ;
+//#########################################################################################
+//################################# ELSE IF #####################################
+//#######################################################################################
+elseif_sup : elseif_sup elseif_sentence                             { $$ = $1; $$.push($2); }
+           | elseif_sentence                                        { $$ = []; $$.push($1); }
+           ;
 
 
+elseif_sentence : ELSE IF expresion LLAVEIZQ instrucciones LLAVEDER         { $$ = new If($3,$5,@1.first_line,@1.first_column); }
+                ;
+
+//#########################################################################################
+//################################# ELSE #####################################
+//#######################################################################################
+else_sentence : ELSE LLAVEIZQ instrucciones LLAVEDER                      { $$ = new If(null,$3,@1.first_line,@1.first_column); }
+              ;
 %%
 
 parser.arbol ={

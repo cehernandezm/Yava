@@ -82,10 +82,11 @@ class Unaria implements Instruccion{
 
 
     /**
-     * ESTA CLASE NO TIENE PRIMERA PASADA
+     * ESTA CLASE EN SU PRIMERA PASADA
+     * RETORNA UN 0
      * @param entorno 
      */
     primeraPasada(entorno: Entorno): Object {
-        throw new Error("Method not implemented.");
+        return 0;
     }
 }

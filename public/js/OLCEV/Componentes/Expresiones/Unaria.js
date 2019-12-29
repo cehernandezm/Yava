@@ -77,11 +77,12 @@ var Unaria = /** @class */ (function () {
         return salida;
     };
     /**
-     * ESTA CLASE NO TIENE PRIMERA PASADA
+     * ESTA CLASE EN SU PRIMERA PASADA
+     * RETORNA UN 0
      * @param entorno
      */
     Unaria.prototype.primeraPasada = function (entorno) {
-        throw new Error("Method not implemented.");
+        return 0;
     };
     return Unaria;
 }());

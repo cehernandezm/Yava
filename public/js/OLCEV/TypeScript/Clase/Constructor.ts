@@ -59,11 +59,13 @@ class Constructor implements Instruccion {
      * @param entorno Entorno actual
      */
     primeraPasada(entorno: Entorno): Object {
+        let i:number = 1; //--------------------------- THIS --------------------------------------------
         this.instrucciones.forEach(element => {
-            if(element instanceof Declaracion) entorno.tamaño++;
+           let x:number = + element.primeraPasada(entorno);
+           i += x;
         });
-        entorno.tamaño = entorno.tamaño + this.parametros.length;
-        return "";
+        entorno.tamaño = i + this.parametros.length;
+        return entorno.tamaño;
     }
 
 

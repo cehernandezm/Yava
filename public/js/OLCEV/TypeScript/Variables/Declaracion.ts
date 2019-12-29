@@ -19,7 +19,7 @@ class Declaracion extends Valor implements Instruccion{
      * @param entorno Entorno Actual
      */
     primeraPasada(entorno: Entorno): Object {
-        return "";
+        return 1;
     }
 
     /**

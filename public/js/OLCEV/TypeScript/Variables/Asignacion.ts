@@ -62,11 +62,12 @@ class Asignacion implements Instruccion{
 
 
     /**
-     * ESTA ACCION NO TIENE PRIMERA PASADA
+     * EN LA PRIMERA PASADA RETORNA UN 0 PUES NO 
+     * SE CREA UNA VARIABLE
      * @param entorno Entorno Actual
      */
     primeraPasada(entorno: Entorno): Object {
-        return "";
+        return 0;
     }
 
 

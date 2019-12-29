@@ -19,6 +19,9 @@ var Nodo = /** @class */ (function (_super) {
         _this.verdaderas = null;
         _this.falsas = null;
         _this.posicion = null;
+        _this.saltos = [];
+        _this.breaks = [];
+        _this.continue = [];
         _this.codigo = codigo;
         _this.resultado = resultado;
         return _this;
