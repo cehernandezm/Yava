@@ -51,7 +51,7 @@ class Relacional implements Instruccion {
                 return this.comparacionSimple(salida, nodoIzq, nodoDer, entorno);
 
             default:
-                return this.comparacionComplicada(salida, nodoIzq, nodoDer, entorno);
+                return Relacional.comparacionComplicada(salida, nodoIzq, nodoDer, entorno,this.l,this.c,this.signo);
         }
 
     }
@@ -100,13 +100,13 @@ class Relacional implements Instruccion {
      * @param nodoDer 
      * @param entorno 
      */
-    comparacionComplicada(nodo: Nodo, nodoIzq: Nodo, nodoDer: Nodo, entorno: Entorno): Object {
+    public static comparacionComplicada(nodo: Nodo, nodoIzq: Nodo, nodoDer: Nodo, entorno: Entorno,l:number,c:number,signo:String): Object {
         nodo.tipo = Tipo.BOOLEAN;
         if ((nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.CHAR)) {
             nodo.tipo = Tipo.BOOLEAN;
             let v: String = Auxiliar.generarEtiqueta();
             let f: String = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
             nodo.codigo.push(Auxiliar.crearLinea("goto " + f, "si no se cumple salta a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);
@@ -143,7 +143,7 @@ class Relacional implements Instruccion {
             }
             let v:String = Auxiliar.generarEtiqueta();
             let f:String = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadera saltar a : " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadera saltar a : " + v));
             nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(f),"Si es falsa saltar a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);
@@ -171,10 +171,10 @@ class Relacional implements Instruccion {
             nodo.codigo.push(Auxiliar.crearLinea(valorIzq + " = Heap[" + posIzq +"]","Obtenemos el caracter de la cadena Izquierda"));
             nodo.codigo.push(Auxiliar.crearLinea(valorDer + " = Heap[" + posDer + "]","Obtenemos el caracter de la cadena derecha"));
             nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " + valorDer,v),"Si es verdadero vamos a verificar si es el fin"));
-            if(this.signo === "==") nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(f),"Etiqueta para falsa"));
+            if(signo === "==") nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(f),"Etiqueta para falsa"));
             else nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(vv),"Etiqueta para verdadera"));
             nodo.codigo.push(v + ":");
-            if(this.signo === "==") nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " +" 0",vv),"Si estamos al final entonces la cadena si es correcta"));
+            if(signo === "==") nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " +" 0",vv),"Si estamos al final entonces la cadena si es correcta"));
             else nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " +" 0",f),"Si estamos al final entonces la cadena si es incorrecta"));
             nodo.codigo.push(Auxiliar.crearLinea(posIzq + " = " + posIzq + " + 1","Aumentamos la posicion de la cadena izquierda"));
             nodo.codigo.push(Auxiliar.crearLinea(posDer + " = " + posDer + " + 1","Aumentamos la posicion de la cadena derecha"));
@@ -187,7 +187,7 @@ class Relacional implements Instruccion {
             return nodo;
         }
         
-        let mensaje:MensajeError = new MensajeError("Semantico", " no se puede obtener el " + this.signo + " de los tipos: " + Tipo[nodoIzq.tipo] + " con: " + Tipo[nodoDer.tipo],entorno.archivo,this.l,this.c);
+        let mensaje:MensajeError = new MensajeError("Semantico", " no se puede obtener el " + signo + " de los tipos: " + Tipo[nodoIzq.tipo] + " con: " + Tipo[nodoDer.tipo],entorno.archivo,l,c);
         Auxiliar.agregarError(mensaje);
         return mensaje;
         

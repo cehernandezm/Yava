@@ -72,6 +72,12 @@
 "if"                                            return 'IF'
 "else"                                          return 'ELSE'
 
+"switch"                                        return 'SWITCH'
+"case"                                          return 'CASE'
+"default"                                       return 'DEFAULT'
+
+"break"                                         return 'BREAK'
+
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
 .                                               { console.log("Error"); }//ERRORES
@@ -175,6 +181,8 @@ instruccion : declaracionLocal PNTCOMA                                          
             | print_statement PNTCOMA                                                     { $$ = $1; }
             | unaria PNTCOMA                                                              { $$ = []; $$.push($1); }
             | if_superior                                                                 { $$ = []; $$.push($1); }
+            | switch_statement                                                            { $$ = []; $$.push($1); }
+            | break_statement  PNTCOMA                                                    { $$ = []; $$.push($1); }
             ;
 
 
@@ -310,7 +318,7 @@ print_statement : PRINT PARIZQ expresion PARDER                     { $$ = []; $
                 | PRINTLN PARIZQ expresion PARDER                   { $$ = []; $$.push(new PrintlOLCEV($3,true,@1.first_line,@1.first_column)); }
                 ;
 //#########################################################################################
-//################################# IF SUPERIOR#####################################
+//################################# IF SUPERIOR #####################################
 //#######################################################################################
 if_superior : if_sentence                                           { $$ = []; $$.push($1); $$ = new If_Superior($$); }
             | if_sentence elseif_sup                                { $$ = []; $$.push($1); $$ = $$.concat($2); $$ = new If_Superior($$); }
@@ -339,6 +347,36 @@ elseif_sentence : ELSE IF expresion LLAVEIZQ instrucciones LLAVEDER         { $$
 //#######################################################################################
 else_sentence : ELSE LLAVEIZQ instrucciones LLAVEDER                      { $$ = new If(null,$3,@1.first_line,@1.first_column); }
               ;
+
+//#########################################################################################
+//################################# SWITCH #####################################
+//#######################################################################################
+switch_statement : SWITCH PARIZQ expresion PARDER LLAVEIZQ listaCase default_statement LLAVEDER                             { $6.push($7); $$ = new Switch($3,$6); }
+                 | SWITCH PARIZQ expresion PARDER LLAVEIZQ listaCase LLAVEDER                                               { $ = new Switch($3,$6); }
+                 ;
+
+//#########################################################################################
+//################################# CASE  #####################################
+//#######################################################################################
+listaCase : listaCase case_statement                                        { $$ = $1; $$.push($2); }
+          | case_statement                                                  { $$ = []; $$.push($1); }
+          ;
+
+case_statement : CASE expresion DSPUNTOS instrucciones                      { $$ = new Case($2,$4,@1.first_line,@1.first_column); }
+               ;
+
+//#########################################################################################
+//################################# DEFAULT #####################################
+//#######################################################################################
+default_statement : DEFAULT DSPUNTOS instrucciones                          { $$ = new Case(null,$3,@1.first_line,@1.first_column); }
+                  ;
+
+//#########################################################################################
+//################################# BREAK #####################################
+//#######################################################################################
+break_statement : BREAK                                             { $$ = new Break(); }
+                ;
+
 %%
 
 parser.arbol ={

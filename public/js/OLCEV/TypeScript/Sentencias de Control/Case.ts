@@ -1,6 +1,6 @@
-class If implements Instruccion {
-
+class Case implements Instruccion{
     condicion: Instruccion;
+    comparar:Nodo;
     cuerpo: Array<Instruccion>;
     l: number;
     c: number;
@@ -34,16 +34,13 @@ class If implements Instruccion {
             if (resultado instanceof MensajeError) return resultado;
 
             let nodo: Nodo = resultado as Nodo;
-            if (nodo.tipo != Tipo.BOOLEAN) {
-                let mensaje: MensajeError = new MensajeError("Semantico", "Las condiciones tienen que ser de tipo Boolean, no se reconoce el tipo: " + Tipo[nodo.tipo], entorno.archivo, this.l, this.c);
-                Auxiliar.agregarError(mensaje);
-                return mensaje;
-            }
-
             salida.codigo = salida.codigo.concat(nodo.codigo);
-            nodo = Logica.arreglarBoolean(nodo, salida);
-            v = nodo.verdaderas;
-            f = nodo.falsas;
+            let result:Object = Relacional.comparacionComplicada(salida,nodo,this.comparar,entorno,this.l,this.c,"==");
+            if(result instanceof MensajeError) return result;
+            
+            let nodoResult:Nodo = result as Nodo;
+            v = nodoResult.verdaderas;
+            f = nodoResult.falsas;
         }
 
         salida.codigo.push(";######################## VERDADERAS ####################");
@@ -58,13 +55,6 @@ class If implements Instruccion {
             salida.breaks = salida.breaks.concat(temp.breaks);
             salida.continue = salida.continue.concat(temp.continue);
         });
-
-        if (this.condicion != null) {
-            let salto: String = Auxiliar.generarEtiqueta();
-            salida.codigo.push(Auxiliar.saltoIncondicional(salto));
-            salida.saltos.push(salto);
-        }
-
         salida.codigo.push(";######################## FALSAS ####################");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(f).codigo);
 

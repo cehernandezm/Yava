@@ -39,7 +39,7 @@ var Relacional = /** @class */ (function () {
             case "<=":
                 return this.comparacionSimple(salida, nodoIzq, nodoDer, entorno);
             default:
-                return this.comparacionComplicada(salida, nodoIzq, nodoDer, entorno);
+                return Relacional.comparacionComplicada(salida, nodoIzq, nodoDer, entorno, this.l, this.c, this.signo);
         }
     };
     /**
@@ -83,13 +83,13 @@ var Relacional = /** @class */ (function () {
      * @param nodoDer
      * @param entorno
      */
-    Relacional.prototype.comparacionComplicada = function (nodo, nodoIzq, nodoDer, entorno) {
+    Relacional.comparacionComplicada = function (nodo, nodoIzq, nodoDer, entorno, l, c, signo) {
         nodo.tipo = Tipo.BOOLEAN;
         if ((nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.CHAR)) {
             nodo.tipo = Tipo.BOOLEAN;
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
             nodo.codigo.push(Auxiliar.crearLinea("goto " + f, "si no se cumple salta a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);
@@ -124,7 +124,7 @@ var Relacional = /** @class */ (function () {
             }
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadera saltar a : " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadera saltar a : " + v));
             nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(f), "Si es falsa saltar a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);
@@ -148,12 +148,12 @@ var Relacional = /** @class */ (function () {
             nodo.codigo.push(Auxiliar.crearLinea(valorIzq + " = Heap[" + posIzq + "]", "Obtenemos el caracter de la cadena Izquierda"));
             nodo.codigo.push(Auxiliar.crearLinea(valorDer + " = Heap[" + posDer + "]", "Obtenemos el caracter de la cadena derecha"));
             nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " + valorDer, v), "Si es verdadero vamos a verificar si es el fin"));
-            if (this.signo === "==")
+            if (signo === "==")
                 nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(f), "Etiqueta para falsa"));
             else
                 nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoIncondicional(vv), "Etiqueta para verdadera"));
             nodo.codigo.push(v + ":");
-            if (this.signo === "==")
+            if (signo === "==")
                 nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " + " 0", vv), "Si estamos al final entonces la cadena si es correcta"));
             else
                 nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valorIzq + " == " + " 0", f), "Si estamos al final entonces la cadena si es incorrecta"));
@@ -164,7 +164,7 @@ var Relacional = /** @class */ (function () {
             nodo.falsas = [f];
             return nodo;
         }
-        var mensaje = new MensajeError("Semantico", " no se puede obtener el " + this.signo + " de los tipos: " + Tipo[nodoIzq.tipo] + " con: " + Tipo[nodoDer.tipo], entorno.archivo, this.l, this.c);
+        var mensaje = new MensajeError("Semantico", " no se puede obtener el " + signo + " de los tipos: " + Tipo[nodoIzq.tipo] + " con: " + Tipo[nodoDer.tipo], entorno.archivo, l, c);
         Auxiliar.agregarError(mensaje);
         return mensaje;
     };

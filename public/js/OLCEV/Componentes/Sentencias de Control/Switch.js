@@ -1,18 +1,27 @@
-var If_Superior = /** @class */ (function () {
+var Switch = /** @class */ (function () {
     /**
      * CONSTRUCTOR DE LA CLASE
      * @param lista
      */
-    function If_Superior(lista) {
+    function Switch(condicion, lista) {
+        this.condicion = condicion;
         this.lista = lista;
     }
     /**
      * METODO DE LA CLASE PADRE
      * @param entorno
      */
-    If_Superior.prototype.ejecutar = function (entorno) {
+    Switch.prototype.ejecutar = function (entorno) {
         var salida = new Nodo([]);
+        var resul = this.condicion.ejecutar(entorno);
+        if (resul instanceof MensajeError)
+            return resul;
+        var nodoCon = resul;
+        salida.codigo = salida.codigo.concat(nodoCon.codigo);
+        if (nodoCon.tipo === Tipo.BOOLEAN)
+            nodoCon = Aritmetica.arreglarBoolean(nodoCon, salida);
         this.lista.forEach(function (element) {
+            element.comparar = nodoCon;
             var resultado = element.ejecutar(entorno);
             if (resultado instanceof MensajeError)
                 return resultado;
@@ -24,15 +33,19 @@ var If_Superior = /** @class */ (function () {
         });
         salida.codigo.push(";##################### SALTOS DE SALIDA ###############");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(salida.saltos).codigo);
+        salida.codigo.push(";##################### SALTOS DE BREAK ###############");
+        salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(salida.breaks).codigo);
+        salida.saltos = [];
+        salida.breaks = [];
         return salida;
     };
     /**
      * LA PRIMERA PASADA OBTIENE
-     * TODOS LOS TAMAÑOS DE LOS IF
+     * TODOS LOS TAMAÑOS DE LOS CASE
      * Y LOS RETORNA A UN PADRE
      * @param entorno
      */
-    If_Superior.prototype.primeraPasada = function (entorno) {
+    Switch.prototype.primeraPasada = function (entorno) {
         var i = 0;
         this.lista.forEach(function (element) {
             var x = +element.primeraPasada(entorno);
@@ -40,5 +53,5 @@ var If_Superior = /** @class */ (function () {
         });
         return i;
     };
-    return If_Superior;
+    return Switch;
 }());
