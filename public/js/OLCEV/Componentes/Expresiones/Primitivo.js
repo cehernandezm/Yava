@@ -51,6 +51,11 @@ var Primitivo = /** @class */ (function (_super) {
                     Auxiliar.agregarError(mensaje);
                     return mensaje;
                 }
+                if (s.isNull) {
+                    var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " es null", entorno.archivo, this.l, this.c);
+                    Auxiliar.agregarError(mensaje);
+                    return mensaje;
+                }
                 var temporal = Auxiliar.generarTemporal();
                 var nodo = new Nodo([]);
                 nodo.tipo = s.tipo;

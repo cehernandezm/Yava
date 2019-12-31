@@ -23,7 +23,21 @@ var Asignacion = /** @class */ (function () {
         var salida = new Nodo();
         salida.codigo = [];
         var nodo = result;
-        if (!(Asignacion.casteoImplicito(s.tipo, nodo.tipo))) {
+        if (s.tipo === Tipo.ARREGLO && nodo.tipo === Tipo.ARREGLO) {
+            var arreglo = nodo.valor;
+            var simArreglo = s.valor;
+            if (s.dimensiones !== +(arreglo.valor)) {
+                var mensaje = new MensajeError("Semantico", "El arreglo es de: " + s.dimensiones + " y se le quiere asignar uno de tamaño: " + +arreglo.valor, entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+            if (simArreglo.tipo != arreglo.tipo) {
+                var mensaje = new MensajeError("Semantico", "El arreglo es de tipo " + Tipo[simArreglo.tipo] + " y se le quiere asignar una arreglo de tipo : " + Tipo[arreglo.tipo], entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+        }
+        else if (!(Asignacion.casteoImplicito(s.tipo, nodo.tipo))) {
             var mensaje = new MensajeError("Semantico", "No se le puede asignar un tipo: " + Tipo[nodo.tipo] + " a : " + Tipo[s.tipo], entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
@@ -44,6 +58,7 @@ var Asignacion = /** @class */ (function () {
             salida.codigo.push(Auxiliar.crearLinea(posHeap + " = " + posHeap + " + " + s.posRelativa, "Nos movemos en el heap"));
             salida.codigo.push(Auxiliar.crearLinea("Heap[" + posHeap + "] = " + nodo.resultado, "Le asignamos valor a la variable: " + s.id));
         }
+        s.isNull = false;
         return salida;
     };
     /**

@@ -35,8 +35,22 @@ class Asignacion implements Instruccion{
         salida.codigo = [];
 
         let nodo:Nodo = result as Nodo;
-        
-        if(!(Asignacion.casteoImplicito(s.tipo,nodo.tipo))){
+        if(s.tipo === Tipo.ARREGLO && nodo.tipo === Tipo.ARREGLO){
+            let arreglo:Arreglo = nodo.valor as Arreglo;
+            let simArreglo:Arreglo = s.valor as Arreglo;
+            if(s.dimensiones !== +(arreglo.valor)){
+                let mensaje:MensajeError = new MensajeError("Semantico","El arreglo es de: " + s.dimensiones + " y se le quiere asignar uno de tamaño: " + +arreglo.valor,entorno.archivo,this.l,this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+
+            if(simArreglo.tipo != arreglo.tipo){
+                let mensaje:MensajeError = new MensajeError("Semantico","El arreglo es de tipo " + Tipo[simArreglo.tipo] + " y se le quiere asignar una arreglo de tipo : " + Tipo[arreglo.tipo],entorno.archivo,this.l,this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+        }
+        else if(!(Asignacion.casteoImplicito(s.tipo,nodo.tipo))){
             let mensaje:MensajeError = new MensajeError("Semantico","No se le puede asignar un tipo: " + Tipo[nodo.tipo] + " a : " + Tipo[s.tipo],entorno.archivo,this.l,this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
@@ -56,7 +70,7 @@ class Asignacion implements Instruccion{
             salida.codigo.push(Auxiliar.crearLinea(posHeap + " = " + posHeap + " + " + s.posRelativa,"Nos movemos en el heap"));
             salida.codigo.push(Auxiliar.crearLinea("Heap[" + posHeap + "] = " + nodo.resultado,"Le asignamos valor a la variable: " + s.id));
         }
-        
+        s.isNull = false;
         return salida;
     }    
 

@@ -13,12 +13,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Declaracion = /** @class */ (function (_super) {
     __extends(Declaracion, _super);
-    function Declaracion(id, modificador, tipo, valor, l, c) {
+    function Declaracion(id, modificador, tipo, valor, l, c, dimesiones) {
         var _this = _super.call(this, tipo, valor) || this;
         _this.id = id;
         _this.modificador = modificador;
         _this.l = l;
         _this.c = c;
+        _this.dimensiones = dimesiones;
         return _this;
     }
     /**
@@ -107,8 +108,12 @@ var Declaracion = /** @class */ (function (_super) {
         var simbolo = new Simbolo();
         simbolo.id = this.id;
         simbolo.rol = Rol.VARIABLE;
-        simbolo.isNul = false;
+        simbolo.isNull = true;
         simbolo.tipo = this.tipo;
+        if (this.tipo === Tipo.ARREGLO) {
+            simbolo.dimensiones = this.dimensiones;
+            simbolo.valor = this.valor;
+        }
         simbolo.posRelativa = entorno.getPosRelativa();
         if (isStatic) {
             simbolo.localizacion = Localizacion.STACK;

@@ -2,15 +2,19 @@ class Declaracion extends Valor implements Instruccion{
     
     id:String;
     modificador:Array<Modificador>;
+    dimensiones:number;
     l:number;
     c:number;
 
-    constructor(id:String,modificador:Array<Modificador>,tipo:Tipo,valor:Object,l:number,c:number){
+    
+    constructor(id:String,modificador:Array<Modificador>,tipo:Tipo,valor:Object,l:number,c:number)
+    constructor(id:String,modificador:Array<Modificador>,tipo:Tipo,valor:Object,l:number,c:number,dimesiones?:number){
         super(tipo,valor);
         this.id = id;
         this.modificador = modificador;
         this.l = l;
         this.c = c;
+        this.dimensiones = dimesiones;
     }
 
     /**
@@ -106,8 +110,13 @@ class Declaracion extends Valor implements Instruccion{
         let simbolo:Simbolo = new Simbolo();
         simbolo.id = this.id;
         simbolo.rol = Rol.VARIABLE;
-        simbolo.isNul = false;
+        simbolo.isNull = true;
         simbolo.tipo = this.tipo;
+        
+        if(this.tipo === Tipo.ARREGLO){
+            simbolo.dimensiones = this.dimensiones;
+            simbolo.valor = this.valor;
+        }
         
         simbolo.posRelativa = entorno.getPosRelativa();
         if(isStatic){

@@ -2,13 +2,14 @@ class Simbolo{
     id:String;
     rol:Rol;
     tipo:Tipo;
+    valor:Object;
     tam:number;
     posRelativa:number;
     posAbsoluta:number;
     atributo:Object;
     dimensiones:number;
     isParam : Boolean;
-    isNul : Boolean;
+    isNull : Boolean;
     localizacion:Localizacion;
     instrucciones:Array<Instruccion>;
     entorno:Entorno;
@@ -32,7 +33,7 @@ class Simbolo{
         this.tam = tam;
         this.atributo = atributo;
         this.instrucciones = instrucciones;
-        this.isNul = true;
+        this.isNull = true;
         this.localizacion = localizacion;
     }
     

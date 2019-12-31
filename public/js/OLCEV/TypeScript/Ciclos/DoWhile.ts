@@ -83,7 +83,7 @@ class DoWhile implements Instruccion{
     primeraPasada(entorno: Entorno): Object {
         let i :number = 0;
         this.cuerpo.forEach(element => {
-            let x:number = element.primeraPasada(entorno);
+            let x:number = +element.primeraPasada(entorno);
             i += x;
         });
         return i;

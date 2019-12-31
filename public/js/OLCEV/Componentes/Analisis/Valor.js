@@ -13,6 +13,7 @@ var Tipo;
     Tipo[Tipo["CHAR"] = 3] = "CHAR";
     Tipo[Tipo["BOOLEAN"] = 4] = "BOOLEAN";
     Tipo[Tipo["ID"] = 5] = "ID";
+    Tipo[Tipo["ARREGLO"] = 6] = "ARREGLO";
 })(Tipo || (Tipo = {}));
 ;
 var Operacion;

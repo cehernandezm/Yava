@@ -65,7 +65,7 @@ var DoWhile = /** @class */ (function () {
     DoWhile.prototype.primeraPasada = function (entorno) {
         var i = 0;
         this.cuerpo.forEach(function (element) {
-            var x = element.primeraPasada(entorno);
+            var x = +element.primeraPasada(entorno);
             i += x;
         });
         return i;

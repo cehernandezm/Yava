@@ -19,7 +19,8 @@ enum Tipo{
     STRING,
     CHAR,
     BOOLEAN,
-    ID
+    ID,
+    ARREGLO
 };
 
 

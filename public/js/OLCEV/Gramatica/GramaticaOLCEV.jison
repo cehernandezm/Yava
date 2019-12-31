@@ -32,6 +32,8 @@
 "}"                                             return 'LLAVEDER'
 "("                                             return 'PARIZQ'
 ")"                                             return 'PARDER'
+"["                                             return 'CORIZQ'
+"]"                                             return 'CORDER'
 ";"                                             return 'PNTCOMA'
 ","                                             return 'COMA' 
 "="                                             return 'IGUAL'
@@ -81,6 +83,9 @@
 
 "while"                                         return 'WHILE'
 "do"                                            return 'DO'
+"for"                                           return 'FOR'
+
+"new"                                           return 'NEW'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -103,6 +108,7 @@
 %right                              INCREMENTO
 %right                              DECREMENTO
 %right                              PARIZQ
+%right                              NEW
 
 
 
@@ -190,6 +196,7 @@ instruccion : declaracionLocal PNTCOMA                                          
             | while_statement                                                             { $$ = []; $$.push($1); }
             | continue_statement PNTCOMA                                                  { $$ = []; $$.push($1); }
             | dowhile_statement PNTCOMA                                                   { $$ = []; $$.push($1); }
+            | for_statement                                                               { $$ = []; $$.push($1); }      
             ;
 
 
@@ -209,15 +216,35 @@ declaracionLocal : modificador tipo ID                                  { $$ = [
                  | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
                  | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
                  | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
+                 | modificador tipo listaArreglo ID                     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3),$3); }
+                 | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
+                 | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
+                 | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
                  ;
+
+
+//###################################################################
+//################ LISTA DE DIMENSIONES ################
+//###################################################################
+listaArreglo : listaArreglo CORIZQ CORDER                               { $$ = +$1; $$++; }
+             | CORIZQ CORDER                                            { $$ = 1; }
+             ;
+
 
 
 //###################################################################
 //################ DECLARACION DE VARIABLES DE CLASE ################
 //###################################################################
-declaracionVariable : modificador tipo ID                   { $$ = new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column); }
-                    | tipo ID                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
+declaracionVariable : modificador tipo ID                                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
+                    | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
+                    | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                    | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
+                    | modificador tipo listaArreglo ID                     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3),$3); }
+                    | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
+                    | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
+                    | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
                     ;
+
 
 //#######################################################################
 //##################### TIPOS DE DATOS ##################################
@@ -238,9 +265,11 @@ expresion : aritmetica                                          { $$ = $1; }
           | casteo                                              { $$ = $1; }
           | ternario                                            { $$ = $1; }
           | str_statement                                       { $$ = $1; }
+          | arreglo_statement                                   { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
           | unaria                                              { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
+          
 
           
           ;
@@ -401,6 +430,27 @@ continue_statement : CONTINUE                                                   
 //#######################################################################################
 dowhile_statement : DO LLAVEIZQ instrucciones LLAVEDER WHILE PARIZQ expresion PARDER                { $$ = new DoWhile($7,$3,@1.first_line,@1.first_column); }
                   ;
+
+//#########################################################################################
+//################################# FOR #####################################
+//#######################################################################################
+for_statement : FOR PARIZQ declaracionLocal PNTCOMA expresion PNTCOMA expresion PARDER LLAVEIZQ instrucciones LLAVEDER                { $$ = new For($3,$5,$7,$10,@1.first_line,@1.first_column); }
+              ;
+//#########################################################################################
+//################################# ARREGLO #####################################
+//#######################################################################################
+arreglo_statement : NEW tipo listaDimensiones                                { $$ = new crearArreglo($2.tipo,$2.valor,$3,@1.first_line,@1.first_column);}
+                  ;
+
+//#########################################################################################
+//################################# LISTA DIMENSIONES #####################################
+//#######################################################################################
+listaDimensiones : listaDimensiones CORIZQ expresion CORDER                         { $$ = $1; $$.push($3); }
+                 | CORIZQ expresion CORDER                                          { $$ = []; $$.push($2); }
+                 ;
+
+
+
 
 %%
 

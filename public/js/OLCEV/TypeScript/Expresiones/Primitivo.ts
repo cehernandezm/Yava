@@ -44,6 +44,12 @@ class Primitivo extends Valor implements Instruccion{
                     Auxiliar.agregarError(mensaje);
                     return mensaje;
                 }
+                if(s.isNull){
+                    let mensaje:MensajeError = new MensajeError("Semantico","La variable: " + nombre + " es null",entorno.archivo,this.l,this.c);
+                    Auxiliar.agregarError(mensaje);
+                    return mensaje;
+                }
+                
                 let temporal:String = Auxiliar.generarTemporal();
                 let nodo:Nodo = new Nodo([]);
                 nodo.tipo = s.tipo;

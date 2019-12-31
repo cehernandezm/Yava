@@ -7,7 +7,7 @@ var Simbolo = /** @class */ (function () {
         this.tam = tam;
         this.atributo = atributo;
         this.instrucciones = instrucciones;
-        this.isNul = true;
+        this.isNull = true;
         this.localizacion = localizacion;
     }
     return Simbolo;
