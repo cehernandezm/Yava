@@ -26,6 +26,7 @@
 
 "?"                                             return 'TERNARIO'
 ":"                                             return 'DSPUNTOS'
+"."                                             return 'PUNTO'
 
 
 "{"                                             return 'LLAVEIZQ'
@@ -93,23 +94,31 @@
 /lex
 
 
-
+%right                              IGUAL
 %right                              TERNARIO,DSPUNTOS
+
+%left                               OR
+%left                               AND
+%left                               MAYOR,MAYORIGUAL,MENOR,MENORIGUAL 
+%left                               DIFERENTE,IGUALIGUAL
 
 %left                               MAS,MENOS
 %left                               MULTIPLICACION, DIVISION
 %right                              NEGACION
 %right                              UMENOS
 
-%left                               OR
-%left                               AND
-%left                               MAYOR,MAYORIGUAL,MENOR,MENORIGUAL 
-%left                               DIFERENTE,IGUALIGUAL
+%right                              NEW
+
 %right                              INCREMENTO
 %right                              DECREMENTO
-%right                              PARIZQ
-%right                              LLAVEIZQ
-%right                              NEW
+%left                               PARIZQ
+%right                              PARDER
+%left                               LLAVEIZQ
+%right                              LLAVEDER 
+%left                               CORIZQ
+%left                               PUNTO
+
+
 
 
 
@@ -206,8 +215,11 @@ instruccion : declaracionLocal PNTCOMA                                          
 //########################################################################################
 //############################### ASIGNACION #############################################
 //########################################################################################
-asignacion_statement : ID IGUAL expresion                               {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column)); }
+asignacion_statement : ID IGUAL expresion                                                   {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column)); }
+                     | variable listaDimensiones IGUAL expresion
+                     | ID listaDimensiones IGUAL expresion
                      ;
+
 
 
 //########################################################################################
@@ -261,20 +273,28 @@ tipo : STRING                                       { $$ = new Valor(Tipo.STRING
 
 expresion : aritmetica                                          { $$ = $1; }
           | relacional                                          { $$ = $1; }
-          | logica                                              { $$ = $1; }                                             
-          | primitivo                                           { $$ = $1; }
+          | logica                                              { $$ = $1; }  
           | casteo                                              { $$ = $1; }
           | ternario                                            { $$ = $1; }
           | str_statement                                       { $$ = $1; }
+          | variable listaDimensiones                          
+          | ID listaDimensiones
           | arreglo_statement                                   { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
           | unaria                                              { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
           | LLAVEIZQ listaExpresiones LLAVEDER                  { $$ = new listaValores($2,@1.first_line,@1.first_column); }
+          | primitivo                                           { $$ = $1; }
+
+
+          
           
 
           
           ;
+
+variable: expresion PUNTO ID 
+        ;
 
 //#########################################################################################
 //################################# LISTA EXPRESIONES #####################################
