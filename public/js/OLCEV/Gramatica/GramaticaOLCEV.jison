@@ -88,6 +88,8 @@
 
 "new"                                           return 'NEW'
 
+"length"                                        return "LENGTH"
+
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
 .                                               { console.log("Error"); }//ERRORES
@@ -287,6 +289,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | unaria                                              { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
           | LLAVEIZQ listaExpresiones LLAVEDER                  { $$ = new listaValores($2,@1.first_line,@1.first_column); }
+          | expresion PUNTO LENGTH                              { $$ = new Length($1,@1.first_line,@1.first_column); }
           | primitivo                                           { $$ = $1; }
 
 
