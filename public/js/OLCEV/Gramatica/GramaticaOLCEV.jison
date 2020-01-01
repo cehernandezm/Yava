@@ -217,9 +217,12 @@ instruccion : declaracionLocal PNTCOMA                                          
 //########################################################################################
 asignacion_statement : ID IGUAL expresion                                                   {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column)); }
                      | variable listaDimensiones IGUAL expresion
-                     | ID listaDimensiones IGUAL expresion
+                     | ID listaDimensiones IGUAL expresion                                 { $$ = []; $$.push(new AsignarArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,$4,@1.first_line,@1.first_column)); }
                      ;
 
+variable:  expresion PUNTO ID
+        |
+        ;
 
 
 //########################################################################################
@@ -278,7 +281,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | ternario                                            { $$ = $1; }
           | str_statement                                       { $$ = $1; }
           | variable listaDimensiones                          
-          | ID listaDimensiones
+          | ID listaDimensiones                                 { $$ = new AccesoArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,@1.first_line,@1.first_column); }
           | arreglo_statement                                   { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
           | unaria                                              { $$ = $1; }
@@ -293,8 +296,7 @@ expresion : aritmetica                                          { $$ = $1; }
           
           ;
 
-variable: expresion PUNTO ID 
-        ;
+
 
 //#########################################################################################
 //################################# LISTA EXPRESIONES #####################################
