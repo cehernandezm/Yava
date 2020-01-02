@@ -90,6 +90,8 @@
 
 "length"                                        return "LENGTH"
 
+"void"                                          return "VOID"
+
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
 .                                               { console.log("Error"); }//ERRORES
@@ -181,6 +183,7 @@ bloqueClase : bloqueClase bloque                            { $$ = $1; $$.push($
 
 bloque : declaracionVariable PNTCOMA                                { $$ = $1; }
        | declaracionConstructor                                     { $$ = $1; }
+       | funcion_statement                                          { $$ = $1; }
        ;
 
 
@@ -208,7 +211,8 @@ instruccion : declaracionLocal PNTCOMA                                          
             | while_statement                                                             { $$ = []; $$.push($1); }
             | continue_statement PNTCOMA                                                  { $$ = []; $$.push($1); }
             | dowhile_statement PNTCOMA                                                   { $$ = []; $$.push($1); }
-            | for_statement                                                               { $$ = []; $$.push($1); }      
+            | for_statement                                                               { $$ = []; $$.push($1); }
+            | call_function PNTCOMA                                                       { $$ = []; $$.push($1); }
             ;
 
 
@@ -485,10 +489,23 @@ listaDimensiones : listaDimensiones CORIZQ expresion CORDER                     
                  | CORIZQ expresion CORDER                                          { $$ = []; $$.push($2); }
                  ;
 
+//#########################################################################################
+//################################# FUNCIONES Y METODOS #####################################
+//#######################################################################################
 
+funcion_statement : modificador VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                           { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$7,[],@1.first_line,@1.first_column,0);  }
+                  ;
+
+//#########################################################################################
+//################################# LLAMAR FUNCIONES #####################################
+//#######################################################################################
+call_function : ID PARIZQ PARDER                                                { $$ = new llamarFunciones($1,null,[],@1.first_line,@1.first_column); }
+              ;
 
 
 %%
+
+
 
 parser.arbol ={
     raiz: null
