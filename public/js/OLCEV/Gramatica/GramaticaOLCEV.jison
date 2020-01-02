@@ -493,14 +493,27 @@ listaDimensiones : listaDimensiones CORIZQ expresion CORDER                     
 //################################# FUNCIONES Y METODOS #####################################
 //#######################################################################################
 
-funcion_statement : modificador VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                           { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$7,[],@1.first_line,@1.first_column,0);  }
+funcion_statement : modificador VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                       { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$7,[],@1.first_line,@1.first_column,0);  }
+                  | VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                                   { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$6,[],@1.first_line,@1.first_column,0);  }
+                  | modificador VOID ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                       { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$8,$5,@1.first_line,@1.first_column,0);  }
+                  | VOID ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                                   { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$7,$4,@1.first_line,@1.first_column,0);  }
                   ;
+
+
+listaParametros: listaParametros COMA parametro                                  { $$ = $1; $$.push($3); }
+               | parametro                                                       { $$ = []; $$.push($1); }
+               ;
+
+parametro: tipo ID                                                              { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
+         ;
 
 //#########################################################################################
 //################################# LLAMAR FUNCIONES #####################################
 //#######################################################################################
 call_function : ID PARIZQ PARDER                                                { $$ = new llamarFunciones($1,null,[],@1.first_line,@1.first_column); }
+              | ID PARIZQ listaExpresiones PARDER                               { $$ = new llamarFunciones($1,null,$3,@1.first_line,@1.first_column); }
               ;
+
 
 
 %%
