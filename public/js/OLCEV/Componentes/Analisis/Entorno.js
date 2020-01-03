@@ -1,9 +1,9 @@
 var Entorno = /** @class */ (function () {
     function Entorno(archivo) {
+        this.metodos = [];
         this.localizacion = Localizacion.HEAP;
         this.listaContinue = [];
         this.listaBreak = [];
-        this.metodoActual = null;
         this.etiquetaSalida = null;
         this.posRelativaStack = 0;
         this.archivo = archivo;
@@ -34,6 +34,22 @@ var Entorno = /** @class */ (function () {
         var i = this.posRelativaStack;
         this.posRelativaStack++;
         return i;
+    };
+    /**
+     * FUNCION ENCARGADA DE BUSCAR LAS FUNCIONES
+     * DE LA CLASE POR ALCANCE
+     * ESTO SERVIRA POR SI ALGUN METODO ES
+     * SOBREESCRIBIDO
+     * @param id
+     * @param parametros
+     */
+    Entorno.prototype.buscarFuncion = function (id, parametros) {
+        for (var i = this.metodos.length - 1; i >= 0; i--) {
+            var f = this.metodos[i];
+            if (f.identificador === id)
+                return f;
+        }
+        return null;
     };
     return Entorno;
 }());

@@ -57,7 +57,13 @@ class Primitivo extends Valor implements Instruccion{
                 nodo.verdaderas = s.verdaderas;
                 nodo.falsas = s.falsas;
                 nodo.resultado = temporal;
+                nodo.valor = s.valor;
+                if(s.tipo === Tipo.ARREGLO){
+                    let simArreglo:Arreglo = s.valor as Arreglo;
+                    nodo.valor = new Arreglo(simArreglo.tipo,s.dimensiones);    
+                }
                 
+
                 if(s.atributo['isStatic']){
                     nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]","Accedemos a la variable estatica " + nombre));
                     nodo.localizacion = Localizacion.STACK;

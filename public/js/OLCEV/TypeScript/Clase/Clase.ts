@@ -131,6 +131,7 @@ class Clase implements Instruccion {
             this.instrucciones = this.instrucciones.concat(claseTemp.instrucciones);
 
         }
+
         let tam: number = this.instrucciones.length;
         let s:Simbolo = new Simbolo(this.nombre,Rol.CLASE,tam,Auxiliar.crearObjectoAtributos(visibilidad,isFinal,isStatic,isAbstract),this.instrucciones);
         s.entorno = entorno;
@@ -142,6 +143,7 @@ class Clase implements Instruccion {
          */
         this.instrucciones.forEach(element => {
             if(element instanceof Declaracion) element.ejecutar(entorno);
+            if(element instanceof FuncionOLCEV) element.primeraPasada(entorno);
         });
 
         /**
@@ -161,7 +163,7 @@ class Clase implements Instruccion {
                 if(!(resultado instanceof MensajeError)){
                     let nodo:Nodo = resultado as Nodo;
                     salida.codigo = salida.codigo.concat(nodo.codigo);
-                }
+                } else return resultado;
                 flag = true;
             }
         });
@@ -186,10 +188,25 @@ class Clase implements Instruccion {
                     nodo.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa,"Nos movemos hacia la variable que necesitamos"));
                     nodo.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0","Iniciando variable: " + s.id));
                 }
+                s.isNull = false;
             });
             nodo.codigo.push("}");
             salida.codigo = salida.codigo.concat(nodo.codigo);
         }
+
+
+        let nodo:Nodo = new Nodo([]);
+
+        this.instrucciones.forEach(element => {
+            if(element instanceof FuncionOLCEV){
+                let resultado:Object = element.ejecutar(entorno);
+                if(resultado instanceof MensajeError) return resultado;
+                let temp:Nodo = resultado as Nodo;
+                nodo.codigo = nodo.codigo.concat(temp.codigo);
+            }
+        });
+
+        salida.codigo = nodo.codigo.concat(salida.codigo);
         return salida;
     }
 }

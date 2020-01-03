@@ -58,6 +58,10 @@ class If implements Instruccion {
             salida.breaks = salida.breaks.concat(temp.breaks);
             salida.continue = salida.continue.concat(temp.continue);
             salida.retornos = salida.retornos.concat(temp.retornos);
+            if(temp.retornos.length > 0){
+                salida.tipo = temp.tipo;
+                salida.valor = temp.valor;
+            }
         });
 
         if (this.condicion != null) {
@@ -68,7 +72,7 @@ class If implements Instruccion {
 
         salida.codigo.push(";######################## FALSAS ####################");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(f).codigo);
-        salida.saltos = [];
+        
         return salida;
     }
 

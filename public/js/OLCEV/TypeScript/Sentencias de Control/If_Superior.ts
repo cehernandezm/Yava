@@ -33,10 +33,15 @@ class If_Superior implements Instruccion{
             salida.breaks = salida.breaks.concat(nodo.breaks);
             salida.continue = salida.continue.concat(nodo.continue);
             salida.retornos = salida.retornos.concat(nodo.retornos);
+            if(nodo.retornos.length > 0){
+                salida.tipo = nodo.tipo;
+                salida.valor = nodo.valor;
+            }
         });
 
         salida.codigo.push(";##################### SALTOS DE SALIDA ###############");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(salida.saltos).codigo);
+        salida.saltos = [];
         return salida;
     }    
     

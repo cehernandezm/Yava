@@ -20,7 +20,8 @@ enum Tipo{
     CHAR,
     BOOLEAN,
     ID,
-    ARREGLO
+    ARREGLO,
+    VOID
 };
 
 

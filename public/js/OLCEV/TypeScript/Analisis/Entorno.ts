@@ -2,11 +2,11 @@ class Entorno{
     localizacion:Localizacion;
     listaContinue:Array<String>;
     listaBreak:Array<String>
-    metodoActual:Object;
     etiquetaSalida:String;
     posRelativaStack:number;
     archivo:String;
     listaSimbolos:Array<Simbolo>
+    metodos:Array<FuncionOLCEV> = [];
     tamaño:number;
     clase:String;
 
@@ -14,7 +14,6 @@ class Entorno{
         this.localizacion = Localizacion.HEAP;
         this.listaContinue = [];
         this.listaBreak = [];
-        this.metodoActual = null;
         this.etiquetaSalida = null;
         this.posRelativaStack = 0;
         this.archivo = archivo;
@@ -51,5 +50,22 @@ class Entorno{
         let i = this.posRelativaStack;
         this.posRelativaStack++;
         return i;
+    }
+
+    /**
+     * FUNCION ENCARGADA DE BUSCAR LAS FUNCIONES
+     * DE LA CLASE POR ALCANCE
+     * ESTO SERVIRA POR SI ALGUN METODO ES 
+     * SOBREESCRIBIDO
+     * @param id 
+     * @param parametros 
+     */
+    public buscarFuncion(id:String,parametros:Array<Instruccion>):FuncionOLCEV{
+
+        for(let i:number = this.metodos.length - 1; i >= 0; i--){
+            let f:FuncionOLCEV = this.metodos[i];
+            if(f.identificador === id) return f;
+        }
+        return null;
     }
 }

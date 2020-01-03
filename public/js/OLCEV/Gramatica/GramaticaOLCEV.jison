@@ -495,22 +495,25 @@ listaDimensiones : listaDimensiones CORIZQ expresion CORDER                     
 //################################# FUNCIONES Y METODOS #####################################
 //#######################################################################################
 
-funcion_statement : modificador VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                       { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$7,[],@1.first_line,@1.first_column,0);  }
-                  | VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                                   { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$6,[],@1.first_line,@1.first_column,0);  }
-                  | modificador VOID ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                       { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$8,$5,@1.first_line,@1.first_column,0);  }
-                  | VOID ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                                   { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$7,$4,@1.first_line,@1.first_column,0);  }
-                  | modificador tipo ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                       { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$7,[],@1.first_line,@1.first_column,0);}
-                  | modificador tipo ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                       { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$8,$5,@1.first_line,@1.first_column,0);}
+funcion_statement : modificador VOID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                 { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$6,$4,@1.first_line,@1.first_column,0);  }
+                  | VOID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                             { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$5,$3,@1.first_line,@1.first_column,0);  }
+                  | modificador tipo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                 { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$6,$4,@1.first_line,@1.first_column,0);}
+                  | tipo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                             { $$ = new FuncionOLCEV($2,null,0,$1.tipo,$1.valor,$5,$3,@1.first_line,@1.first_column,0);}
+                  | modificador tipo listaArreglo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                      {$$ = new FuncionOLCEV($4,$1,$3,$2.tipo,$2.valor,$7,$5,@1.first_line,@1.first_column,0); }
+                  | tipo listaArreglo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                  {$$ = new FuncionOLCEV($3,null,$2,$1.tipo,$1.valor,$6,$4,@1.first_line,@1.first_column,0); }
                   ;
 
 
-
+parametros_sentence: PARIZQ listaParametros PARDER                                { $$ = $2; }
+                   | PARIZQ PARDER                                                { $$ = []; }
+                   ;
 
 listaParametros: listaParametros COMA parametro                                  { $$ = $1; $$.push($3); }
                | parametro                                                       { $$ = []; $$.push($1); }
                ;
 
-parametro: tipo ID                                                              { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
+parametro: tipo ID                                                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
+         | tipo listaArreglo ID                                                  { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }                                 
          ;
 
 //#########################################################################################

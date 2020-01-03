@@ -69,6 +69,8 @@ class Auxiliar{
         let e: Entorno = new Entorno(entorno.archivo);
         e.listaSimbolos = [];
         e.listaSimbolos = e.listaSimbolos.concat(entorno.listaSimbolos);
+        e.metodos = [];
+        e.metodos = e.metodos.concat(entorno.metodos);
         e.listaBreak = entorno.listaBreak;
         e.listaContinue = entorno.listaContinue;
         e.etiquetaSalida = entorno.etiquetaSalida;

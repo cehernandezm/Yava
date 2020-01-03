@@ -29,7 +29,7 @@ var listaValores = /** @class */ (function () {
             var nodo = resultado;
             salida.codigo = salida.codigo.concat(nodo.codigo);
             if (nodo.tipo === Tipo.BOOLEAN)
-                nodo = Logica.arreglarBoolean(nodo, salida);
+                nodo = Aritmetica.arreglarBoolean(nodo, salida);
             if (tipo === null) {
                 if (nodo.tipo === Tipo.ARREGLO) {
                     tipo = Tipo.ARREGLO;

@@ -63,6 +63,11 @@ var Primitivo = /** @class */ (function (_super) {
                 nodo.verdaderas = s.verdaderas;
                 nodo.falsas = s.falsas;
                 nodo.resultado = temporal;
+                nodo.valor = s.valor;
+                if (s.tipo === Tipo.ARREGLO) {
+                    var simArreglo = s.valor;
+                    nodo.valor = new Arreglo(simArreglo.tipo, s.dimensiones);
+                }
                 if (s.atributo['isStatic']) {
                     nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]", "Accedemos a la variable estatica " + nombre));
                     nodo.localizacion = Localizacion.STACK;
