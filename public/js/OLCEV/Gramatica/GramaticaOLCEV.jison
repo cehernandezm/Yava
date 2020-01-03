@@ -4,8 +4,6 @@
 [ \r\t\n]+                                      {} // ESPACIOS
 \/\/.([^\n])*                                   {} // COMENTARIO SIMPLE
 \/\*(.?\n?)*\*\/                                {} // COMENTARIO MULTILINEA
-"-"[0-9]+("."[0-9]+)                            return 'DECIMAL'
-"-"[0-9]+                                       return 'ENTERO'
 [0-9]+("."[0-9]+)                               return 'DECIMAL'
 [0-9]+                                          return 'ENTERO'
 
@@ -91,6 +89,7 @@
 "length"                                        return "LENGTH"
 
 "void"                                          return "VOID"
+"return"                                        return 'RETURN'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -213,6 +212,7 @@ instruccion : declaracionLocal PNTCOMA                                          
             | dowhile_statement PNTCOMA                                                   { $$ = []; $$.push($1); }
             | for_statement                                                               { $$ = []; $$.push($1); }
             | call_function PNTCOMA                                                       { $$ = []; $$.push($1); }
+            | return_statement PNTCOMA                                                    { $$ = []; $$.push($1); }
             ;
 
 
@@ -295,6 +295,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | LLAVEIZQ listaExpresiones LLAVEDER                  { $$ = new listaValores($2,@1.first_line,@1.first_column); }
           | expresion PUNTO LENGTH                              { $$ = new Length($1,@1.first_line,@1.first_column); }
           | primitivo                                           { $$ = $1; }
+          | call_function                                       { $$ = $1; }
 
 
           
@@ -321,7 +322,6 @@ aritmetica : expresion MAS expresion                                            
            | expresion MULTIPLICACION expresion                                     { $$ = new Aritmetica($1,$3,Operacion.MULTIPLICACION,@1.first_line,@1.first_column);}
            | expresion DIVISION expresion                                           { $$ = new Aritmetica($1,$3,Operacion.DIVISION,@1.first_line,@1.first_column);}
            | POW PARIZQ expresion COMA expresion PARDER                             { $$ = new Aritmetica($3,$5,Operacion.POTENCIA,@1.first_line,@1.first_column);}
-           | MENOS expresion %prec UMENOS                                           { $$ = new Unaria($2,Operacion.NEGATIVO,@1.first_line,@1.first_column); }
            ;
 //#########################################################################################
 //################################# RELACIONALES #####################################
@@ -340,6 +340,8 @@ relacional : expresion MENOR expresion                                          
 logica : expresion OR expresion                                                          { $$ = new Logica($1,$3,Operacion.OR,@1.first_line,@1.first_column); }
        | expresion AND expresion                                                         { $$ = new Logica($1,$3,Operacion.AND,@1.first_line,@1.first_column); }
        |           NEGACION expresion                                                    { $$ = new Logica($2,null,Operacion.NEGACION,@1.first_line,@1.first_column); }
+       |           MENOS expresion %prec UMENOS                                          { $$ = new Unaria($2,Operacion.NEGATIVO,@1.first_line,@1.first_column); }
+
        ;
 
 //#########################################################################################
@@ -497,7 +499,11 @@ funcion_statement : modificador VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLA
                   | VOID ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                                   { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$6,[],@1.first_line,@1.first_column,0);  }
                   | modificador VOID ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                       { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$8,$5,@1.first_line,@1.first_column,0);  }
                   | VOID ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                                   { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$7,$4,@1.first_line,@1.first_column,0);  }
+                  | modificador tipo ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                                       { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$7,[],@1.first_line,@1.first_column,0);}
+                  | modificador tipo ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER                       { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$8,$5,@1.first_line,@1.first_column,0);}
                   ;
+
+
 
 
 listaParametros: listaParametros COMA parametro                                  { $$ = $1; $$.push($3); }
@@ -515,6 +521,12 @@ call_function : ID PARIZQ PARDER                                                
               ;
 
 
+
+//#########################################################################################
+//################################# RETURN #####################################
+//#######################################################################################
+return_statement : RETURN expresion                                             { $$ = new Return($2,@1.first_line,@1.first_column); }
+                 ;
 
 %%
 
