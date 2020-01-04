@@ -124,6 +124,7 @@ var Declaracion = /** @class */ (function (_super) {
             simbolo.posAbsoluta = -1;
         }
         simbolo.atributo = atributo;
+        simbolo.objeto = this.valor.toString();
         entorno.agregarSimbolo(simbolo);
         var nodo = new Nodo();
         nodo.codigo = [];

@@ -127,6 +127,7 @@ class Declaracion extends Valor implements Instruccion{
             simbolo.posAbsoluta = -1;
         }
         simbolo.atributo = atributo;
+        simbolo.objeto = this.valor.toString();
 
         entorno.agregarSimbolo(simbolo);
         let nodo:Nodo = new Nodo();

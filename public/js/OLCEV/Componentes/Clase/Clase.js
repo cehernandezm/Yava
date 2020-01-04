@@ -9,6 +9,8 @@ var Clase = /** @class */ (function () {
      * @param c columna de la instruccion
      */
     function Clase(modificiador, nombre, instrucciones, extender, l, c) {
+        this.tamaño = 0;
+        this.constructores = [];
         this.modificador = modificiador;
         this.nombre = nombre;
         this.instrucciones = instrucciones;
@@ -104,6 +106,7 @@ var Clase = /** @class */ (function () {
         }
         if (visibilidad == null)
             visibilidad = Modificador.PUBLIC;
+        this.atributos = Auxiliar.crearObjectoAtributos(visibilidad, isFinal, isStatic, isAbstract);
         /**
          * SI VAMOS A EXTENDER DE UNA CLASE
          */
@@ -116,17 +119,17 @@ var Clase = /** @class */ (function () {
             }
             this.instrucciones = this.instrucciones.concat(claseTemp.instrucciones);
         }
-        var tam = this.instrucciones.length;
-        var s = new Simbolo(this.nombre, Rol.CLASE, tam, Auxiliar.crearObjectoAtributos(visibilidad, isFinal, isStatic, isAbstract), this.instrucciones);
-        s.entorno = entorno;
-        agregarClase(s);
         entorno.clase = this.nombre;
         /**
          * ALMACENAMOS TODOS SUS ATRIBUTOS
          */
         this.instrucciones.forEach(function (element) {
-            if (element instanceof Declaracion)
-                element.ejecutar(entorno);
+            if (element instanceof Declaracion) {
+                var resultado = element.ejecutar(entorno);
+                if (resultado instanceof MensajeError)
+                    return resultado;
+                _this.tamaño++;
+            }
             if (element instanceof FuncionOLCEV)
                 element.primeraPasada(entorno);
         });
@@ -146,6 +149,7 @@ var Clase = /** @class */ (function () {
                 if (!(resultado instanceof MensajeError)) {
                     var nodo_1 = resultado;
                     salida.codigo = salida.codigo.concat(nodo_1.codigo);
+                    _this.constructores.push(element.identificador);
                 }
                 else
                     return resultado;
@@ -188,7 +192,20 @@ var Clase = /** @class */ (function () {
             }
         });
         salida.codigo = nodo.codigo.concat(salida.codigo);
+        agregarClase(this);
         return salida;
+    };
+    /**
+     * METODO QUE BUSCA UN CONSTRUCTOR
+     * EN EL LISTADO DE CONSTRUCTORES
+     * @param id
+     */
+    Clase.prototype.buscarConstructor = function (id) {
+        for (var i = 0; i < this.constructores.length; i++) {
+            if (this.constructores[i] === id)
+                return true;
+        }
+        return false;
     };
     return Clase;
 }());

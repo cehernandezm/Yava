@@ -10,7 +10,7 @@ class Nodo extends Valor{
     breaks:Array<String> = [];
     continue:Array<String> = [];
     retornos:Array<String> = [];
-
+    id:String;
     constructor()
     constructor(codigo:Array<String>)
     constructor(codigo:Array<String>,resultado:String,tipo:Tipo,valor:Object)

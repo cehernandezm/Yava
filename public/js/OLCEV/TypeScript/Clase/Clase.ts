@@ -7,6 +7,10 @@ class Clase implements Instruccion {
     extender: String;
     l: number;
     c: number;
+    entorno:Entorno;
+    tamaño:number = 0;
+    atributos:Object;
+    constructores:Array<String> = [];
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -45,7 +49,7 @@ class Clase implements Instruccion {
     primeraPasada(entorno: Entorno): Object {
         let salida:Nodo = new Nodo();
         salida.codigo = [];
-        let claseTemp: Simbolo = getClase(this.nombre);
+        let claseTemp: Clase = getClase(this.nombre);
         if (claseTemp != null) {
             let mensaje: MensajeError = new MensajeError("Semantico", "La clase: " + this.nombre + " ya existe", entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
@@ -118,6 +122,7 @@ class Clase implements Instruccion {
         }
         if (visibilidad == null) visibilidad = Modificador.PUBLIC;
         
+        this.atributos = Auxiliar.crearObjectoAtributos(visibilidad,isFinal,isStatic,isAbstract);
         /**
          * SI VAMOS A EXTENDER DE UNA CLASE
          */
@@ -132,20 +137,21 @@ class Clase implements Instruccion {
 
         }
 
-        let tam: number = this.instrucciones.length;
-        let s:Simbolo = new Simbolo(this.nombre,Rol.CLASE,tam,Auxiliar.crearObjectoAtributos(visibilidad,isFinal,isStatic,isAbstract),this.instrucciones);
-        s.entorno = entorno;
-        agregarClase(s);
+
+        
 
         entorno.clase = this.nombre;
         /**
          * ALMACENAMOS TODOS SUS ATRIBUTOS
          */
         this.instrucciones.forEach(element => {
-            if(element instanceof Declaracion) element.ejecutar(entorno);
+            if(element instanceof Declaracion) {
+                let resultado:Object = element.ejecutar(entorno);
+                if(resultado instanceof MensajeError) return resultado;
+                this.tamaño ++;
+            }
             if(element instanceof FuncionOLCEV) element.primeraPasada(entorno);
         });
-
         /**
          * BUSCAMOS SI TIENE UN CONSTRUCTOR 
          * DE LO CONTRARIO GENERAMOS UNO 
@@ -157,12 +163,12 @@ class Clase implements Instruccion {
                 let e: Entorno = Auxiliar.clonarEntorno(entorno);
                 e.localizacion = Localizacion.STACK;
                 e.posRelativaStack = 1;
-                
                 element.primeraPasada(e); //----- Realizamos la primera pasada obteniendo el tamaño total del constructor
                 let resultado: Object = element.ejecutar(e);
                 if(!(resultado instanceof MensajeError)){
                     let nodo:Nodo = resultado as Nodo;
                     salida.codigo = salida.codigo.concat(nodo.codigo);
+                    this.constructores.push(element.identificador);
                 } else return resultado;
                 flag = true;
             }
@@ -207,6 +213,19 @@ class Clase implements Instruccion {
         });
 
         salida.codigo = nodo.codigo.concat(salida.codigo);
+        agregarClase(this); 
         return salida;
+    }
+
+    /**
+     * METODO QUE BUSCA UN CONSTRUCTOR
+     * EN EL LISTADO DE CONSTRUCTORES
+     * @param id 
+     */
+    buscarConstructor(id:String):Boolean{
+        for(let i = 0; i < this.constructores.length; i++){
+            if(this.constructores[i] === id) return true;
+        }
+        return false;
     }
 }

@@ -802,7 +802,7 @@ function agregarClase(clase){
  */
 function getClase(id){
     for(let i = 0; i < listaClases.length; i++){
-        if(listaClases[i].id === id) return listaClases[i]
+        if(listaClases[i].nombre === id) return listaClases[i]
     }
     return null;
 }

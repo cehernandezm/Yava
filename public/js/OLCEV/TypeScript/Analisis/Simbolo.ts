@@ -15,6 +15,7 @@ class Simbolo{
     entorno:Entorno;
     verdaderas:Array<String> = null;
     falsas:Array<String> = null;
+    objeto:String = "";
 
     constructor()
     /**

@@ -176,20 +176,21 @@ modificador : modificador PROTECTED                                         { $$
 //#############################################################
 //################### INSTRUCCIONES DE UNA CLASE ##############
 //#############################################################
-bloqueClase : bloqueClase bloque                            { $$ = $1; $$.push($2); }
-            | bloque                                        { $$ = []; $$.push($1); }
+bloqueClase : bloqueClase bloque                            { $$ = $1; $$ = $$.concat($2); }
+            | bloque                                        { $$ = $1; }
             ;
 
 bloque : declaracionVariable PNTCOMA                                { $$ = $1; }
-       | declaracionConstructor                                     { $$ = $1; }
-       | funcion_statement                                          { $$ = $1; }
+       | declaracionConstructor                                     { $$ = []; $$.push($1); }
+       | funcion_statement                                          { $$ = []; $$.push($1); }
        ;
 
 
 //########################################################################
 //################# DECLARACION DE CONSTRUCTORES #########################
 //########################################################################
-declaracionConstructor : PUBLIC ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                { $$ = new Constructor($2,[],$6,@1.first_line,@1.first_column); }
+declaracionConstructor : PUBLIC ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                              { $$ = new Constructor($2,[],$6,@1.first_line,@1.first_column); }   
+                       | PUBLIC ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER              { $$ = new Constructor($2,$4,$7,@1.first_line,@1.first_column); }
                        ;
 
 //######################################################################################
@@ -242,6 +243,7 @@ declaracionLocal : modificador tipo ID                                  { $$ = [
                  | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
                  | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
                  | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                 | ID ID IGUAL expresion                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
                  ;
 
 
@@ -296,6 +298,8 @@ expresion : aritmetica                                          { $$ = $1; }
           | expresion PUNTO LENGTH                              { $$ = new Length($1,@1.first_line,@1.first_column); }
           | primitivo                                           { $$ = $1; }
           | call_function                                       { $$ = $1; }
+          | NEW ID PARIZQ PARDER                                { $$ = new callConstructor($2,[]); }
+          | NEW ID PARIZQ listaExpresiones PARDER               { $$ = new callConstructor($2,$4); }
 
 
           

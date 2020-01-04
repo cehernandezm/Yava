@@ -27,7 +27,7 @@ class Analizar {
         
         
         
-        nodo.codigo.push("call constructor_hola");
+        nodo.codigo.push("call constructor_hola_");
         return nodo;
     }
 }
