@@ -114,6 +114,7 @@ class Primitivo extends Valor implements Instruccion {
         nodo.falsas = s.falsas;
         nodo.resultado = temporal;
         nodo.valor = s.valor;
+        nodo.id = s.objeto;
         if (s.tipo === Tipo.ARREGLO) {
             let simArreglo: Arreglo = s.valor as Arreglo;
             nodo.valor = new Arreglo(simArreglo.tipo, s.dimensiones);

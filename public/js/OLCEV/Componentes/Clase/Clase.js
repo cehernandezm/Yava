@@ -192,6 +192,7 @@ var Clase = /** @class */ (function () {
             }
         });
         salida.codigo = nodo.codigo.concat(salida.codigo);
+        this.entorno = entorno;
         agregarClase(this);
         return salida;
     };

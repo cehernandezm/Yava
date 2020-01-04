@@ -213,6 +213,7 @@ class Clase implements Instruccion {
         });
 
         salida.codigo = nodo.codigo.concat(salida.codigo);
+        this.entorno = entorno;
         agregarClase(this); 
         return salida;
     }

@@ -81,7 +81,7 @@ var PrintlOLCEV = /** @class */ (function () {
             }
         }
         else {
-            var mensaje = new MensajeError("Semantico", "No se puede imprimir el tipo de dato: " + nodo.tipo, entorno.archivo, this.l, this.c);
+            var mensaje = new MensajeError("Semantico", "No se puede imprimir el tipo de dato: " + Tipo[nodo.tipo], entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }

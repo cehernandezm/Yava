@@ -110,6 +110,7 @@ var Primitivo = /** @class */ (function (_super) {
         nodo.falsas = s.falsas;
         nodo.resultado = temporal;
         nodo.valor = s.valor;
+        nodo.id = s.objeto;
         if (s.tipo === Tipo.ARREGLO) {
             var simArreglo = s.valor;
             nodo.valor = new Arreglo(simArreglo.tipo, s.dimensiones);

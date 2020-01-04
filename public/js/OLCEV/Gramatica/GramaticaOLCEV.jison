@@ -302,6 +302,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | call_function                                       { $$ = $1; }
           | NEW ID PARIZQ PARDER                                { $$ = new callConstructor($2,[]); }
           | NEW ID PARIZQ listaExpresiones PARDER               { $$ = new callConstructor($2,$4); }
+          | expresion PUNTO ID                                  { $$ = new accederAtributo($1,$3,@1.first_line,@1.first_column); }
 
 
           
