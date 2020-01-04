@@ -2,14 +2,16 @@ class Asignacion implements Instruccion{
     
     id:String;
     expresion:Instruccion;
+    flag:number;
     l:number;
     c:number;
 
-    constructor(id:String,expresion:Instruccion,l:number,c:number){
+    constructor(id:String,expresion:Instruccion,l:number,c:number,flag:number){
         this.id = id;
         this.expresion = expresion;
         this.l = l;
         this.c = c;
+        this.flag = flag;
     }
 
 
@@ -20,7 +22,7 @@ class Asignacion implements Instruccion{
      * @param entorno Entorno Actual
      */
     ejecutar(entorno: Entorno): Object {
-        let s:Simbolo = entorno.buscarSimbolo(this.id);
+        let s:Simbolo = (this.flag === 0) ? entorno.buscarSimbolo(this.id) : entorno.buscarSimboloThis(this.id);
         //------------------------------------------ SI NO EXISTE EL SIMBOLO ----------------------------------------------------------------
         if(s == null){
             let mensaje:MensajeError = new MensajeError("Semantico","La variable: " + this.id + " no existe",entorno.archivo,this.l,this.c);

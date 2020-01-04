@@ -91,6 +91,8 @@
 "void"                                          return "VOID"
 "return"                                        return 'RETURN'
 
+"this"                                          return 'THIS'
+
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
 .                                               { console.log("Error"); }//ERRORES
@@ -222,13 +224,12 @@ instruccion : declaracionLocal PNTCOMA                                          
 //########################################################################################
 //############################### ASIGNACION #############################################
 //########################################################################################
-asignacion_statement : ID IGUAL expresion                                                   {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column)); }
-                     | variable listaDimensiones IGUAL expresion
+asignacion_statement : ID IGUAL expresion                                                   {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column,0)); }
                      | ID listaDimensiones IGUAL expresion                                 { $$ = []; $$.push(new AsignarArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,$4,@1.first_line,@1.first_column)); }
+                     | THIS PUNTO ID IGUAL expresion                                        {$$ = []; $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,1)); }
                      ;
 
-variable:  expresion PUNTO ID
-        |
+variable: THIS PUNTO ID                              { $$ = new elementThis($3,@1.first_line,@1.first_column); }
         ;
 
 
@@ -237,13 +238,13 @@ variable:  expresion PUNTO ID
 //########################################################################################
 declaracionLocal : modificador tipo ID                                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
                  | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
-                 | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
-                 | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
+                 | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,0)); }
+                 | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
                  | modificador tipo listaArreglo ID                     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3),$3); }
                  | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
-                 | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
-                 | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
-                 | ID ID IGUAL expresion                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
+                 | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column,0)); }
+                 | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,0)); }
+                 | ID ID IGUAL expresion                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
                  ;
 
 
@@ -289,6 +290,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | ternario                                            { $$ = $1; }
           | str_statement                                       { $$ = $1; }
           | variable listaDimensiones                          
+          | variable                                            { $$ = $1; }
           | ID listaDimensiones                                 { $$ = new AccesoArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,@1.first_line,@1.first_column); }
           | arreglo_statement                                   { $$ = $1; }
           | toint_statement                                     { $$ = $1; }

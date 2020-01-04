@@ -25,8 +25,9 @@ var Constructor = /** @class */ (function () {
             return mensaje;
         }
         this.parametros.forEach(function (element) {
-            var resultado = element.ejecutar(entorno);
             var d = element;
+            d.parametro = true;
+            var resultado = d.ejecutar(entorno);
             if (resultado instanceof MensajeError)
                 return resultado;
             var s = entorno.buscarSimbolo(d.id);

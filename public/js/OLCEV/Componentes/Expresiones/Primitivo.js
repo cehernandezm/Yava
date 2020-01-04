@@ -47,7 +47,7 @@ var Primitivo = /** @class */ (function (_super) {
                 var s = entorno.buscarSimbolo(nombre);
                 //----------------------------------------------- Si no existe la variable ----------------------------------------------------
                 if (s == null) {
-                    var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " no existe", entorno.archivo, this.l, this.c);
+                    var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " no existe en este ambito", entorno.archivo, this.l, this.c);
                     Auxiliar.agregarError(mensaje);
                     return mensaje;
                 }
@@ -56,41 +56,7 @@ var Primitivo = /** @class */ (function (_super) {
                     Auxiliar.agregarError(mensaje);
                     return mensaje;
                 }
-                var temporal = Auxiliar.generarTemporal();
-                var nodo = new Nodo([]);
-                nodo.tipo = s.tipo;
-                nodo.atributos = s.atributo;
-                nodo.verdaderas = s.verdaderas;
-                nodo.falsas = s.falsas;
-                nodo.resultado = temporal;
-                nodo.valor = s.valor;
-                if (s.tipo === Tipo.ARREGLO) {
-                    var simArreglo = s.valor;
-                    nodo.valor = new Arreglo(simArreglo.tipo, s.dimensiones);
-                }
-                if (s.atributo['isStatic']) {
-                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]", "Accedemos a la variable estatica " + nombre));
-                    nodo.localizacion = Localizacion.STACK;
-                    nodo.posicion = s.posAbsoluta.toString();
-                }
-                else if (s.localizacion === Localizacion.STACK) {
-                    var posicion = Auxiliar.generarTemporal();
-                    nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + s.posRelativa, "Accedemos a la posicion de la variable: " + nombre));
-                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + posicion + "]", "Obtenemos el valor de la variable: " + nombre));
-                    nodo.localizacion = Localizacion.STACK;
-                    nodo.posicion = posicion;
-                }
-                else {
-                    var posicion = Auxiliar.generarTemporal();
-                    var posHeap = Auxiliar.generarTemporal();
-                    nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + 0", "Nos posicionamos en this"));
-                    nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = Stack[" + posicion + "]", "Obtenemos la posicion en Heap de la referencia"));
-                    nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = " + posHeap + " + " + s.posRelativa, "Nos movemos a la posicion del atributo"));
-                    nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Heap[" + posHeap + "]", "Obtenemos el valor del atributo: " + nombre));
-                    nodo.localizacion = Localizacion.HEAP;
-                    nodo.posicion = posHeap;
-                }
-                return nodo;
+                return Primitivo.crearNodo(s);
         }
     };
     /**
@@ -127,6 +93,49 @@ var Primitivo = /** @class */ (function (_super) {
         }
         nodo.codigo.push(Auxiliar.crearLinea("Heap[H] = 0", "Fin de la cadena"));
         nodo.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentamos el Heap"));
+        return nodo;
+    };
+    /**
+     * METODO ESTATICO
+     * QUE CREA UN NODO APARTIR DE
+     * UN SIMBOLO
+     * @param s
+     */
+    Primitivo.crearNodo = function (s) {
+        var temporal = Auxiliar.generarTemporal();
+        var nodo = new Nodo([]);
+        nodo.tipo = s.tipo;
+        nodo.atributos = s.atributo;
+        nodo.verdaderas = s.verdaderas;
+        nodo.falsas = s.falsas;
+        nodo.resultado = temporal;
+        nodo.valor = s.valor;
+        if (s.tipo === Tipo.ARREGLO) {
+            var simArreglo = s.valor;
+            nodo.valor = new Arreglo(simArreglo.tipo, s.dimensiones);
+        }
+        if (s.atributo['isStatic']) {
+            nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]", "Accedemos a la variable estatica " + s.id));
+            nodo.localizacion = Localizacion.STACK;
+            nodo.posicion = s.posAbsoluta.toString();
+        }
+        else if (s.localizacion === Localizacion.STACK) {
+            var posicion = Auxiliar.generarTemporal();
+            nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + s.posRelativa, "Accedemos a la posicion de la variable: " + s.id));
+            nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + posicion + "]", "Obtenemos el valor de la variable: " + s.id));
+            nodo.localizacion = Localizacion.STACK;
+            nodo.posicion = posicion;
+        }
+        else {
+            var posicion = Auxiliar.generarTemporal();
+            var posHeap = Auxiliar.generarTemporal();
+            nodo.codigo.push(Auxiliar.crearLinea(posicion + " = P + 0", "Nos posicionamos en this"));
+            nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = Stack[" + posicion + "]", "Obtenemos la posicion en Heap de la referencia"));
+            nodo.codigo.push(Auxiliar.crearLinea(posHeap + " = " + posHeap + " + " + s.posRelativa, "Nos movemos a la posicion del atributo"));
+            nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Heap[" + posHeap + "]", "Obtenemos el valor del atributo: " + s.id));
+            nodo.localizacion = Localizacion.HEAP;
+            nodo.posicion = posHeap;
+        }
         return nodo;
     };
     return Primitivo;

@@ -21,6 +21,18 @@ var Entorno = /** @class */ (function () {
         return null;
     };
     /**
+     * BUSCA ATRIBUTOS
+     * @param id
+     * @param flag
+     */
+    Entorno.prototype.buscarSimboloThis = function (id) {
+        for (var i = this.listaSimbolos.length - 1; i >= 0; i--) {
+            if (this.listaSimbolos[i].id === id && this.listaSimbolos[i].localizacion === Localizacion.HEAP)
+                return this.listaSimbolos[i];
+        }
+        return null;
+    };
+    /**
      * METODO PARA AGREGAR SIMBOLOS
      * @param s SIMBOLO A AGREGAR
      */

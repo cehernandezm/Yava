@@ -47,9 +47,11 @@ class FuncionOLCEV extends Valor implements Instruccion {
         nuevo.posRelativaStack = 1;
 
         this.parametros.forEach(element => {
-            let resultado: Object = element.ejecutar(nuevo);
-            if (resultado instanceof MensajeError) return resultado;
             let d: Declaracion = element as Declaracion;
+            d.parametro = true;
+            let resultado: Object = d.ejecutar(nuevo);
+            if (resultado instanceof MensajeError) return resultado;
+            
             let s: Simbolo = nuevo.buscarSimbolo(d.id);
             s.isNull = false;
         });

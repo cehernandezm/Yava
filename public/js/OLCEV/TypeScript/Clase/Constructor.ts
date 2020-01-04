@@ -33,8 +33,9 @@ class Constructor implements Instruccion {
             return mensaje;
         }
         this.parametros.forEach(element => {
-            let resultado:Object = element.ejecutar(entorno);
             let d:Declaracion = element as Declaracion;
+            d.parametro = true;
+            let resultado:Object = d.ejecutar(entorno);
             if(resultado instanceof MensajeError) return resultado;
             let s:Simbolo = entorno.buscarSimbolo(d.id);
             s.isNull = false;

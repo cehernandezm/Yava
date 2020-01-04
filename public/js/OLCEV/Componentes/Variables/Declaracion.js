@@ -15,6 +15,7 @@ var Declaracion = /** @class */ (function (_super) {
     __extends(Declaracion, _super);
     function Declaracion(id, modificador, tipo, valor, l, c, dimesiones) {
         var _this = _super.call(this, tipo, valor) || this;
+        _this.parametro = false;
         _this.id = id;
         _this.modificador = modificador;
         _this.l = l;
@@ -39,7 +40,7 @@ var Declaracion = /** @class */ (function (_super) {
         var _this = this;
         var s = entorno.buscarSimbolo(this.id);
         //---------------------------------------------- Si ya existe una variable con ese nombre
-        if (s != null) {
+        if (s != null && !this.parametro) {
             var mensaje = new MensajeError("Semantico", "El identificador: " + this.id + " ya existe", entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;

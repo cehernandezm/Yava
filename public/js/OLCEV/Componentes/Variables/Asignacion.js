@@ -1,16 +1,17 @@
 var Asignacion = /** @class */ (function () {
-    function Asignacion(id, expresion, l, c) {
+    function Asignacion(id, expresion, l, c, flag) {
         this.id = id;
         this.expresion = expresion;
         this.l = l;
         this.c = c;
+        this.flag = flag;
     }
     /**
      * METODO DE LA CLASE PADRE
      * @param entorno Entorno Actual
      */
     Asignacion.prototype.ejecutar = function (entorno) {
-        var s = entorno.buscarSimbolo(this.id);
+        var s = (this.flag === 0) ? entorno.buscarSimbolo(this.id) : entorno.buscarSimboloThis(this.id);
         //------------------------------------------ SI NO EXISTE EL SIMBOLO ----------------------------------------------------------------
         if (s == null) {
             var mensaje = new MensajeError("Semantico", "La variable: " + this.id + " no existe", entorno.archivo, this.l, this.c);

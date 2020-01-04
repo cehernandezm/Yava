@@ -46,10 +46,11 @@ var FuncionOLCEV = /** @class */ (function (_super) {
         nuevo.tamaño = this.tamaño;
         nuevo.posRelativaStack = 1;
         this.parametros.forEach(function (element) {
-            var resultado = element.ejecutar(nuevo);
+            var d = element;
+            d.parametro = true;
+            var resultado = d.ejecutar(nuevo);
             if (resultado instanceof MensajeError)
                 return resultado;
-            var d = element;
             var s = nuevo.buscarSimbolo(d.id);
             s.isNull = false;
         });

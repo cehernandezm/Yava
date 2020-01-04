@@ -5,7 +5,7 @@ class Declaracion extends Valor implements Instruccion{
     dimensiones:number;
     l:number;
     c:number;
-
+    parametro:Boolean = false;
     
     constructor(id:String,modificador:Array<Modificador>,tipo:Tipo,valor:Object,l:number,c:number)
     constructor(id:String,modificador:Array<Modificador>,tipo:Tipo,valor:Object,l:number,c:number,dimesiones?:number){
@@ -34,7 +34,7 @@ class Declaracion extends Valor implements Instruccion{
     ejecutar(entorno:Entorno):Object{
         let s:Simbolo = entorno.buscarSimbolo(this.id);
         //---------------------------------------------- Si ya existe una variable con ese nombre
-        if(s != null){
+        if(s != null && !this.parametro){
             let mensaje:MensajeError = new MensajeError("Semantico","El identificador: " + this.id + " ya existe",entorno.archivo,this.l,this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
@@ -130,6 +130,7 @@ class Declaracion extends Valor implements Instruccion{
         simbolo.objeto = this.valor.toString();
 
         entorno.agregarSimbolo(simbolo);
+        
         let nodo:Nodo = new Nodo();
         nodo.codigo = [];
         return nodo;
