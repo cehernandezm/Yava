@@ -25,13 +25,6 @@ var callConstructor = /** @class */ (function () {
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
-        var identificador = this.crearIdentificador();
-        var resultado = clase.buscarConstructor(identificador);
-        if (!resultado) {
-            var mensaje = new MensajeError("Semantico", "La clase no posee este tipo de constructor", entorno.archivo, this.l, this.c);
-            Auxiliar.agregarError(mensaje);
-            return mensaje;
-        }
         this.parametros.forEach(function (element) {
             var result = element.ejecutar(entorno);
             if (result instanceof MensajeError)
@@ -40,8 +33,15 @@ var callConstructor = /** @class */ (function () {
             salida.codigo = salida.codigo.concat(nodo.codigo);
             if (nodo.tipo === Tipo.BOOLEAN)
                 nodo = Aritmetica.arreglarBoolean(nodo, salida);
-            valores.push(nodo.resultado);
+            valores.push(nodo);
         });
+        var identificador = this.construirIdentificador(valores);
+        var resultado = clase.buscarConstructor(identificador);
+        if (!resultado) {
+            var mensaje = new MensajeError("Semantico", "La clase no posee este tipo de constructor", entorno.archivo, this.l, this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
         var temporal = Auxiliar.generarTemporal();
         var posicion = Auxiliar.generarTemporal();
         salida.codigo.push(Auxiliar.crearLinea(temporal + " = H", "Inicio del Objeto"));
@@ -52,7 +52,7 @@ var callConstructor = /** @class */ (function () {
         var index = 1;
         valores.forEach(function (element) {
             salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + index, "Parametro: " + index));
-            salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + element, "Seteamos el parametro: " + index));
+            salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + element.resultado, "Seteamos el parametro: " + index));
         });
         salida.codigo.push("call constructor_" + identificador);
         salida.codigo.push(Auxiliar.crearLinea("P = P - " + entorno.tamaño, "Fin Simulacion de cambio de ambito"));
@@ -65,11 +65,10 @@ var callConstructor = /** @class */ (function () {
      * METODO QUE CREA UN IDENTIFICADOR
      * PARA EL CONSTRUCTOR A LLAMAR
      */
-    callConstructor.prototype.crearIdentificador = function () {
+    callConstructor.prototype.construirIdentificador = function (valores) {
         var identificador = this.id + "_";
-        this.parametros.forEach(function (element) {
-            var d = element;
-            identificador += Tipo[d.tipo] + "_";
+        valores.forEach(function (element) {
+            identificador += Tipo[element.tipo] + "_";
         });
         return identificador;
     };

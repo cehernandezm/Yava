@@ -63,9 +63,16 @@ var Constructor = /** @class */ (function () {
             var x = +element.primeraPasada(entorno);
             i += x;
         });
+        /**
+         * CREAMOS UN IDENTIFICADOR DEL TIPO
+         * ID_ [TIPO]*
+         */
         this.parametros.forEach(function (element) {
             var d = element;
-            _this.identificador += Tipo[d.tipo] + "_";
+            if (d.dimensiones > 0)
+                _this.identificador += Tipo[Tipo.ARREGLO] + "_";
+            else
+                _this.identificador += Tipo[d.tipo] + "_";
         });
         entorno.tamaño = i + this.parametros.length;
         return entorno.tamaño;

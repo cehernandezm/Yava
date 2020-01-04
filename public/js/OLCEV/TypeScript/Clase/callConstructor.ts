@@ -27,20 +27,14 @@ class callConstructor implements Instruccion {
     ejecutar(entorno: Entorno): Object {
         let salida: Nodo = new Nodo([]);
         let clase: Clase = getClase(this.id);
-        let valores: Array<String> = [];
+        let valores: Array<Nodo> = [];
         if (clase == null) {
             let mensaje: MensajeError = new MensajeError("Semantico", "No existe la clase: " + this.id, entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
 
-        let identificador: String = this.crearIdentificador();
-        let resultado: Boolean = clase.buscarConstructor(identificador);
-        if (!resultado) {
-            let mensaje: MensajeError = new MensajeError("Semantico", "La clase no posee este tipo de constructor", entorno.archivo, this.l, this.c);
-            Auxiliar.agregarError(mensaje);
-            return mensaje;
-        }
+        
 
         this.parametros.forEach(element => {
             let result: Object = element.ejecutar(entorno);
@@ -48,8 +42,16 @@ class callConstructor implements Instruccion {
             let nodo: Nodo = result as Nodo;
             salida.codigo = salida.codigo.concat(nodo.codigo);
             if (nodo.tipo === Tipo.BOOLEAN) nodo = Aritmetica.arreglarBoolean(nodo, salida);
-            valores.push(nodo.resultado);
+            valores.push(nodo);
         });
+
+        let identificador: String = this.construirIdentificador(valores);
+        let resultado: Boolean = clase.buscarConstructor(identificador);
+        if (!resultado) {
+            let mensaje: MensajeError = new MensajeError("Semantico", "La clase no posee este tipo de constructor", entorno.archivo, this.l, this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
 
         let temporal: String = Auxiliar.generarTemporal();
         let posicion: String = Auxiliar.generarTemporal();
@@ -62,7 +64,7 @@ class callConstructor implements Instruccion {
         let index: number = 1;
         valores.forEach(element => {
             salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + index, "Parametro: " + index));
-            salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + element, "Seteamos el parametro: " + index));
+            salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + element.resultado, "Seteamos el parametro: " + index));
         });
 
         salida.codigo.push("call constructor_" + identificador);
@@ -80,14 +82,11 @@ class callConstructor implements Instruccion {
      * METODO QUE CREA UN IDENTIFICADOR
      * PARA EL CONSTRUCTOR A LLAMAR
      */
-    crearIdentificador(): String {
-        let identificador: String = this.id + "_";
-
-        this.parametros.forEach(element => {
-            let d: Declaracion = element as Declaracion;
-            identificador += Tipo[d.tipo] + "_";
+    construirIdentificador(valores:Array<Nodo>):String{
+        let identificador:String = this.id + "_";
+        valores.forEach(element => {
+            identificador += Tipo[element.tipo] + "_";
         });
-
         return identificador;
     }
 

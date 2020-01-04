@@ -77,9 +77,14 @@ class Constructor implements Instruccion {
            i += x;
         });
 
+        /**
+         * CREAMOS UN IDENTIFICADOR DEL TIPO
+         * ID_ [TIPO]*
+         */
         this.parametros.forEach(element => {
-            let d:Declaracion = element as Declaracion;
-            this.identificador += Tipo[d.tipo] + "_";
+            let d: Declaracion = element as Declaracion;
+            if(d.dimensiones > 0) this.identificador += Tipo[Tipo.ARREGLO] + "_";
+            else this.identificador += Tipo[d.tipo] + "_";
         });
 
         entorno.tamaño = i + this.parametros.length;

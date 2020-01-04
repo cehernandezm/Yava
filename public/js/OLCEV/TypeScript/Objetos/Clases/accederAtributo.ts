@@ -79,7 +79,7 @@ class accederAtributo implements Instruccion{
 
             if (simbolo.tipo === Tipo.ARREGLO) {
                 let simArreglo: Arreglo = simbolo.valor as Arreglo;
-                nodo.valor = new Arreglo(simArreglo.tipo, simbolo.dimensiones);
+                salida.valor = new Arreglo(simArreglo.tipo, simbolo.dimensiones);
             }
         }
         else{

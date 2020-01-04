@@ -240,10 +240,10 @@ case 86:
  this.$ = new Length($$[$0-2],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
 case 89:
- this.$ = new callConstructor($$[$0-2],[]); 
+ this.$ = new callConstructor($$[$0-2],[],_$[$0-3].first_line,_$[$0-3].first_column); 
 break;
 case 90:
- this.$ = new callConstructor($$[$0-3],$$[$0-1]); 
+ this.$ = new callConstructor($$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); 
 break;
 case 91:
  this.$ = new accederAtributo($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 

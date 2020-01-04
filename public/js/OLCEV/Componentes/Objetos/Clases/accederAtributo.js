@@ -61,7 +61,7 @@ var accederAtributo = /** @class */ (function () {
             salida.posicion = posicionHeap;
             if (simbolo.tipo === Tipo.ARREGLO) {
                 var simArreglo = simbolo.valor;
-                nodo.valor = new Arreglo(simArreglo.tipo, simbolo.dimensiones);
+                salida.valor = new Arreglo(simArreglo.tipo, simbolo.dimensiones);
             }
         }
         else {
