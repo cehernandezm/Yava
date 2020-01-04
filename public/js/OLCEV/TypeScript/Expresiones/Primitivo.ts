@@ -52,6 +52,8 @@ class Primitivo extends Valor implements Instruccion {
 
 
                 return Primitivo.crearNodo(s);
+            case Tipo.NULL:
+                return new Nodo([],"0",this.tipo,"0");
         }
 
     }

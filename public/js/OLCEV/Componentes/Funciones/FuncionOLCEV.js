@@ -109,6 +109,8 @@ var FuncionOLCEV = /** @class */ (function (_super) {
             salida.tipo = this.tipo;
             salida.valor = this.valor;
         }
+        salida.id = this.valor.toString();
+        this.objeto = this.valor.toString();
         return salida;
     };
     /**

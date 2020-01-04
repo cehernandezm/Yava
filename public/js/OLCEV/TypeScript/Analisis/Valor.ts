@@ -21,7 +21,8 @@ enum Tipo{
     BOOLEAN,
     ID,
     ARREGLO,
-    VOID
+    VOID,
+    NULL
 };
 
 

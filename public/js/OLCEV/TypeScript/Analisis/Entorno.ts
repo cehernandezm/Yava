@@ -75,6 +75,7 @@ class Entorno {
     public buscarFuncion(id: String, parametros: Array<Instruccion>): FuncionOLCEV {
 
         for (let i: number = this.metodos.length - 1; i >= 0; i--) {
+            
             let f: FuncionOLCEV = this.metodos[i];
             if (f.identificador === id) return f;
         }

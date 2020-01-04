@@ -154,6 +154,18 @@ class Relacional implements Instruccion {
 
 
         }
+        else if(nodoIzq.tipo === Tipo.ID && nodoDer.tipo === Tipo.NULL || nodoIzq.tipo === Tipo.NULL && nodoDer.tipo === Tipo.ID ){
+            nodo.codigo = nodo.codigo.concat(nodoIzq.codigo);
+            nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
+            let v :String = Auxiliar.generarEtiqueta();
+            let f:String = Auxiliar.generarEtiqueta();
+            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(nodoIzq + " " + signo + " " + nodoDer,v),"Verificamos si en null"));
+            nodo.codigo.push(Auxiliar.saltoIncondicional(f));
+            nodo.verdaderas = [v];
+            nodo.falsas = [f];
+            nodo.tipo = Tipo.BOOLEAN;
+            return nodo;
+        }
         else if(nodoIzq.tipo === Tipo.STRING && nodoDer.tipo === Tipo.STRING){
             nodo.codigo.push(";################################## COMPARAR DOS CADENAS #########################################");
             let posIzq:String = Auxiliar.generarTemporal();

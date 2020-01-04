@@ -15,6 +15,7 @@ var Tipo;
     Tipo[Tipo["ID"] = 5] = "ID";
     Tipo[Tipo["ARREGLO"] = 6] = "ARREGLO";
     Tipo[Tipo["VOID"] = 7] = "VOID";
+    Tipo[Tipo["NULL"] = 8] = "NULL";
 })(Tipo || (Tipo = {}));
 ;
 var Operacion;

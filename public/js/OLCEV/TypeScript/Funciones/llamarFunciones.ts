@@ -81,7 +81,7 @@ class llamarFunciones implements Instruccion{
             salida.tipo = f.tipo;
             salida.valor = f.valor;
         }
-
+        salida.id = f.valor.toString();
         return salida;
     }    
     

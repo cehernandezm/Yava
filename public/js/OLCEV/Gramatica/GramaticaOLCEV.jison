@@ -92,6 +92,7 @@
 "return"                                        return 'RETURN'
 
 "this"                                          return 'THIS'
+"null"                                          return 'NULL';
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -191,8 +192,8 @@ bloque : declaracionVariable PNTCOMA                                { $$ = $1; }
 //########################################################################
 //################# DECLARACION DE CONSTRUCTORES #########################
 //########################################################################
-declaracionConstructor : PUBLIC ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                              { $$ = new Constructor($2,[],$6,@1.first_line,@1.first_column); }   
-                       | PUBLIC ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER              { $$ = new Constructor($2,$4,$7,@1.first_line,@1.first_column); }
+declaracionConstructor : modificador ID PARIZQ PARDER LLAVEIZQ instrucciones LLAVEDER                              { $$ = new Constructor($2,[],$6,@1.first_line,@1.first_column); }   
+                       | modificador ID PARIZQ listaParametros PARDER LLAVEIZQ instrucciones LLAVEDER              { $$ = new Constructor($2,$4,$7,@1.first_line,@1.first_column); }
                        ;
 
 //######################################################################################
@@ -227,6 +228,7 @@ instruccion : declaracionLocal PNTCOMA                                          
 asignacion_statement : ID IGUAL expresion                                                   {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column,0)); }
                      | ID listaDimensiones IGUAL expresion                                 { $$ = []; $$.push(new AsignarArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,$4,@1.first_line,@1.first_column)); }
                      | THIS PUNTO ID IGUAL expresion                                        {$$ = []; $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,1)); }
+                     | expresion PUNTO ID IGUAL expresion                                   { $$ = []; $$.push(new asignarAtributo($1,$3,$5,@1.first_line,@1.first_column)); }
                      ;
 
 variable: THIS PUNTO ID                              { $$ = new elementThis($3,@1.first_line,@1.first_column); }
@@ -268,6 +270,10 @@ declaracionVariable : modificador tipo ID                                  { $$ 
                     | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
                     | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
                     | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                    | ID ID IGUAL expresion                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
+                    | ID ID                                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column)); }
+                    | modificador ID ID IGUAL expresion                    { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ID,$2,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                    | modificador ID ID                                    { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ID,$2,@1.first_line,@1.first_column)); }
                     ;
 
 
@@ -395,6 +401,7 @@ primitivo : ENTERO                  {$$ = new Primitivo(Tipo.INT,$1,@1.first_lin
           | ID                      {$$ = new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column);}
           | TRUE                    {$$ = new Primitivo(Tipo.BOOLEAN,"1",@1.first_line,@1.first_column)}
           | FALSE                   {$$ = new Primitivo(Tipo.BOOLEAN,"0",@1.first_line,@1.first_column)}
+          | NULL                    {$$ = new Primitivo(Tipo.NULL,"",@1.first_line,@1.first_column); }
           ;  
 //#########################################################################################
 //################################# PRINT | PRINTLN #####################################
@@ -502,12 +509,14 @@ listaDimensiones : listaDimensiones CORIZQ expresion CORDER                     
 //################################# FUNCIONES Y METODOS #####################################
 //#######################################################################################
 
-funcion_statement : modificador VOID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                 { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$6,$4,@1.first_line,@1.first_column,0);  }
-                  | VOID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                             { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$5,$3,@1.first_line,@1.first_column,0);  }
-                  | modificador tipo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                 { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$6,$4,@1.first_line,@1.first_column,0);}
-                  | tipo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                             { $$ = new FuncionOLCEV($2,null,0,$1.tipo,$1.valor,$5,$3,@1.first_line,@1.first_column,0);}
+funcion_statement : modificador VOID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                   { $$ = new FuncionOLCEV($3,$1,0,Tipo.VOID,"",$6,$4,@1.first_line,@1.first_column,0);  }
+                  | VOID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                               { $$ = new FuncionOLCEV($2,null,0,Tipo.VOID,"",$5,$3,@1.first_line,@1.first_column,0);  }
+                  | modificador tipo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                   { $$ = new FuncionOLCEV($3,$1,0,$2.tipo,$2.valor,$6,$4,@1.first_line,@1.first_column,0);}
+                  | tipo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                               { $$ = new FuncionOLCEV($2,null,0,$1.tipo,$1.valor,$5,$3,@1.first_line,@1.first_column,0);}
                   | modificador tipo listaArreglo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                      {$$ = new FuncionOLCEV($4,$1,$3,$2.tipo,$2.valor,$7,$5,@1.first_line,@1.first_column,0); }
                   | tipo listaArreglo ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                  {$$ = new FuncionOLCEV($3,null,$2,$1.tipo,$1.valor,$6,$4,@1.first_line,@1.first_column,0); }
+                  | ID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                                 { $$ = new FuncionOLCEV($2,null,0,Tipo.ID,$1,$5,$3,@1.first_line,@1.first_column,0);}
+                  | modificador ID ID parametros_sentence LLAVEIZQ instrucciones LLAVEDER                                     {$$ = new FuncionOLCEV($3,$1,0,Tipo.ID,$2,$6,$4,@1.first_line,@1.first_column,0); }
                   ;
 
 

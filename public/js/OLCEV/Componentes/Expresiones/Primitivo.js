@@ -57,6 +57,8 @@ var Primitivo = /** @class */ (function (_super) {
                     return mensaje;
                 }
                 return Primitivo.crearNodo(s);
+            case Tipo.NULL:
+                return new Nodo([], "0", this.tipo, "0");
         }
     };
     /**

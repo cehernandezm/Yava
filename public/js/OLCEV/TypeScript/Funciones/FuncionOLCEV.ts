@@ -13,6 +13,7 @@ class FuncionOLCEV extends Valor implements Instruccion {
     c: number;
     override: number;
     identificador: String;
+    objeto:String;
 
     constructor(id: String, modificadores: Array<Modificador>, dimensiones: number, tipo: Tipo, valor: Object, cuerpo: Array<Instruccion>, parametros: Array<Instruccion>, l: number, c: number, override: number) {
         super(tipo, valor);
@@ -117,7 +118,8 @@ class FuncionOLCEV extends Valor implements Instruccion {
             salida.tipo = this.tipo;
             salida.valor = this.valor;
         }
-
+        salida.id = this.valor.toString();
+        this.objeto = this.valor.toString();
         return salida;
     }
 
