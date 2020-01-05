@@ -130,7 +130,6 @@ class Declaracion extends Valor implements Instruccion{
         simbolo.objeto = this.valor.toString();
 
         entorno.agregarSimbolo(simbolo);
-        
         let nodo:Nodo = new Nodo();
         nodo.codigo = [];
         return nodo;
