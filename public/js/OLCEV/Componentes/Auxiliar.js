@@ -313,6 +313,56 @@ var Auxiliar = /** @class */ (function () {
         salida.resultado = temporal;
         return salida;
     };
+    /**
+     * FUNCION ENCARGADA DE GENERAR
+     * EL CODIGO 3D PARA CONVERTIR
+     * UNA CADENA A UN ARREGLO DE
+     * CARACTERES
+     */
+    Auxiliar.toCharArray = function () {
+        var salida = new Nodo([]);
+        salida.codigo.push(";#########################################################################");
+        salida.codigo.push(";######################### FUNCION toCHARARRAY ########################");
+        salida.codigo.push(";#########################################################################");
+        salida.codigo.push("proc toCharArray{");
+        var posicion = Auxiliar.generarTemporal();
+        var temporal = Auxiliar.generarTemporal();
+        var cadena = Auxiliar.generarTemporal();
+        var retorno = Auxiliar.generarTemporal();
+        var valor = Auxiliar.generarTemporal();
+        var v = Auxiliar.generarEtiqueta();
+        var s = Auxiliar.generarEtiqueta();
+        salida.codigo.push(posicion + " = P + 0");
+        salida.codigo.push(cadena + " = Stack[" + posicion + "]");
+        salida.codigo.push(Auxiliar.crearLinea("P = P + 2", "Simulacion de cambio de ambito"));
+        salida.codigo.push(posicion + " = P + 0");
+        salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + cadena, "Pasamos la referencia de la cadena"));
+        salida.codigo.push("call stringLength");
+        salida.codigo.push(posicion + " = P + 1");
+        salida.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + posicion + "]", "Obtenemos el valor del retorno"));
+        salida.codigo.push(Auxiliar.crearLinea("P = P - 2", "Fin simulacion de cambio de ambito"));
+        salida.codigo.push(Auxiliar.crearLinea(retorno + " = H", "Inicio del arreglo"));
+        salida.codigo.push(Auxiliar.crearLinea("Heap[H] = " + temporal, "Guardamos el tamanio"));
+        salida.codigo.push("H = H + 1");
+        salida.codigo.push(temporal + " = " + temporal + " - 1");
+        salida.codigo.push(Auxiliar.crearLinea("Heap[H] = " + temporal, "Guardamos el limite"));
+        salida.codigo.push("H = H + 1");
+        salida.codigo.push(posicion + " = " + cadena);
+        salida.codigo.push(s + ":");
+        salida.codigo.push(Auxiliar.crearLinea(valor + " = Heap[" + posicion + "]", "Obtenemos el caracter"));
+        salida.codigo.push(Auxiliar.saltoCondicional(valor + " == 0", v));
+        salida.codigo.push(posicion + " = " + posicion + " + 1");
+        salida.codigo.push("Heap[H] = " + valor);
+        salida.codigo.push("H = H + 1");
+        salida.codigo.push(Auxiliar.saltoIncondicional(s));
+        salida.codigo.push(v + ":");
+        salida.codigo.push(posicion + " = P + 1");
+        salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + retorno, "Guardamos la referencia del arreglo para retornar"));
+        salida.codigo.push("}");
+        salida.codigo.push("\n");
+        salida.codigo.push("\n");
+        return salida;
+    };
     Auxiliar.temporal = 0;
     Auxiliar.posicion = 0;
     Auxiliar.etiqueta = 0;
