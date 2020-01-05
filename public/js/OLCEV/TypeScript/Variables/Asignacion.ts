@@ -56,7 +56,6 @@ class Asignacion implements Instruccion {
             salida.codigo.push(Auxiliar.crearLinea("Heap[" + posHeap + "] = " + nodo.resultado, "Le asignamos valor a la variable: " + s.id));
         }
         s.isNull = false;
-        s.objeto = nodo.id;
         return salida;
     }
 

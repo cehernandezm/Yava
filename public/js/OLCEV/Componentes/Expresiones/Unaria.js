@@ -33,6 +33,8 @@ var Unaria = /** @class */ (function () {
         if (this.operacion === Operacion.NEGATIVO) {
             var temporal = Auxiliar.generarTemporal();
             salida.codigo.push(Auxiliar.crearLinea(temporal + " = -1 * " + nodo.resultado, "Negamos el valor numerico"));
+            salida.resultado = temporal;
+            return salida;
         }
         //------------------------------------------------- SI ES UN VALOR PRIMITIVO -----------------------------------------------------------------
         if (nodo.posicion === null) {

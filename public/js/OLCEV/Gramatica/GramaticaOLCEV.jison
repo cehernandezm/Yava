@@ -217,6 +217,8 @@ instruccion : declaracionLocal PNTCOMA                                          
             | for_statement                                                               { $$ = []; $$.push($1); }
             | call_function PNTCOMA                                                       { $$ = []; $$.push($1); }
             | return_statement PNTCOMA                                                    { $$ = []; $$.push($1); }
+            | expresion PUNTO ID PARIZQ PARDER PNTCOMA                                    { $$ = [];  $$.push(new accederAFunciones($1,$3,[],@1.first_line,@1.first_column)); }
+            | expresion PUNTO ID PARIZQ listaExpresiones PARDER PNTCOMA                   { $$ = []; $$.push(new accederAFunciones($1,$3,$5,@1.first_line,@1.first_column)); }
             ;
 
 
@@ -238,16 +240,19 @@ variable: THIS PUNTO ID                              { $$ = new elementThis($3,@
 //########################################################################################
 //##################### DECLARACION DE VARIABLES LOCALES #################################
 //########################################################################################
-declaracionLocal : modificador tipo ID                                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
-                 | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
-                 | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,0)); }
-                 | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
-                 | modificador tipo listaArreglo ID                     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3),$3); }
-                 | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
-                 | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column,0)); }
-                 | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,0)); }
-                 | ID ID IGUAL expresion                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
-                 ;
+declaracionLocal :  modificador tipo ID                                    { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
+                    | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
+                    | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                    | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
+                    | modificador tipo listaArreglo ID                     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3),$3); }
+                    | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
+                    | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
+                    | tipo listaArreglo ID IGUAL expresion                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                    | ID ID IGUAL expresion                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
+                    | ID ID                                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column)); }
+                    | modificador ID ID IGUAL expresion                    { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ID,$2,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
+                    | modificador ID ID                                    { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ID,$2,@1.first_line,@1.first_column)); }
+                    ;
 
 
 //###################################################################
@@ -265,7 +270,7 @@ listaArreglo : listaArreglo CORIZQ CORDER                               { $$ = +
 declaracionVariable : modificador tipo ID                                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); }
                     | tipo ID                                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); }
                     | modificador tipo ID IGUAL expresion                  { $$ = []; $$.push(new Declaracion($3,$1,$2.tipo,$2.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column)); }
-                    | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column)); }
+                    | tipo ID IGUAL expresion                              { $$ = []; $$.push(new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column)); $$.push(new Asignacion($2,$4,@1.first_line,@1.first_column,0)); }
                     | modificador tipo listaArreglo ID                     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3),$3); }
                     | tipo listaArreglo ID                                 { $$ = []; $$.push(new Declaracion($3,null,Tipo.ARREGLO,new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2)); }
                     | modificador tipo listaArreglo ID IGUAL expresion     { $$ = []; $$.push(new Declaracion($4,$1,Tipo.ARREGLO,new Arreglo($2.tipo,$2.valor),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($4,$6,@1.first_line,@1.first_column)); }
@@ -309,6 +314,8 @@ expresion : aritmetica                                          { $$ = $1; }
           | NEW ID PARIZQ PARDER                                { $$ = new callConstructor($2,[],@1.first_line,@1.first_column); }
           | NEW ID PARIZQ listaExpresiones PARDER               { $$ = new callConstructor($2,$4,@1.first_line,@1.first_column); }
           | expresion PUNTO ID                                  { $$ = new accederAtributo($1,$3,@1.first_line,@1.first_column); }
+          | expresion PUNTO ID PARIZQ PARDER                    { $$ = new accederAFunciones($1,$3,[],@1.first_line,@1.first_column); }
+          | expresion PUNTO ID PARIZQ listaExpresiones PARDER   { $$ = new accederAFunciones($1,$3,$5,@1.first_line,@1.first_column); }
 
 
           
@@ -529,7 +536,8 @@ listaParametros: listaParametros COMA parametro                                 
                ;
 
 parametro: tipo ID                                                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
-         | tipo listaArreglo ID                                                  { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }                                 
+         | tipo listaArreglo ID                                                  { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }   
+         | ID ID                                                                 { $$ = new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2); }                              
          ;
 
 //#########################################################################################

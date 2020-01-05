@@ -137,7 +137,7 @@ var Relacional = /** @class */ (function () {
             nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(nodoIzq + " " + signo + " " + nodoDer, v), "Verificamos si en null"));
+            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(nodoIzq.resultado + " " + signo + " " + nodoDer.resultado, v), "Verificamos si en null"));
             nodo.codigo.push(Auxiliar.saltoIncondicional(f));
             nodo.verdaderas = [v];
             nodo.falsas = [f];

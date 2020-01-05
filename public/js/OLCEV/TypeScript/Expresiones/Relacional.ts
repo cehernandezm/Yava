@@ -159,7 +159,7 @@ class Relacional implements Instruccion {
             nodo.codigo = nodo.codigo.concat(nodoDer.codigo);
             let v :String = Auxiliar.generarEtiqueta();
             let f:String = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(nodoIzq + " " + signo + " " + nodoDer,v),"Verificamos si en null"));
+            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(nodoIzq.resultado + " " + signo + " " + nodoDer.resultado,v),"Verificamos si en null"));
             nodo.codigo.push(Auxiliar.saltoIncondicional(f));
             nodo.verdaderas = [v];
             nodo.falsas = [f];
