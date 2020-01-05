@@ -12,6 +12,7 @@ var Analizar = /** @class */ (function () {
         nodo.codigo = nodo.codigo.concat(Auxiliar.funcionLength().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.toCharArray().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.toUpperCase().codigo);
+        nodo.codigo = nodo.codigo.concat(Auxiliar.toLoweCase().codigo);
         this.instrucciones.forEach(function (clase) {
             var entorno = new Entorno(id);
             if (clase instanceof Clase) {

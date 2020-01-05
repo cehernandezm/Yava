@@ -16,6 +16,11 @@ class toUpperCase implements Instruccion{
         this.c = c;
     }
 
+
+    /**
+     * METODO DE LA CLASE PADRE
+     * @param entorno 
+     */
     ejecutar(entorno: Entorno): Object {
         let salida: Nodo = new Nodo([]);
 
@@ -49,8 +54,12 @@ class toUpperCase implements Instruccion{
         return salida;
     }    
     
+    /**
+     * ESTA CLASE NO POSEE PRIMERA PASADA
+     * @param entorno 
+     */
     primeraPasada(entorno: Entorno): Object {
-        throw new Error("Method not implemented.");
+        return 0;
     }
 
 
