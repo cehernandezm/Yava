@@ -309,6 +309,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | PARIZQ expresion PARDER                             { $$ = $2; }
           | LLAVEIZQ listaExpresiones LLAVEDER                  { $$ = new listaValores($2,@1.first_line,@1.first_column); }
           | expresion PUNTO LENGTH                              { $$ = new Length($1,@1.first_line,@1.first_column); }
+          | expresion PUNTO LENGTH PARIZQ PARDER                { $$ = new Length($1,@1.first_line,@1.first_column); }
           | primitivo                                           { $$ = $1; }
           | call_function                                       { $$ = $1; }
           | NEW ID PARIZQ PARDER                                { $$ = new callConstructor($2,[],@1.first_line,@1.first_column); }

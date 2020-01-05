@@ -325,5 +325,43 @@ class Auxiliar{
     }
     
     
+    /**
+     * FUNCITON QUE SE ENCARGA DE
+     * GENERAR CODIGO 3D PARA
+     * OBTENER EL LARGO DE UNA CADENA
+     */
+    public static funcionLength():Nodo{
+        let salida:Nodo = new Nodo([]);
+        let posicion:String = Auxiliar.generarTemporal();
+        let valor:String = Auxiliar.generarTemporal();
+        let temporal:String = Auxiliar.generarTemporal();
+        let v:String = Auxiliar.generarEtiqueta();
+        let s:String = Auxiliar.generarEtiqueta();
+        salida.codigo.push(";#########################################################################");
+        salida.codigo.push(";######################### FUNCION LENGHT OF STRING ########################");
+        salida.codigo.push(";#########################################################################");
+        salida.codigo.push("proc stringLength{");
+        salida.codigo.push(temporal + " = 0");
+        salida.codigo.push(posicion + " = P + 0");
+        salida.codigo.push(posicion + " = Stack[" + posicion + "]");
+        salida.codigo.push(s + ":");
+        salida.codigo.push(Auxiliar.crearLinea(valor + " = Heap[" + posicion + "]","Se obtiene el inicio de la cadena"));
+        salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valor + " == 0",v),"Si estamos al final de la cadena nos salimos"));
+        salida.codigo.push(Auxiliar.crearLinea(posicion + " = " + posicion + " + 1","Aumentamos la posicion"));
+        salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + temporal + " + 1","Aumentamos el contador"));
+        salida.codigo.push(Auxiliar.saltoIncondicional(s));
+
+        salida.codigo.push(v + ":");
+        salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + 1","Posicion del retorno"));
+        salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] =" + temporal,"Guardamos el valor del retorno"));
+        salida.codigo.push("}");
+        salida.codigo.push("\n");
+        salida.codigo.push("\n");
+
+        salida.tipo = Tipo.INT;
+        salida.resultado = temporal;
+        return salida;
+    }
+    
 
 }

@@ -9,6 +9,7 @@ var Analizar = /** @class */ (function () {
         nodo.codigo = nodo.codigo.concat(Auxiliar.functionNumberToCadena().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.funcionPow().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.stringToNumber().codigo);
+        nodo.codigo = nodo.codigo.concat(Auxiliar.funcionLength().codigo);
         this.instrucciones.forEach(function (clase) {
             var entorno = new Entorno(id);
             if (clase instanceof Clase) {
