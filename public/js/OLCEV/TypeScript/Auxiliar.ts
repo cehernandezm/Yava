@@ -421,4 +421,53 @@ class Auxiliar {
     }
 
 
+    public static toUpperCase():Nodo {
+        let salida:Nodo = new Nodo([]);
+        let posicion:String = Auxiliar.generarTemporal();
+        let resultado:String = Auxiliar.generarTemporal();
+        let loop:String = Auxiliar.generarEtiqueta();
+        let valor:String = Auxiliar.generarTemporal();
+        let exit:String = Auxiliar.generarEtiqueta();
+        let f:String = Auxiliar.generarEtiqueta();
+        
+        salida.codigo.push(";#########################################################################");
+        salida.codigo.push(";######################### FUNCION toUpperCase ########################");
+        salida.codigo.push(";#########################################################################");
+        salida.codigo.push("proc toUpperCase{");
+
+        salida.codigo.push(posicion + " = P + 0");
+        salida.codigo.push(posicion + " = Stack[" + posicion + "]");
+        salida.codigo.push(resultado + " = H");
+        
+        salida.codigo.push(loop + ":");
+        salida.codigo.push(Auxiliar.crearLinea(valor + " = Heap[" + posicion + "]","Obtenemos el caracter"));
+        salida.codigo.push(Auxiliar.saltoCondicional(valor + " == 0",exit));
+        salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valor + "< 97",f),"si es menor a 97 no es una letra"));
+        salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(valor + "> 122",f),"si es mayor a 122 no es una letra"));
+        salida.codigo.push(Auxiliar.crearLinea(valor + " = " + valor + " - 32","Los volvemos a mayuscula"));
+        salida.codigo.push(f + ":");
+        salida.codigo.push(Auxiliar.crearLinea("Heap[H] = " + valor, "Almacenamos el nuevo caracter"));
+        salida.codigo.push("H = H + 1");
+        salida.codigo.push(posicion + " = " + posicion + " + 1");
+        salida.codigo.push(Auxiliar.saltoIncondicional(loop));
+        
+       
+       
+
+
+
+
+        salida.codigo.push(exit + ":");
+        salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0","Fin de la cadena"));
+        salida.codigo.push("H  = H + 1");
+        salida.codigo.push(posicion + " = P + 1");
+        salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + resultado,"Almacenamos el apuntador de la cadena a retornar"));
+        salida.codigo.push("}");
+        salida.codigo.push("\n");
+        salida.codigo.push("\n");
+        return salida;
+
+    }
+
+
 }

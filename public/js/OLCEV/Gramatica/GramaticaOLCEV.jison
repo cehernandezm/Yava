@@ -95,6 +95,7 @@
 "null"                                          return 'NULL';
 
 "toCharArray"                                   return "TOCHARARRAY";
+"toUpperCase"                                   return "TOUPPERCASE";
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -320,6 +321,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | expresion PUNTO ID PARIZQ PARDER                    { $$ = new accederAFunciones($1,$3,[],@1.first_line,@1.first_column); }
           | expresion PUNTO ID PARIZQ listaExpresiones PARDER   { $$ = new accederAFunciones($1,$3,$5,@1.first_line,@1.first_column); }
           | expresion PUNTO TOCHARARRAY PARIZQ PARDER           { $$ = new toCharArray($1,@1.first_line,@1.first_column); }
+          | expresion PUNTO TOUPPERCASE PARIZQ PARDER           { $$ = new toUpperCase($1,@1.first_line,@1.first_column); }
 
 
           
