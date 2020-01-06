@@ -39,7 +39,8 @@ enum Operacion{
     DECREMENTOPOS,
     OR,
     AND,
-    NEGACION
+    NEGACION,
+    MODULO
 };
 
 enum Modificador{

@@ -40,6 +40,7 @@ class Aritmetica implements Instruccion {
             case Operacion.RESTA:
             case Operacion.MULTIPLICACION:
             case Operacion.DIVISION: 
+            case Operacion.MODULO:
             return this.restaMultiplicacionDivision(nodoIzq,nodoDer,nodo,entorno);
             case Operacion.POTENCIA: return this.potencia(nodoIzq,nodoDer,nodo,entorno);
 
@@ -109,6 +110,10 @@ class Aritmetica implements Instruccion {
         else if(this.operacion === Operacion.MULTIPLICACION){
             simbolo = " * ";
             palabra = " multiplicar ";
+        }
+        else if(this.operacion === Operacion.MODULO){
+            simbolo = " % ";
+            palabra = " modulo ";
         }
         else{
             simbolo = " / ";
