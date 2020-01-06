@@ -118,7 +118,6 @@
 %right                              NEGACION
 %right                              UMENOS
 
-%right                              NEW
 
 %right                              INCREMENTO
 %right                              DECREMENTO
@@ -127,7 +126,13 @@
 %left                               LLAVEIZQ
 %right                              LLAVEDER 
 %left                               CORIZQ
+%right                              CORDER
+%right                              NEW
 %left                               PUNTO
+
+
+
+
 
 
 
@@ -233,13 +238,16 @@ instruccion : declaracionVariable PNTCOMA                                       
 //############################### ASIGNACION #############################################
 //########################################################################################
 asignacion_statement : ID IGUAL expresion                                                   {$$ = []; $$.push(new Asignacion($1,$3,@1.first_line,@1.first_column,0)); }
-                     | ID listaDimensiones IGUAL expresion                                 { $$ = []; $$.push(new AsignarArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,$4,@1.first_line,@1.first_column)); }
                      | THIS PUNTO ID IGUAL expresion                                        {$$ = []; $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,1)); }
                      | expresion PUNTO ID IGUAL expresion                                   { $$ = []; $$.push(new asignarAtributo($1,$3,$5,@1.first_line,@1.first_column)); }
+                     | expresion PUNTO ID listaDimensiones IGUAL expresion                  { $$ = []; let bb = new accederAtributo($1,$3,@1.first_line,@1.first_column); $$.push(new AsignarArreglo(bb,$4,$6,@1.first_line,@1.first_column)); }
+                     | ID listaDimensiones IGUAL expresion                                  { $$ = []; $$.push(new AsignarArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,$4,@1.first_line,@1.first_column)); }
+                     | THIS PUNTO ID listaDimensiones IGUAL expresion                       { $$ = []; $$.push(new AsignarArreglo(new elementThis($3,@1.first_line,@1.first_column),$4,$6,@1.first_line,@1.first_column)); }
+          
                      ;
 
-variable: THIS PUNTO ID                              { $$ = new elementThis($3,@1.first_line,@1.first_column); }
-        ;
+
+
 
 
 
@@ -289,9 +297,6 @@ expresion : aritmetica                                          { $$ = $1; }
           | casteo                                              { $$ = $1; }
           | ternario                                            { $$ = $1; }
           | str_statement                                       { $$ = $1; }
-          | variable listaDimensiones                          
-          | variable                                            { $$ = $1; }
-          | ID listaDimensiones                                 { $$ = new AccesoArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,@1.first_line,@1.first_column); }
           | arreglo_statement                                   { $$ = $1; }
           | toint_statement                                     { $$ = $1; }
           | unaria                                              { $$ = $1; }
@@ -309,13 +314,13 @@ expresion : aritmetica                                          { $$ = $1; }
           | expresion PUNTO TOCHARARRAY PARIZQ PARDER           { $$ = new toCharArray($1,@1.first_line,@1.first_column); }
           | expresion PUNTO TOUPPERCASE PARIZQ PARDER           { $$ = new toUpperCase($1,@1.first_line,@1.first_column); }
           | expresion PUNTO TOLOWERCASE PARIZQ PARDER           { $$ = new toLowerCase($1,@1.first_line,@1.first_column); }
-
-
-          
-          
-
-          
+          | expresion PUNTO ID listaDimensiones                 { let a = new accederAtributo($1,$3,@1.first_line,@1.first_column); $$ = new AccesoArreglo(a,$4,@1.first_line,@1.first_column);}
+          | ID listaDimensiones                                 { $$ = new AccesoArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,@1.first_line,@1.first_column); }
+          | THIS PUNTO ID                                       { $$ = new elementThis($3,@1.first_line,@1.first_column); }
+          | THIS PUNTO ID listaDimensiones                      { $$ = new AccesoArreglo(new elementThis($3,@1.first_line,@1.first_column),$4,@1.first_line,@1.first_column); }
           ;
+
+
 
 
 

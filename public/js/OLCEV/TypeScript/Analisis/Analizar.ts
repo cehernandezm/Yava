@@ -29,8 +29,10 @@ class Analizar {
             }
         });
         
-        
-        
+        let temporal:String = Auxiliar.generarTemporal();
+        nodo.codigo.push(temporal + " = P + 0");
+        nodo.codigo.push("Stack[" + temporal + "] = H");
+        nodo.codigo.push("H = H + 1");
         nodo.codigo.push("call constructor_hola_");
         return nodo;
     }
