@@ -99,6 +99,7 @@
 "toUpperCase"                                   return "TOUPPERCASE";
 "toLowerCase"                                   return "TOLOWERCASE";
 "equals"                                        return "EQUALS"
+"getClass"                                      return 'GETCLASS'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -325,6 +326,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | ID listaDimensiones                                 { $$ = new AccesoArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,@1.first_line,@1.first_column); }
           | THIS PUNTO ID                                       { $$ = new elementThis($3,@1.first_line,@1.first_column); }
           | THIS PUNTO ID listaDimensiones                      { $$ = new AccesoArreglo(new elementThis($3,@1.first_line,@1.first_column),$4,@1.first_line,@1.first_column); }
+          | expresion PUNTO GETCLASS PARIZQ PARDER              { $$ = new getClass($1,@1.first_line,@1.first_column); }
           ;
 
 
