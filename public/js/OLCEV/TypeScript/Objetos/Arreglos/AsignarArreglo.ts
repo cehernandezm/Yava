@@ -62,6 +62,7 @@ class AsignarArreglo implements Instruccion{
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
+        salida.id = nodoID.id;
 
         salida.codigo.push(Auxiliar.crearLinea("Heap[" + acceso.resultado + "] = " + value.resultado,"Seteamos el valor en la posicion indicada"));
         return salida;
@@ -127,7 +128,7 @@ class AsignarArreglo implements Instruccion{
             }
         }
         salida.resultado = posDinamica;
-        
+        salida.id = nodo.id;
         return salida;
     }
 

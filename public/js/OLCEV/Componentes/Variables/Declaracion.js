@@ -114,6 +114,8 @@ var Declaracion = /** @class */ (function (_super) {
         if (this.tipo === Tipo.ARREGLO) {
             simbolo.dimensiones = this.dimensiones;
             simbolo.valor = this.valor;
+            var arr = this.valor;
+            simbolo.objeto = arr.valor.toString();
         }
         simbolo.posRelativa = entorno.getPosRelativa();
         if (isStatic) {
@@ -125,7 +127,8 @@ var Declaracion = /** @class */ (function (_super) {
             simbolo.posAbsoluta = -1;
         }
         simbolo.atributo = atributo;
-        simbolo.objeto = this.valor.toString();
+        if (this.tipo !== Tipo.ARREGLO)
+            simbolo.objeto = this.valor.toString();
         entorno.agregarSimbolo(simbolo);
         var nodo = new Nodo();
         nodo.codigo = [];

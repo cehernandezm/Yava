@@ -276,6 +276,11 @@ declaracionVariable : modificador tipo ID                                  { $$ 
                     | ID ID                                                { $$ = []; $$.push(new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column)); }
                     | modificador ID ID IGUAL expresion                    { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ID,$2,@1.first_line,@1.first_column)); $$.push(new Asignacion($3,$5,@1.first_line,@1.first_column,0)); }
                     | modificador ID ID                                    { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ID,$2,@1.first_line,@1.first_column)); }
+                    | modificador ID ID listaArreglo                       { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ARREGLO,new Arreglo(Tipo.ID,$2),@1.first_line,@1.first_column,$4)); }      
+                    | modificador ID ID listaArreglo IGUAL expresion       { $$ = []; $$.push(new Declaracion($3,$1,Tipo.ARREGLO,new Arreglo(Tipo.ID,$2),@1.first_line,@1.first_column,$4)); $$.push(new Asignacion($3,$6,@1.first_line,@1.first_column,0)); }
+                    | ID ID listaArreglo                                   { $$ = []; $$.push(new Declaracion($2,null,Tipo.ARREGLO,new Arreglo(Tipo.ID,$1),@1.first_line,@1.first_column,$3)); }
+                    | ID ID listaArreglo IGUAL expresion                   { $$ = []; $$.push(new Declaracion($2,null,Tipo.ARREGLO,new Arreglo(Tipo.ID,$1),@1.first_line,@1.first_column,$3)); $$.push(new Asignacion($2,$5,@1.first_line,@1.first_column,0)); }
+
                     ;
 
 
@@ -496,12 +501,13 @@ dowhile_statement : DO LLAVEIZQ instrucciones LLAVEDER WHILE PARIZQ expresion PA
 //#########################################################################################
 //################################# FOR #####################################
 //#######################################################################################
-for_statement : FOR PARIZQ declaracionLocal PNTCOMA expresion PNTCOMA expresion PARDER LLAVEIZQ instrucciones LLAVEDER                { $$ = new For($3,$5,$7,$10,@1.first_line,@1.first_column); }
+for_statement : FOR PARIZQ declaracionVariable PNTCOMA expresion PNTCOMA expresion PARDER LLAVEIZQ instrucciones LLAVEDER                { $$ = new For($3,$5,$7,$10,@1.first_line,@1.first_column); }
               ;
 //#########################################################################################
 //################################# ARREGLO #####################################
 //#######################################################################################
 arreglo_statement : NEW tipo listaDimensiones                                { $$ = new crearArreglo($2.tipo,$2.valor,$3,@1.first_line,@1.first_column);}
+                  | NEW ID listaDimensiones                                  { $$ = new crearArreglo(Tipo.ID,$2,$3,@1.first_line,@1.first_column);}
                   ;
 
 //#########################################################################################
@@ -535,10 +541,11 @@ listaParametros: listaParametros COMA parametro                                 
                ;
 
 parametro: tipo ID                                                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
-         | tipo listaArreglo ID                                                  { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }   
-         | ID ID                                                                 { $$ = new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column,$2); }                              
+         | tipo listaArreglo ID                                              { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }   
+         | ID ID                                                                 { $$ = new Declaracion($3,null,Tipo.ID,$1,@1.first_line,@1.first_column); }   
+         | ID listaArreglo ID                                                { $$ = new Declaracion($3,null,Tipo.ARREGLO,new Arreglo(Tipo.ID,$1),@1.first_line,@1.first_column,$2); }
+         
          ;
-
 //#########################################################################################
 //################################# LLAMAR FUNCIONES #####################################
 //#######################################################################################

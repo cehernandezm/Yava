@@ -65,6 +65,7 @@ class callConstructor implements Instruccion {
         valores.forEach(element => {
             salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + " + index, "Parametro: " + index));
             salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + element.resultado, "Seteamos el parametro: " + index));
+            index++;
         });
 
         salida.codigo.push("call constructor_" + identificador);

@@ -116,6 +116,8 @@ class Declaracion extends Valor implements Instruccion{
         if(this.tipo === Tipo.ARREGLO){
             simbolo.dimensiones = this.dimensiones;
             simbolo.valor = this.valor;
+            let arr:Arreglo = this.valor as Arreglo;
+            simbolo.objeto = arr.valor.toString();
         }
         
         simbolo.posRelativa = entorno.getPosRelativa();
@@ -127,7 +129,7 @@ class Declaracion extends Valor implements Instruccion{
             simbolo.posAbsoluta = -1;
         }
         simbolo.atributo = atributo;
-        simbolo.objeto = this.valor.toString();
+        if(this.tipo !== Tipo.ARREGLO) simbolo.objeto = this.valor.toString();
 
         entorno.agregarSimbolo(simbolo);
         let nodo:Nodo = new Nodo();

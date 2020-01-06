@@ -48,6 +48,7 @@ var AsignarArreglo = /** @class */ (function () {
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
+        salida.id = nodoID.id;
         salida.codigo.push(Auxiliar.crearLinea("Heap[" + acceso.resultado + "] = " + value.resultado, "Seteamos el valor en la posicion indicada"));
         return salida;
     };
@@ -107,6 +108,7 @@ var AsignarArreglo = /** @class */ (function () {
             }
         }
         salida.resultado = posDinamica;
+        salida.id = nodo.id;
         return salida;
     };
     /**
