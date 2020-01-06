@@ -85,7 +85,7 @@ var Relacional = /** @class */ (function () {
      */
     Relacional.comparacionComplicada = function (nodo, nodoIzq, nodoDer, entorno, l, c, signo) {
         nodo.tipo = Tipo.BOOLEAN;
-        if ((nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.CHAR)) {
+        if ((nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.ID && nodoDer.tipo == Tipo.ID) || (nodoIzq.tipo === Tipo.ARREGLO && nodoDer.tipo === Tipo.ARREGLO)) {
             nodo.tipo = Tipo.BOOLEAN;
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();

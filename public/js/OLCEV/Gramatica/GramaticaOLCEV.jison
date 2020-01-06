@@ -98,6 +98,7 @@
 "toCharArray"                                   return "TOCHARARRAY";
 "toUpperCase"                                   return "TOUPPERCASE";
 "toLowerCase"                                   return "TOLOWERCASE";
+"equals"                                        return "EQUALS"
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -319,6 +320,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | expresion PUNTO TOCHARARRAY PARIZQ PARDER           { $$ = new toCharArray($1,@1.first_line,@1.first_column); }
           | expresion PUNTO TOUPPERCASE PARIZQ PARDER           { $$ = new toUpperCase($1,@1.first_line,@1.first_column); }
           | expresion PUNTO TOLOWERCASE PARIZQ PARDER           { $$ = new toLowerCase($1,@1.first_line,@1.first_column); }
+          | expresion PUNTO EQUALS PARIZQ expresion PARDER      { $$ = new equals($1,$5,@1.first_line,@1.first_column); }
           | expresion PUNTO ID listaDimensiones                 { let a = new accederAtributo($1,$3,@1.first_line,@1.first_column); $$ = new AccesoArreglo(a,$4,@1.first_line,@1.first_column);}
           | ID listaDimensiones                                 { $$ = new AccesoArreglo(new Primitivo(Tipo.ID,$1,@1.first_line,@1.first_column),$2,@1.first_line,@1.first_column); }
           | THIS PUNTO ID                                       { $$ = new elementThis($3,@1.first_line,@1.first_column); }

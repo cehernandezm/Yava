@@ -102,7 +102,7 @@ class Relacional implements Instruccion {
      */
     public static comparacionComplicada(nodo: Nodo, nodoIzq: Nodo, nodoDer: Nodo, entorno: Entorno,l:number,c:number,signo:String): Object {
         nodo.tipo = Tipo.BOOLEAN;
-        if ((nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.CHAR)) {
+        if ((nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.DOUBLE && nodoDer.tipo === Tipo.DOUBLE) || (nodoIzq.tipo === Tipo.INT && nodoDer.tipo === Tipo.INT) || (nodoIzq.tipo === Tipo.CHAR && nodoDer.tipo === Tipo.CHAR) || (nodoIzq.tipo === Tipo.ID && nodoDer.tipo == Tipo.ID) || (nodoIzq.tipo === Tipo.ARREGLO && nodoDer.tipo === Tipo.ARREGLO)) {
             nodo.tipo = Tipo.BOOLEAN;
             let v: String = Auxiliar.generarEtiqueta();
             let f: String = Auxiliar.generarEtiqueta();
