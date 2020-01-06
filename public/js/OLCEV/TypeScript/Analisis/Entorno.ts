@@ -3,6 +3,7 @@ class Entorno {
     listaContinue: Array<String>;
     listaBreak: Array<String>
     etiquetaSalida: String;
+    codigoStatic:Array<String> = [];
     posRelativaStack: number;
     archivo: String;
     listaSimbolos: Array<Simbolo>

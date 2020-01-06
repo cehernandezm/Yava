@@ -150,6 +150,13 @@ class Clase implements Instruccion {
                 if(resultado instanceof MensajeError) return resultado;
                 this.tamaño ++;
             }
+            else if(element instanceof Asignacion){
+                let resultado:Object = element.ejecutar(entorno);
+                if(resultado instanceof MensajeError) return resultado;
+                let nodo:Nodo = resultado as Nodo;
+                salida.codigo = salida.codigo.concat(nodo.codigo);
+
+            }
             if(element instanceof FuncionOLCEV) element.primeraPasada(entorno);
         });
         /**

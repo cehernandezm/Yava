@@ -1,5 +1,6 @@
 var Entorno = /** @class */ (function () {
     function Entorno(archivo) {
+        this.codigoStatic = [];
         this.metodos = [];
         this.localizacion = Localizacion.HEAP;
         this.listaContinue = [];

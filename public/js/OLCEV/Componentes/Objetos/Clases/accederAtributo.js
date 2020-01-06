@@ -64,6 +64,48 @@ var accederAtributo = /** @class */ (function () {
                 salida.valor = new Arreglo(simArreglo.tipo, simbolo.dimensiones);
             }
         }
+        else if (nodo.tipo === Tipo.CLASE) {
+            var clase = getClase(nodo.id);
+            if (clase === null) {
+                var mensaje = new MensajeError("Semantico", "No existe la clase: " + nodo.id, entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+            var entornoTemp = clase.entorno;
+            var simbolo = entornoTemp.buscarSimbolo(this.id);
+            if (simbolo === null) {
+                var mensaje = new MensajeError("Semantico", "No existe el atributo: " + this.id + " en la clase: " + nodo.id, entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+            var atributos = simbolo.atributo;
+            var visibilidad = atributos['visibilidad'];
+            if (visibilidad !== Visibilidad.PUBLIC) {
+                var mensaje = new MensajeError("Semantico", "El atributo: " + this.id + " tiene una visibilidad: " + Visibilidad[visibilidad], entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+            var isStatic = atributos['isStatic'];
+            if (!isStatic) {
+                var mensaje = new MensajeError("Semantico", "El atributo: " + this.id + " tiene que ser static ", entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
+            var temporal = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + simbolo.posAbsoluta + "]", "Obtenemos el valor del atributo: " + simbolo.id));
+            salida.tipo = simbolo.tipo;
+            salida.atributos = simbolo.atributo;
+            salida.verdaderas = simbolo.verdaderas;
+            salida.falsas = simbolo.falsas;
+            salida.resultado = temporal;
+            salida.valor = simbolo.valor;
+            salida.id = simbolo.objeto;
+            salida.posicion = simbolo.posAbsoluta.toString();
+            if (simbolo.tipo === Tipo.ARREGLO) {
+                var simArreglo = simbolo.valor;
+                salida.valor = new Arreglo(simArreglo.tipo, simbolo.dimensiones);
+            }
+        }
         else {
             var mensaje = new MensajeError("Semantico", "No se puede acceder a un atributo de un tipo: " + Tipo[nodo.tipo], entorno.archivo, this.l, this.c);
             Auxiliar.agregarError(mensaje);

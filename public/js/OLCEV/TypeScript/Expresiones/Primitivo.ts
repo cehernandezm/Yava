@@ -40,9 +40,19 @@ class Primitivo extends Valor implements Instruccion {
                 let s: Simbolo = entorno.buscarSimbolo(nombre);
                 //----------------------------------------------- Si no existe la variable ----------------------------------------------------
                 if (s == null) {
-                    let mensaje: MensajeError = new MensajeError("Semantico", "La variable: " + nombre + " no existe en este ambito", entorno.archivo, this.l, this.c);
-                    Auxiliar.agregarError(mensaje);
-                    return mensaje;
+                    let clase: Clase = getClase(this.valor.toString());
+                    if (clase === null) {
+                        let mensaje: MensajeError = new MensajeError("Semantico", "La variable: " + nombre + " no existe en este ambito", entorno.archivo, this.l, this.c);
+                        Auxiliar.agregarError(mensaje);
+                        return mensaje;
+                    }
+
+                    let salida:Nodo = new Nodo([]);
+                    salida.tipo = Tipo.CLASE;
+                    salida.id = this.valor.toString();
+                    salida.valor = this.valor.toString();
+                    return salida;
+
                 }
                 if (s.isNull) {
                     let mensaje: MensajeError = new MensajeError("Semantico", "La variable: " + nombre + " es null", entorno.archivo, this.l, this.c);
@@ -53,7 +63,7 @@ class Primitivo extends Valor implements Instruccion {
 
                 return Primitivo.crearNodo(s);
             case Tipo.NULL:
-                return new Nodo([],"0",this.tipo,"0");
+                return new Nodo([], "0", this.tipo, "0");
         }
 
     }

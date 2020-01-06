@@ -22,7 +22,8 @@ enum Tipo{
     ID,
     ARREGLO,
     VOID,
-    NULL
+    NULL,
+    CLASE
 };
 
 

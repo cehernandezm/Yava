@@ -130,6 +130,13 @@ var Clase = /** @class */ (function () {
                     return resultado;
                 _this.tamaño++;
             }
+            else if (element instanceof Asignacion) {
+                var resultado = element.ejecutar(entorno);
+                if (resultado instanceof MensajeError)
+                    return resultado;
+                var nodo_1 = resultado;
+                salida.codigo = salida.codigo.concat(nodo_1.codigo);
+            }
             if (element instanceof FuncionOLCEV)
                 element.primeraPasada(entorno);
         });
@@ -147,8 +154,8 @@ var Clase = /** @class */ (function () {
                 element.primeraPasada(e); //----- Realizamos la primera pasada obteniendo el tamaño total del constructor
                 var resultado = element.ejecutar(e);
                 if (!(resultado instanceof MensajeError)) {
-                    var nodo_1 = resultado;
-                    salida.codigo = salida.codigo.concat(nodo_1.codigo);
+                    var nodo_2 = resultado;
+                    salida.codigo = salida.codigo.concat(nodo_2.codigo);
                     _this.constructores.push(element.identificador);
                 }
                 else
@@ -160,26 +167,26 @@ var Clase = /** @class */ (function () {
          * SI NO SE ENCONTRO NINGUN CONSTRUCTOR SE CREA UNO CON TODOS LOS ATRIBUTOS
          */
         if (!flag) {
-            var nodo_2 = new Nodo();
-            nodo_2.codigo = [];
-            nodo_2.codigo.push(";#############################");
-            nodo_2.codigo.push(";########CONSTRUCTOR " + this.nombre);
-            nodo_2.codigo.push(";#############################");
-            nodo_2.codigo.push("proc contructor_" + this.nombre + "{");
+            var nodo_3 = new Nodo();
+            nodo_3.codigo = [];
+            nodo_3.codigo.push(";#############################");
+            nodo_3.codigo.push(";########CONSTRUCTOR " + this.nombre);
+            nodo_3.codigo.push(";#############################");
+            nodo_3.codigo.push("proc contructor_" + this.nombre + "{");
             entorno.listaSimbolos.forEach(function (s) {
                 //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
                 if (s.localizacion == Localizacion.STACK)
-                    nodo_2.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0", "iniciando variable: " + s.id));
+                    nodo_3.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0", "iniciando variable: " + s.id));
                 else {
                     var pos = Auxiliar.generarTemporal();
-                    nodo_2.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
-                    nodo_2.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
-                    nodo_2.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
+                    nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                    nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
+                    nodo_3.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
                 }
                 s.isNull = false;
             });
-            nodo_2.codigo.push("}");
-            salida.codigo = salida.codigo.concat(nodo_2.codigo);
+            nodo_3.codigo.push("}");
+            salida.codigo = salida.codigo.concat(nodo_3.codigo);
         }
         var nodo = new Nodo([]);
         this.instrucciones.forEach(function (element) {

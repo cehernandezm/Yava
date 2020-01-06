@@ -47,9 +47,17 @@ var Primitivo = /** @class */ (function (_super) {
                 var s = entorno.buscarSimbolo(nombre);
                 //----------------------------------------------- Si no existe la variable ----------------------------------------------------
                 if (s == null) {
-                    var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " no existe en este ambito", entorno.archivo, this.l, this.c);
-                    Auxiliar.agregarError(mensaje);
-                    return mensaje;
+                    var clase = getClase(this.valor.toString());
+                    if (clase === null) {
+                        var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " no existe en este ambito", entorno.archivo, this.l, this.c);
+                        Auxiliar.agregarError(mensaje);
+                        return mensaje;
+                    }
+                    var salida = new Nodo([]);
+                    salida.tipo = Tipo.CLASE;
+                    salida.id = this.valor.toString();
+                    salida.valor = this.valor.toString();
+                    return salida;
                 }
                 if (s.isNull) {
                     var mensaje = new MensajeError("Semantico", "La variable: " + nombre + " es null", entorno.archivo, this.l, this.c);
