@@ -1,5 +1,5 @@
-declare function agregarClase(clase:any):any;
-declare function getClase(id:any):any;
+declare function agregarClase(clase: any): any;
+declare function getClase(id: any): any;
 class Clase implements Instruccion {
     modificador: Array<Modificador>;
     nombre: String;
@@ -7,10 +7,10 @@ class Clase implements Instruccion {
     extender: String;
     l: number;
     c: number;
-    entorno:Entorno;
-    tamaño:number = 0;
-    atributos:Object;
-    constructores:Array<String> = [];
+    entorno: Entorno;
+    tamaño: number = 0;
+    atributos: Object;
+    constructores: Array<String> = [];
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -35,7 +35,7 @@ class Clase implements Instruccion {
      * ESTA CLASE NO IMPLEMENTA EL METODO EJECUTAR
      * @param entorno Entorno actual
      */
-    ejecutar(entorno:Entorno): Object {
+    ejecutar(entorno: Entorno): Object {
         return null;
     }
 
@@ -47,7 +47,7 @@ class Clase implements Instruccion {
      * @param entorno Entorno Actual
      */
     primeraPasada(entorno: Entorno): Object {
-        let salida:Nodo = new Nodo();
+        let salida: Nodo = new Nodo();
         salida.codigo = [];
         let claseTemp: Clase = getClase(this.nombre);
         if (claseTemp != null) {
@@ -121,8 +121,8 @@ class Clase implements Instruccion {
             });
         }
         if (visibilidad == null) visibilidad = Modificador.PUBLIC;
-        
-        this.atributos = Auxiliar.crearObjectoAtributos(visibilidad,isFinal,isStatic,isAbstract);
+
+        this.atributos = Auxiliar.crearObjectoAtributos(visibilidad, isFinal, isStatic, isAbstract);
         /**
          * SI VAMOS A EXTENDER DE UNA CLASE
          */
@@ -138,42 +138,42 @@ class Clase implements Instruccion {
         }
 
 
-        
+
 
         entorno.clase = this.nombre;
         /**
          * ALMACENAMOS TODOS SUS ATRIBUTOS
          */
         this.instrucciones.forEach(element => {
-            if(element instanceof Declaracion) {
-                let resultado:Object = element.ejecutar(entorno);
-                if(resultado instanceof MensajeError) return resultado;
-                this.tamaño ++;
+            if (element instanceof Declaracion) {
+                let resultado: Object = element.ejecutar(entorno);
+                if (resultado instanceof MensajeError) return resultado;
+                this.tamaño++;
             }
-            else if(element instanceof Asignacion){
-                let resultado:Object = element.ejecutar(entorno);
-                if(resultado instanceof MensajeError) return resultado;
-                let nodo:Nodo = resultado as Nodo;
+            else if (element instanceof Asignacion) {
+                let resultado: Object = element.ejecutar(entorno);
+                if (resultado instanceof MensajeError) return resultado;
+                let nodo: Nodo = resultado as Nodo;
                 salida.codigo = salida.codigo.concat(nodo.codigo);
 
             }
-            if(element instanceof FuncionOLCEV) element.primeraPasada(entorno);
+            if (element instanceof FuncionOLCEV) element.primeraPasada(entorno);
         });
         /**
          * BUSCAMOS SI TIENE UN CONSTRUCTOR 
          * DE LO CONTRARIO GENERAMOS UNO 
          * AUTOMATICAMENTE
          */
-        let flag:Boolean = false;
+        let flag: Boolean = false;
         this.instrucciones.forEach(element => {
-            if(element instanceof Constructor) {
+            if (element instanceof Constructor) {
                 let e: Entorno = Auxiliar.clonarEntorno(entorno);
                 e.localizacion = Localizacion.STACK;
                 e.posRelativaStack = 1;
                 element.primeraPasada(e); //----- Realizamos la primera pasada obteniendo el tamaño total del constructor
                 let resultado: Object = element.ejecutar(e);
-                if(!(resultado instanceof MensajeError)){
-                    let nodo:Nodo = resultado as Nodo;
+                if (!(resultado instanceof MensajeError)) {
+                    let nodo: Nodo = resultado as Nodo;
                     salida.codigo = salida.codigo.concat(nodo.codigo);
                     this.constructores.push(element.identificador);
                 } else return resultado;
@@ -184,44 +184,50 @@ class Clase implements Instruccion {
         /**
          * SI NO SE ENCONTRO NINGUN CONSTRUCTOR SE CREA UNO CON TODOS LOS ATRIBUTOS
          */
-        if(!flag){
-            let nodo:Nodo = new Nodo();
+        if (!flag) {
+            let nodo: Nodo = new Nodo();
             nodo.codigo = [];
             nodo.codigo.push(";#############################");
             nodo.codigo.push(";########CONSTRUCTOR " + this.nombre);
             nodo.codigo.push(";#############################");
-            nodo.codigo.push("proc contructor_" + this.nombre + "{");
-            
+            nodo.codigo.push("proc constructor_" + this.nombre + "_ " + "{");
+
             entorno.listaSimbolos.forEach(s => {
                 //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
-                if(s.localizacion == Localizacion.STACK) nodo.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0","iniciando variable: " + s.id));
-                else{
-                    let pos:String = Auxiliar.generarTemporal();
-                    nodo.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
-                    nodo.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa,"Nos movemos hacia la variable que necesitamos"));
-                    nodo.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0","Iniciando variable: " + s.id));
+                let atributos: Object = s.atributo;
+                let isStatic: Boolean = atributos['isStatic'] as Boolean;
+                if (!isStatic) {
+                    if (s.localizacion == Localizacion.STACK) nodo.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0", "iniciando variable: " + s.id));
+                    else {
+                        let pos: String = Auxiliar.generarTemporal();
+                        nodo.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                        nodo.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
+                        nodo.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
+                    }
                 }
+
                 s.isNull = false;
             });
             nodo.codigo.push("}");
             salida.codigo = salida.codigo.concat(nodo.codigo);
+            this.constructores.push(this.nombre + "_");
         }
 
 
-        let nodo:Nodo = new Nodo([]);
+        let nodo: Nodo = new Nodo([]);
 
         this.instrucciones.forEach(element => {
-            if(element instanceof FuncionOLCEV){
-                let resultado:Object = element.ejecutar(entorno);
-                if(resultado instanceof MensajeError) return resultado;
-                let temp:Nodo = resultado as Nodo;
+            if (element instanceof FuncionOLCEV) {
+                let resultado: Object = element.ejecutar(entorno);
+                if (resultado instanceof MensajeError) return resultado;
+                let temp: Nodo = resultado as Nodo;
                 nodo.codigo = nodo.codigo.concat(temp.codigo);
             }
         });
 
         salida.codigo = nodo.codigo.concat(salida.codigo);
         this.entorno = entorno;
-        agregarClase(this); 
+        agregarClase(this);
         return salida;
     }
 
@@ -230,9 +236,9 @@ class Clase implements Instruccion {
      * EN EL LISTADO DE CONSTRUCTORES
      * @param id 
      */
-    buscarConstructor(id:String):Boolean{
-        for(let i = 0; i < this.constructores.length; i++){
-            if(this.constructores[i] === id) return true;
+    buscarConstructor(id: String): Boolean {
+        for (let i = 0; i < this.constructores.length; i++) {
+            if (this.constructores[i] === id) return true;
         }
         return false;
     }

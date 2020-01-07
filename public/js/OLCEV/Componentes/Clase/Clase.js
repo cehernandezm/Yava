@@ -172,21 +172,26 @@ var Clase = /** @class */ (function () {
             nodo_3.codigo.push(";#############################");
             nodo_3.codigo.push(";########CONSTRUCTOR " + this.nombre);
             nodo_3.codigo.push(";#############################");
-            nodo_3.codigo.push("proc contructor_" + this.nombre + "{");
+            nodo_3.codigo.push("proc constructor_" + this.nombre + "_ " + "{");
             entorno.listaSimbolos.forEach(function (s) {
                 //--------------------------- SIGNIFICA QUE ES UNA VARIABLE ESTATICA ---------------------------------------------
-                if (s.localizacion == Localizacion.STACK)
-                    nodo_3.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0", "iniciando variable: " + s.id));
-                else {
-                    var pos = Auxiliar.generarTemporal();
-                    nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
-                    nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
-                    nodo_3.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
+                var atributos = s.atributo;
+                var isStatic = atributos['isStatic'];
+                if (!isStatic) {
+                    if (s.localizacion == Localizacion.STACK)
+                        nodo_3.codigo.push(Auxiliar.crearLinea("Stack[" + s.posAbsoluta + "] = 0", "iniciando variable: " + s.id));
+                    else {
+                        var pos = Auxiliar.generarTemporal();
+                        nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                        nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
+                        nodo_3.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
+                    }
                 }
                 s.isNull = false;
             });
             nodo_3.codigo.push("}");
             salida.codigo = salida.codigo.concat(nodo_3.codigo);
+            this.constructores.push(this.nombre + "_");
         }
         var nodo = new Nodo([]);
         this.instrucciones.forEach(function (element) {
