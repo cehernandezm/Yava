@@ -67,6 +67,7 @@ var Auxiliar = /** @class */ (function () {
         e.archivo = entorno.archivo;
         e.posRelativaStack = entorno.posRelativaStack;
         e.tamaño = entorno.tamaño;
+        e.extendida = entorno.extendida;
         return e;
     };
     /**

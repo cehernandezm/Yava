@@ -2,6 +2,7 @@ var Entorno = /** @class */ (function () {
     function Entorno(archivo) {
         this.codigoStatic = [];
         this.metodos = [];
+        this.extendida = null;
         this.localizacion = Localizacion.HEAP;
         this.listaContinue = [];
         this.listaBreak = [];

@@ -94,6 +94,7 @@
 
 "this"                                          return 'THIS'
 "null"                                          return 'NULL';
+"super"                                         return 'SUPER';
 
 "toCharArray"                                   return "TOCHARARRAY";
 "toUpperCase"                                   return "TOUPPERCASE";
@@ -231,6 +232,8 @@ instruccion : declaracionVariable PNTCOMA                                       
             | return_statement PNTCOMA                                                    { $$ = []; $$.push($1); }
             | expresion PUNTO ID PARIZQ PARDER PNTCOMA                                    { $$ = [];  $$.push(new accederAFunciones($1,$3,[],@1.first_line,@1.first_column)); }
             | expresion PUNTO ID PARIZQ listaExpresiones PARDER PNTCOMA                   { $$ = []; $$.push(new accederAFunciones($1,$3,$5,@1.first_line,@1.first_column)); }
+            | SUPER PARIZQ listaExpresiones PARDER PNTCOMA                                { $$ = []; $$.push(new super_sentece($3,@1.first_line,@1.first_column)); }
+            | SUPER PARIZQ  PARDER PNTCOMA                                                { $$ = []; $$.push(new super_sentece([],@1.first_line,@1.first_column)); }
             ;
 
 

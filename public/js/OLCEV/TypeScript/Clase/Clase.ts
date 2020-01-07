@@ -11,6 +11,7 @@ class Clase implements Instruccion {
     tamaño: number = 0;
     atributos: Object;
     constructores: Array<String> = [];
+    
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -133,7 +134,12 @@ class Clase implements Instruccion {
                 Auxiliar.agregarError(mensaje);
                 return mensaje;
             }
-            this.instrucciones = this.instrucciones.concat(claseTemp.instrucciones);
+            this.tamaño = claseTemp.tamaño;
+            entorno.listaSimbolos = entorno.listaSimbolos.concat(claseTemp.entorno.listaSimbolos);
+            entorno.metodos = entorno.metodos.concat(claseTemp.entorno.metodos);
+            entorno.posRelativaStack = claseTemp.entorno.posRelativaStack;
+            entorno.extendida = claseTemp;
+            
 
         }
 

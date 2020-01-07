@@ -10,6 +10,7 @@ class Entorno {
     metodos: Array<FuncionOLCEV> = [];
     tamaño: number;
     clase: String;
+    extendida:Clase = null;
 
     constructor(archivo: String) {
         this.localizacion = Localizacion.HEAP;
