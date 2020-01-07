@@ -107,7 +107,7 @@ $("#new3D").on("click", function (e) {
 });
 
 /**
- * ABRIR UN ARCHIVO DE PASCAL
+ * ABRIR UN ARCHIVO DE OLCEV
  */
 $("#openOLCEV").on('click', function (e) {
     let file = document.getElementById("filePascal");
@@ -516,7 +516,7 @@ function analizarCodigoOLCEV() {
     GramaticaOLCEV.parse(codigo);
     let analizar = GramaticaOLCEV.arbol.raiz;
     let nodo = analizar.ejecutar("principal");
-    
+
     let texto = obtenerCodigo(nodo.codigo);
     new3D(texto);
 }
@@ -629,6 +629,7 @@ $("#optimizarButton").on('click', function (e) {
         let primeraRegla = new Regla1(codigo);
         let optimizado = primeraRegla.optimizar();
 
+        /*
         let segundaRegla = new Regla2(optimizado);
         optimizado = segundaRegla.optimizar();
 
@@ -674,7 +675,7 @@ $("#optimizarButton").on('click', function (e) {
 
         let R16 = new Regla16(optimizado);
         optimizado = R16.optimizar();
-
+        */
         let codigoFinal = "";
         optimizado.forEach(element => {
 
@@ -747,7 +748,7 @@ function isCuadruplo(linea) {
  * METODO PARA OBTENER UN TEMPORAL Y NO TIENE UN COMENTARIO ADYACENTE EJEMPLO T1//OPERACION
  */
 function limpiarTemporal(temp) {
-    return temp.split('/')[0].trim();
+    return temp.split(';')[0].trim();
 }
 
 /**
@@ -769,15 +770,29 @@ function addNewRegla(linea, tipo, detalle) {
  */
 function isComentario(linea) {
     linea = linea.trim();
-    return linea.indexOf("\/") === 0;
+    return linea.indexOf(";") === 0;
 }
 
 /**
  * FUNCION QUE RETONAR SI ES UN TEMPORAL
  * @param {*} linea 
  */
-function isTemporal(linea) {
-    return linea.toLowerCase().includes("t");
+function isOperacion(linea) {
+    linea = linea.toLowerCase();
+    if(linea === "\n") return false;
+    if(linea.indexOf("l") === 0) return false;
+    if(linea.includes("if")) return false;
+    if(linea.indexOf("heap") === 0) return false;
+    if(linea.indexOf("stack") === 0) return false;
+    if(linea.includes("proc")) return false;
+    if(linea.includes("}")) return false;
+    if(linea.includes("call")) return false;
+    if(linea.includes("write")) return false;
+    if(linea.includes("goto")) return false;
+    if(linea.includes("print")) return false;
+    if(linea.includes("iffalse")) return false;
+
+    return true;
 }
 
 /**
