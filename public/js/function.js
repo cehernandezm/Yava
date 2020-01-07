@@ -635,47 +635,16 @@ $("#optimizarButton").on('click', function (e) {
         
         let R3 = new Regla3(optimizado);
         optimizado = R3.optimizar();
-        /*
-        let R5 = new Regla5(optimizado);
-        optimizado = R5.optimizar();
-
+        
+        let R4 = new Regla4(optimizado);
+        optimizado = R4.optimizar();
+        
         let sextaRegla = new Regla6(optimizado);
         optimizado = sextaRegla.optimizar();
 
 
 
-        let septimaRegla = new Regla7(optimizado);
-        optimizado = septimaRegla.optimizar();
-
-        let octavaRegla = new Regla8(optimizado);
-        optimizado = octavaRegla.optimizar();
-
-        let novenaRegla = new Regla9(optimizado);
-        optimizado = novenaRegla.optimizar();
-
-
-        let R10 = new Regla10(optimizado);
-        optimizado = R10.optimizar();
-
-
-        let R11 = new Regla11(optimizado);
-        optimizado = R11.optimizar();
-
-        let R12 = new Regla12(optimizado);
-        optimizado = R12.optimizar();
-
-        let R13 = new Regla13(optimizado);
-        optimizado = R13.optimizar();
-
-        let R14 = new Regla14(optimizado);
-        optimizado = R14.optimizar();
-
-        let R15 = new Regla15(optimizado);
-        optimizado = R15.optimizar();
-
-        let R16 = new Regla16(optimizado);
-        optimizado = R16.optimizar();
-        */
+        
         let codigoFinal = "";
         optimizado.forEach(element => {
 
