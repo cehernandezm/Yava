@@ -101,6 +101,7 @@
 "toLowerCase"                                   return "TOLOWERCASE";
 "equals"                                        return "EQUALS"
 "getClass"                                      return 'GETCLASS'
+"import"                                        return 'IMPORT'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -150,15 +151,23 @@
     SINTACTICO
 */
 
-inicio : contenido                                              { parser.arbol.raiz = new Analizar($1); }
+inicio : import_sentence contenido                              { let im= $1.concat($2);  parser.arbol.raiz = new Analizar(im);}
+       | contenido                                              { parser.arbol.raiz = new Analizar($1); }
        ;
 
+// ##############################################################
+// #################### IMPORT ##################################
+// ##############################################################
+import_sentence : import_sentence import                        { $$ = $1; $$.push($2); }
+                | import                                        { $$ = []; $$.push($1); }
+                ;
 
+import : IMPORT CADENA PNTCOMA                                  { $$ = new Import($2,@1.first_line,@1.first_column); }
+       ;
 
 contenido : contenido declaracionClase                          { $$ = $1; $$.push($2);}
-          | contenido import_sentence
+          | contenido import
           | declaracionClase                                    { $$ = []; $$.push($1); } 
-          | import_sentence
           ;
 
 // ##############################################################
@@ -548,9 +557,9 @@ listaParametros: listaParametros COMA parametro                                 
                ;
 
 parametro: tipo ID                                                               { $$ = new Declaracion($2,null,$1.tipo,$1.valor,@1.first_line,@1.first_column); }
-         | tipo listaArreglo ID                                              { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }   
-         | ID ID                                                                 { $$ = new Declaracion($3,null,Tipo.ID,$1,@1.first_line,@1.first_column); }   
-         | ID listaArreglo ID                                                { $$ = new Declaracion($3,null,Tipo.ARREGLO,new Arreglo(Tipo.ID,$1),@1.first_line,@1.first_column,$2); }
+         | tipo listaArreglo ID                                                  { $$ = new Declaracion($3,null,Tipo.ARREGLO, new Arreglo($1.tipo,$1.valor),@1.first_line,@1.first_column,$2); }   
+         | ID ID                                                                 { $$ = new Declaracion($2,null,Tipo.ID,$1,@1.first_line,@1.first_column); }   
+         | ID listaArreglo ID                                                    { $$ = new Declaracion($3,null,Tipo.ARREGLO,new Arreglo(Tipo.ID,$1),@1.first_line,@1.first_column,$2); }
          
          ;
 //#########################################################################################

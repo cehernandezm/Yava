@@ -1,0 +1,53 @@
+public class NodoAVL {
+    NodoAVL izquierda; 
+    NodoAVL derecha;
+    int altura;
+    int valor;
+
+    public NodoAVL(int valor) {
+        izquierda = null;
+        derecha = null;
+        altura = 0;
+        this.valor = valor;
+    }
+
+    public NodoAVL() {
+        izquierda = null;
+        derecha = null;
+        altura = 0;
+        valor = 0;
+    }
+
+    public NodoAVL getIzquierda() {
+        return izquierda;
+    }
+
+    public void setIzquierda(NodoAVL izquierda) {
+        this.izquierda = izquierda;
+    }
+
+    public NodoAVL getDerecha() {
+        return derecha;
+    }
+
+    public void setDerecha(NodoAVL derecha) {
+        this.derecha = derecha;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+	public void setValor(int valor){
+        this.valor = valor;
+    }
+
+    public int getValor(){
+        return this.valor;
+    }
+    
+}

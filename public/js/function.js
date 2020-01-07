@@ -5,12 +5,12 @@
  */
 
 
- /**
-  * TIPOS DE EDITORES
-  * 0: OLCEV
-  * 1: 3D
-  * 
-  */
+/**
+ * TIPOS DE EDITORES
+ * 0: OLCEV
+ * 1: 3D
+ * 
+ */
 
 /**
  * OPTIMIZACION:
@@ -109,49 +109,49 @@ $("#new3D").on("click", function (e) {
 /**
  * ABRIR UN ARCHIVO DE PASCAL
  */
-$("#openOLCEV").on('click',function(e){
+$("#openOLCEV").on('click', function (e) {
     let file = document.getElementById("filePascal");
-    if(file) file.click();
+    if (file) file.click();
 });
 
 /**
  * FUNCION QUE MANEJA EL INPUT FILE DE PASCAL
  */
-function handleFilePascal(){
+function handleFilePascal() {
     let file = document.getElementById("filePascal").files[0];
     let fileReader = new FileReader();
-    fileReader.onload = function(fileLoadedEvent){
+    fileReader.onload = function (fileLoadedEvent) {
         let text = fileLoadedEvent.target.result;
         newPascal(text);
     };
-    fileReader.readAsText(file,"UTF-8");
+    fileReader.readAsText(file, "UTF-8");
 }
 
 /**
  * ABRIR UN NUEVO ARCHIVO DE CUADRUPLOS
  */
-$("#open3D").on('click',function(e){
+$("#open3D").on('click', function (e) {
     let file = document.getElementById("file3D");
-    if(file) file.click();
+    if (file) file.click();
 });
 
 /**
  * FUNCION QUE MANEJA EL INPUT FILE DE 3D
  */
-function handleFile3D(){
+function handleFile3D() {
     let file = document.getElementById("file3D").files[0];
     let fileReader = new FileReader();
-    fileReader.onload = function(fileLoadedEvent){
+    fileReader.onload = function (fileLoadedEvent) {
         let text = fileLoadedEvent.target.result;
         new3D(text);
     };
-    fileReader.readAsText(file,"UTF-8");
+    fileReader.readAsText(file, "UTF-8");
 }
 
 /**
  * ARCHIVO PARA CREAR UN NUEVO ARCHIVO DE PASCAL
  */
-function newOLCEV(texto){
+function newOLCEV(texto) {
     $("#nav-tab").append(
         '<a class="nav-item nav-link"  data-toggle="tab" href="#nav-' +
         TabId +
@@ -196,7 +196,7 @@ function newOLCEV(texto){
  * CREA UNA NUEVA PESTAÑA CON UN ARCHIVO 3D
  * @param {*} texto 
  */
-function new3D(texto){
+function new3D(texto) {
     $("#nav-tab").append(
         '<a class="nav-item nav-link"  data-toggle="tab" href="#nav-' +
         TabId +
@@ -252,7 +252,7 @@ function new3D(texto){
  * CREA UN NUEVO ARCHIVO ASSEMBLER
  * @param {*} texto 
  */
-function newAssembler(texto){
+function newAssembler(texto) {
     $("#nav-tab").append(
         '<a class="nav-item nav-link"  data-toggle="tab" href="#nav-' +
         TabId +
@@ -285,7 +285,7 @@ function newAssembler(texto){
         tipo: 2
     };
 
-   
+
     listaEditores.push(objectEditor);
     editor.getDoc().setValue(texto);
     editor.refresh;
@@ -297,15 +297,15 @@ function newAssembler(texto){
 /**
  * OBTENGO EL TEXTO DE LA PESTAÑA ACTUAL Y LO GUARDO EN UN ARCHIVO
  */
-$("#saveFile").on('click',function(e){
+$("#saveFile").on('click', function (e) {
     e.preventDefault();
     let edi = editorActual.editor;
     let texto = edi.getValue();
     let nombre = (editorActual.tipo === 0) ? "archivo.doslang" : "archivo.txt";
     var element = document.createElement("a");
     element.setAttribute(
-      "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(texto)
+        "href",
+        "data:text/plain;charset=utf-8," + encodeURIComponent(texto)
     );
     element.setAttribute("download", nombre);
 
@@ -416,7 +416,7 @@ $("#debugButton").on("click", function (e) {
     }
 
     if (!$("#consolaTarget").is(":visible")) $("#consolaTarget").toggle();
-    
+
 });
 
 /**
@@ -439,13 +439,13 @@ $("#nextStep").on("click", function (e) {
 /**
  * FUNCION QUE SE ENCARGA DE RECORRER EL STACK E IMPRIMIRLO
  */
-function recorrerStack(){
+function recorrerStack() {
     let codigo = "";
 
-    for(let i = 0; i < ambitoActual.getAllStack().length; i++){
+    for (let i = 0; i < ambitoActual.getAllStack().length; i++) {
         let dato = ambitoActual.getAllStack()[i];
-        if(dato.valor != -11){
-            let div = '<div class="element">' + i +".       " + dato.valor + '</div>';
+        if (dato.valor != -11) {
+            let div = '<div class="element">' + i + ".       " + dato.valor + '</div>';
             codigo += "\n" + div;
         }
     }
@@ -455,13 +455,13 @@ function recorrerStack(){
 /**
  * FUNCION QUE RECORRE E IMPRIME EL HEAP
  */
-function recorrerHeap(){
+function recorrerHeap() {
     let codigo = "";
 
-    for(let i = 0; i < ambitoActual.getAllHeap().length; i++){
+    for (let i = 0; i < ambitoActual.getAllHeap().length; i++) {
         let dato = ambitoActual.getAllHeap()[i];
-        if(dato.valor != -11){
-            let div = '<div class="element">' + i +".       " + dato.valor + '</div>';
+        if (dato.valor != -11) {
+            let div = '<div class="element">' + i + ".       " + dato.valor + '</div>';
             codigo += "\n" + div;
         }
     }
@@ -490,7 +490,7 @@ $("#playButton").on("click", function (e) {
             case 0:
                 analizarCodigoOLCEV();
                 break;
-            
+
             case 1:
                 ejecutar3D();
                 break;
@@ -501,21 +501,22 @@ $("#playButton").on("click", function (e) {
 /**
  * OBTENER EL REPORTE ATRAVEZ DE SOCKETS
  */
-$("#reportButton").on('click',function(e){
-    socket.emit("getReporte","");
+$("#reportButton").on('click', function (e) {
+    socket.emit("getReporte", "");
 });
 
 /**
  * METODO QUE SE ENCARGARA
  * DE ANALIZAR EL CODIGO DE ALTO NIVEL
  */
-function analizarCodigoOLCEV(){
+function analizarCodigoOLCEV() {
     let ed = editorActual.editor;
     let codigo = ed.getValue();
     listaClases = [];
     GramaticaOLCEV.parse(codigo);
     let analizar = GramaticaOLCEV.arbol.raiz;
     let nodo = analizar.ejecutar("principal");
+    
     let texto = obtenerCodigo(nodo.codigo);
     new3D(texto);
 }
@@ -525,7 +526,7 @@ function analizarCodigoOLCEV(){
  * EL ARREGLO DE TEXTO Y NOS
  * DEVUELVE UN TEXTO PLANO
  */
-function obtenerCodigo(codigo){
+function obtenerCodigo(codigo) {
     let texto = "";
     codigo.forEach(element => {
         texto += element + "\n";
@@ -621,13 +622,13 @@ function addMessage(mensaje) {
 /**
  * SE ENCARGARA DE OPTIMIZAR CODIGO 3D
  */
-$("#optimizarButton").on('click',function(e){
-    if(editorActual.tipo === 1){
+$("#optimizarButton").on('click', function (e) {
+    if (editorActual.tipo === 1) {
         reglasAplicada = [];
         let codigo = editorActual.editor.getValue().split('\n');
         let primeraRegla = new Regla1(codigo);
         let optimizado = primeraRegla.optimizar();
-         
+
         let segundaRegla = new Regla2(optimizado);
         optimizado = segundaRegla.optimizar();
 
@@ -640,7 +641,7 @@ $("#optimizarButton").on('click',function(e){
         let sextaRegla = new Regla6(optimizado);
         optimizado = sextaRegla.optimizar();
 
-        
+
 
         let septimaRegla = new Regla7(optimizado);
         optimizado = septimaRegla.optimizar();
@@ -676,18 +677,18 @@ $("#optimizarButton").on('click',function(e){
 
         let codigoFinal = "";
         optimizado.forEach(element => {
-            
+
             codigoFinal += element + "\n";
         });
 
         new3D(codigoFinal);
         let codigoHTML = "";
         reglasAplicada.forEach(element => {
-            codigoHTML += '<tr><td>' + element.linea + '</td><td>' + element.regla + '</td><td>' + element.detalle + '</td></tr>\n'; 
+            codigoHTML += '<tr><td>' + element.linea + '</td><td>' + element.regla + '</td><td>' + element.detalle + '</td></tr>\n';
         });
         document.getElementById("bodyOptimizacion").innerHTML = codigoHTML;
         $("#modalOptimizacion").modal();
-        
+
 
     }
 });
@@ -722,7 +723,7 @@ function getInstrucciones3D() {
  * METODO QUE SE ENCARGARA DE PARA EL DEBUG
  */
 $("#stopDebug").on("click", function (e) {
-    if(markedText) markedText.clear();
+    if (markedText) markedText.clear();
     $("#debugTarget").toggle();
     document.getElementById("bodyInfo").style.visibility = "hidden";
 });
@@ -737,36 +738,36 @@ $("#stopDebug").on("click", function (e) {
 /**
  * VERIFICA QUE ES UN CUADRUPLO Y NO UN COMENTARIO O UN SALTO DE LINEA
  */
-function isCuadruplo(linea){
+function isCuadruplo(linea) {
     let cuadruplo = linea.split(',');
-    return cuadruplo.length === 4; 
+    return cuadruplo.length === 4;
 }
 
 /**
  * METODO PARA OBTENER UN TEMPORAL Y NO TIENE UN COMENTARIO ADYACENTE EJEMPLO T1//OPERACION
  */
-function limpiarTemporal(temp){
+function limpiarTemporal(temp) {
     return temp.split('/')[0].trim();
 }
 
 /**
  * METODO PARA VERIFICAR SI ES UNA ETIQUETA LX
  */
-function isEtiqueta(linea){
+function isEtiqueta(linea) {
     return linea.toLowerCase().includes("l");
 }
 
 /**
  * AGREGA UNA NUEVA REGLA APLICADA EN LA EJECUCION DEL PROGRAMA
  */
-function addNewRegla(linea,tipo,detalle){
-    reglasAplicada.push({linea:linea,regla:tipo,detalle:detalle});
+function addNewRegla(linea, tipo, detalle) {
+    reglasAplicada.push({ linea: linea, regla: tipo, detalle: detalle });
 }
 
 /**
  * VERIFICA SI ES UN COMENTARIO
  */
-function isComentario(linea){
+function isComentario(linea) {
     linea = linea.trim();
     return linea.indexOf("\/") === 0;
 }
@@ -775,7 +776,7 @@ function isComentario(linea){
  * FUNCION QUE RETONAR SI ES UN TEMPORAL
  * @param {*} linea 
  */
-function isTemporal(linea){
+function isTemporal(linea) {
     return linea.toLowerCase().includes("t");
 }
 
@@ -783,8 +784,8 @@ function isTemporal(linea){
  * RETORNA SI EXISTE UN OPERADOR O NO
  * @param {*} operador 
  */
-function operadoresLogicos(operador){
-    let operadores  = ["je","jne","jg","jl","jge","jle"];
+function operadoresLogicos(operador) {
+    let operadores = ["je", "jne", "jg", "jl", "jge", "jle"];
     return operadores.find(element => element === operador.toLowerCase());
 }
 
@@ -792,7 +793,7 @@ function operadoresLogicos(operador){
 /**
  * METODO PARA AGREGAR CLASES
  */
-function agregarClase(clase){
+function agregarClase(clase) {
     listaClases.push(clase);
 }
 
@@ -800,9 +801,38 @@ function agregarClase(clase){
  * METODO PARA BUSCAR CLASES
  * @param id Nombre de la clase a buscar
  */
-function getClase(id){
-    for(let i = 0; i < listaClases.length; i++){
-        if(listaClases[i].nombre === id) return listaClases[i]
+function getClase(id) {
+    for (let i = 0; i < listaClases.length; i++) {
+        if (listaClases[i].nombre === id) return listaClases[i]
     }
     return null;
 }
+
+
+/**
+ * FUNCION ENCARGADA DE 
+ * ANALIZAR UN IMPORT Y DEVOLVER
+ * UN AJAX CON EL RESULTADO
+ */
+function analizarImport(direccion) {
+    let retorno;
+    $.ajax({
+        url: '/searchFile',
+        data: {
+            direccion: direccion
+        },
+        type: 'POST',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            retorno = data;
+        },
+        error: function () {
+            retorno = new MensajeError("", "", "", 0, 0);
+        }
+
+    });
+    return retorno;
+}
+
+

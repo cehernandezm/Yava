@@ -15,6 +15,13 @@ var Analizar = /** @class */ (function () {
         nodo.codigo = nodo.codigo.concat(Auxiliar.toLoweCase().codigo);
         this.instrucciones.forEach(function (clase) {
             var entorno = new Entorno(id);
+            if (clase instanceof Import) {
+                var resultado = clase.ejecutar(entorno);
+                if (resultado instanceof MensajeError)
+                    return resultado;
+                var res = resultado;
+                nodo.codigo = nodo.codigo.concat(res.codigo);
+            }
             if (clase instanceof Clase) {
                 var resultado = clase.primeraPasada(entorno);
                 if (!(resultado instanceof MensajeError)) {

@@ -20,6 +20,13 @@ class Analizar {
         nodo.codigo = nodo.codigo.concat(Auxiliar.toLoweCase().codigo);
         this.instrucciones.forEach(clase => {
             let entorno: Entorno = new Entorno(id);
+            if(clase instanceof Import){
+                let resultado:Object = clase.ejecutar(entorno);
+                if(resultado instanceof MensajeError) return resultado;
+                let res:Nodo = resultado as Nodo;
+                nodo.codigo = nodo.codigo.concat(res.codigo);
+
+            }
             if (clase instanceof Clase) {
                 let resultado:Object = clase.primeraPasada(entorno);
                 if(!(resultado instanceof MensajeError)){
