@@ -8,6 +8,11 @@ class Regla1{
 
     /**
      * CONSTRUCTOR DE LA CLASE
+     * ESTA REGLA ELIMINA LAS ASIGNACIONES:
+     * T1 = T4
+     * T4 = T1
+     * SIEMPRE Y CUANDO T1 NO CAMBIE DE VALOR Y NO EXISTA
+     * UNA ETIQUETA ENTRE AMBAS ASIGNACIONES
      * @param codigo 
      */
     constructor(codigo:Array<String>){

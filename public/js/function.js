@@ -629,10 +629,10 @@ $("#optimizarButton").on('click', function (e) {
         let primeraRegla = new Regla1(codigo);
         let optimizado = primeraRegla.optimizar();
 
-        /*
+        
         let segundaRegla = new Regla2(optimizado);
         optimizado = segundaRegla.optimizar();
-
+        /*
         let R4 = new Regla4(optimizado);
         optimizado = R4.optimizar();
 
@@ -755,7 +755,7 @@ function limpiarTemporal(temp) {
  * METODO PARA VERIFICAR SI ES UNA ETIQUETA LX
  */
 function isEtiqueta(linea) {
-    return linea.toLowerCase().includes("l");
+    return linea.toLowerCase().trim().indexOf("l") === 0;
 }
 
 /**
