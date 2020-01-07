@@ -31,6 +31,13 @@ class Asignacion implements Instruccion {
             return mensaje;
         }
 
+        let atributo:Object = s.atributo;
+        let isFinal:Boolean = atributo['isFinal'] as Boolean;
+        if(isFinal){
+            let mensaje: MensajeError = new MensajeError("Semantico", "La variable: " + this.id + " es Final no se le puede cambiar su valor", entorno.archivo, this.l, this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
         let result: Object = this.expresion.ejecutar(entorno);
         if (result instanceof MensajeError) return result;
 

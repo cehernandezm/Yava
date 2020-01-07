@@ -18,6 +18,13 @@ var Asignacion = /** @class */ (function () {
             Auxiliar.agregarError(mensaje);
             return mensaje;
         }
+        var atributo = s.atributo;
+        var isFinal = atributo['isFinal'];
+        if (isFinal) {
+            var mensaje = new MensajeError("Semantico", "La variable: " + this.id + " es Final no se le puede cambiar su valor", entorno.archivo, this.l, this.c);
+            Auxiliar.agregarError(mensaje);
+            return mensaje;
+        }
         var result = this.expresion.ejecutar(entorno);
         if (result instanceof MensajeError)
             return result;
