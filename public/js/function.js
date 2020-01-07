@@ -632,10 +632,10 @@ $("#optimizarButton").on('click', function (e) {
         
         let segundaRegla = new Regla2(optimizado);
         optimizado = segundaRegla.optimizar();
+        
+        let R3 = new Regla3(optimizado);
+        optimizado = R3.optimizar();
         /*
-        let R4 = new Regla4(optimizado);
-        optimizado = R4.optimizar();
-
         let R5 = new Regla5(optimizado);
         optimizado = R5.optimizar();
 
@@ -748,6 +748,7 @@ function isCuadruplo(linea) {
  * METODO PARA OBTENER UN TEMPORAL Y NO TIENE UN COMENTARIO ADYACENTE EJEMPLO T1//OPERACION
  */
 function limpiarTemporal(temp) {
+    if(temp === undefined) return "";
     return temp.split(';')[0].trim();
 }
 
