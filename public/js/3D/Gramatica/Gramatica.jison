@@ -52,6 +52,7 @@
 "ifFalse"                                   return 'IFFALSE'
 "goto"                                      return 'GOTO'
 "then"                                      return 'THEN'
+"var"                                       return 'VAR'
 
 
 "T"[0-9]+                                   return 'TEMPORAL'
@@ -86,7 +87,12 @@ instruccion : asignacion                             {$$ = $1;}
             | imprimir                               {$$ = $1;}
             | funcion                                {$$ = $1;}
             | callFuncion                            {$$ = $1;}
+            | declaracion                            {$$ = $1;}
             ;
+            
+declaracion : VAR ID IGUAL e                         {$$ = new Declaracion3D($2,$4,@1.first_line,@1.first_column,parser.linea); }
+            ;
+
 
 instruccionesF : instruccionesF instruccionF            {$$ = $1; $$.push($2); parser.linea++;}
                | instruccionF                           {$$ = []; $$.push($1); parser.linea++;}
@@ -131,6 +137,7 @@ e : ENTERO                                   {$$ = new Valor3D({tipo : "int", va
   | DECIMAL                                  {$$ = new Valor3D({tipo: "double", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
   | H                                        {$$ = new Valor3D({tipo: "h", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
   | P                                        {$$ = new Valor3D({tipo: "p", valor:  $1, linea: @1.first_line, columna: @1.first_column});}
+  | ID                                       {$$ = new Valor3D({tipo : "temporal", valor: $1, linea: @1.first_line, columna: @1.first_column});}
   ;
 
 
