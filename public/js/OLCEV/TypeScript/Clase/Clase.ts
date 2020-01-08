@@ -11,7 +11,8 @@ class Clase implements Instruccion {
     tamaño: number = 0;
     atributos: Object;
     constructores: Array<String> = [];
-    
+    flagMain: number = 0;
+
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -139,7 +140,7 @@ class Clase implements Instruccion {
             entorno.metodos = entorno.metodos.concat(claseTemp.entorno.metodos);
             entorno.posRelativaStack = claseTemp.entorno.posRelativaStack;
             entorno.extendida = claseTemp;
-            
+
 
         }
 
@@ -170,6 +171,8 @@ class Clase implements Instruccion {
          * DE LO CONTRARIO GENERAMOS UNO 
          * AUTOMATICAMENTE
          */
+
+        if (this.flagMain > 0) entorno.metodos = Auxiliar.eliminarMains(entorno.metodos);
         let flag: Boolean = false;
         this.instrucciones.forEach(element => {
             if (element instanceof Constructor) {
@@ -224,10 +227,13 @@ class Clase implements Instruccion {
 
         this.instrucciones.forEach(element => {
             if (element instanceof FuncionOLCEV) {
-                let resultado: Object = element.ejecutar(entorno);
-                if (resultado instanceof MensajeError) return resultado;
-                let temp: Nodo = resultado as Nodo;
-                nodo.codigo = nodo.codigo.concat(temp.codigo);
+                if (this.flagMain === 1 && element.id === "main") { }
+                else {
+                    let resultado: Object = element.ejecutar(entorno);
+                    if (resultado instanceof MensajeError) return resultado;
+                    let temp: Nodo = resultado as Nodo;
+                    nodo.codigo = nodo.codigo.concat(temp.codigo);
+                }
             }
         });
 

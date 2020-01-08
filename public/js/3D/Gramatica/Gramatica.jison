@@ -178,6 +178,7 @@ imprimir : PRINT PARIZQ MODULO IE COMA e PARDER    { $$ = new Print(0,$6,@1.firs
 
 
 funcion : PROC ID LLAVEIZQ instruccionesF LLAVEDER          { $$ = new Funcion($2,$4,@1.first_line,@1.first_column,parser.linea);}
+        | PROC ID LLAVEIZQ LLAVEDER                         { $$ = new Funcion($2,[],@1.first_line,@1.first_column,parser.linea);}
         ;
 callFuncion : CALL  ID                                   {$$ = new CallFuncion($2,@1.first_line,@1.first_column,parser.linea);}
             ;

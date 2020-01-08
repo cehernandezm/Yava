@@ -18,6 +18,7 @@ class Analizar {
         nodo.codigo = nodo.codigo.concat(Auxiliar.toCharArray().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.toUpperCase().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.toLoweCase().codigo);
+        
         this.instrucciones.forEach(clase => {
             let entorno: Entorno = new Entorno(id);
             if(clase instanceof Import){
@@ -28,10 +29,12 @@ class Analizar {
 
             }
             if (clase instanceof Clase) {
+                
                 let resultado:Object = clase.primeraPasada(entorno);
                 if(!(resultado instanceof MensajeError)){
                     let res:Nodo = resultado as Nodo;
                     nodo.codigo = nodo.codigo.concat(res.codigo);
+                    
                 }
             }
         });
@@ -40,7 +43,7 @@ class Analizar {
         nodo.codigo.push(temporal + " = P + 0");
         nodo.codigo.push("Stack[" + temporal + "] = H");
         nodo.codigo.push("H = H + 1");
-        nodo.codigo.push("call constructor_hola_");
+        nodo.codigo.push("call main_ARREGLO_");
         return nodo;
     }
 }

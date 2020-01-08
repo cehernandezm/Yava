@@ -34,7 +34,7 @@ var Analizar = /** @class */ (function () {
         nodo.codigo.push(temporal + " = P + 0");
         nodo.codigo.push("Stack[" + temporal + "] = H");
         nodo.codigo.push("H = H + 1");
-        nodo.codigo.push("call constructor_hola_");
+        nodo.codigo.push("call main_ARREGLO_");
         return nodo;
     };
     return Analizar;

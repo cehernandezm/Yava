@@ -520,4 +520,11 @@ class Auxiliar {
 
     }
 
+    public static eliminarMains(funciones:Array<FuncionOLCEV>):Array<FuncionOLCEV>{
+        for(let i = 0; i < funciones.length; i++){
+            if(funciones[i].id === "main") funciones.splice(i,1);
+        }
+        return funciones;
+    }
+
 }

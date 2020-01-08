@@ -34,6 +34,7 @@ var Import = /** @class */ (function () {
                     salida_1.codigo = salida_1.codigo.concat(res.codigo);
                 }
                 if (clase instanceof Clase) {
+                    clase.flagMain = 1;
                     var resultado_2 = clase.primeraPasada(entorno);
                     if (!(resultado_2 instanceof MensajeError)) {
                         var res = resultado_2;

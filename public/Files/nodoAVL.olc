@@ -4,6 +4,11 @@ public class NodoAVL {
     int altura;
     int valor;
 
+
+    public void main(String[] args){
+        println("desde nodoavl");
+    }
+
     public NodoAVL(int valor) {
         izquierda = null;
         derecha = null;

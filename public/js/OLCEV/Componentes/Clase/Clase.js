@@ -11,6 +11,7 @@ var Clase = /** @class */ (function () {
     function Clase(modificiador, nombre, instrucciones, extender, l, c) {
         this.tamaño = 0;
         this.constructores = [];
+        this.flagMain = 0;
         this.modificador = modificiador;
         this.nombre = nombre;
         this.instrucciones = instrucciones;
@@ -149,6 +150,8 @@ var Clase = /** @class */ (function () {
          * DE LO CONTRARIO GENERAMOS UNO
          * AUTOMATICAMENTE
          */
+        if (this.flagMain > 0)
+            entorno.metodos = Auxiliar.eliminarMains(entorno.metodos);
         var flag = false;
         this.instrucciones.forEach(function (element) {
             if (element instanceof Constructor) {
@@ -200,11 +203,14 @@ var Clase = /** @class */ (function () {
         var nodo = new Nodo([]);
         this.instrucciones.forEach(function (element) {
             if (element instanceof FuncionOLCEV) {
-                var resultado = element.ejecutar(entorno);
-                if (resultado instanceof MensajeError)
-                    return resultado;
-                var temp = resultado;
-                nodo.codigo = nodo.codigo.concat(temp.codigo);
+                if (_this.flagMain === 1 && element.id === "main") { }
+                else {
+                    var resultado = element.ejecutar(entorno);
+                    if (resultado instanceof MensajeError)
+                        return resultado;
+                    var temp = resultado;
+                    nodo.codigo = nodo.codigo.concat(temp.codigo);
+                }
             }
         });
         salida.codigo = nodo.codigo.concat(salida.codigo);

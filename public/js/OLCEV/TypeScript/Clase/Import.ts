@@ -43,6 +43,7 @@ class Import implements Instruccion {
 
                 }
                 if (clase instanceof Clase) {
+                    clase.flagMain = 1;
                     let resultado: Object = clase.primeraPasada(entorno);
                     if (!(resultado instanceof MensajeError)) {
                         let res: Nodo = resultado as Nodo;

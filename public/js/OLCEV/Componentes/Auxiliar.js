@@ -448,6 +448,13 @@ var Auxiliar = /** @class */ (function () {
         salida.codigo.push("\n");
         return salida;
     };
+    Auxiliar.eliminarMains = function (funciones) {
+        for (var i = 0; i < funciones.length; i++) {
+            if (funciones[i].id === "main")
+                funciones.splice(i, 1);
+        }
+        return funciones;
+    };
     Auxiliar.temporal = 0;
     Auxiliar.posicion = 0;
     Auxiliar.etiqueta = 0;
