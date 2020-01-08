@@ -101,6 +101,7 @@
 "toLowerCase"                                   return "TOLOWERCASE";
 "equals"                                        return "EQUALS"
 "getClass"                                      return 'GETCLASS'
+"toString"                                      return 'TOSTRING'
 "import"                                        return 'IMPORT'
 "write_file"                                    return 'WRITEFILE'
 
@@ -341,6 +342,7 @@ expresion : aritmetica                                          { $$ = $1; }
           | THIS PUNTO ID                                       { $$ = new elementThis($3,@1.first_line,@1.first_column); }
           | THIS PUNTO ID listaDimensiones                      { $$ = new AccesoArreglo(new elementThis($3,@1.first_line,@1.first_column),$4,@1.first_line,@1.first_column); }
           | expresion PUNTO GETCLASS PARIZQ PARDER              { $$ = new getClass($1,@1.first_line,@1.first_column); }
+          | expresion PUNTO TOSTRING PARIZQ PARDER              { $$ = new getClass($1,@1.first_line,@1.first_column); }
           ;
 
 

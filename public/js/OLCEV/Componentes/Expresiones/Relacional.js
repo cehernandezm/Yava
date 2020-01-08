@@ -59,7 +59,7 @@ var Relacional = /** @class */ (function () {
             nodo.tipo = Tipo.BOOLEAN;
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " then goto " + v, "Si es verdadero salta a " + v));
             nodo.codigo.push(Auxiliar.crearLinea("goto " + f, "si no se cumple salta a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);
@@ -89,7 +89,7 @@ var Relacional = /** @class */ (function () {
             nodo.tipo = Tipo.BOOLEAN;
             var v = Auxiliar.generarEtiqueta();
             var f = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " then goto " + v, "Si es verdadero salta a " + v));
             nodo.codigo.push(Auxiliar.crearLinea("goto " + f, "si no se cumple salta a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);

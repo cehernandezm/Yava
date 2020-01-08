@@ -25,8 +25,12 @@ var Write = /** @class */ (function () {
         var f = Auxiliar.generarEtiqueta();
         var s = Auxiliar.generarEtiqueta();
         var valor = Auxiliar.generarTemporal();
+        salida.codigo.push(s + ":");
         salida.codigo.push(valor + " = Heap[" + nodo.resultado + "]");
         salida.codigo.push(Auxiliar.saltoCondicional(valor + " == 0", f));
+        salida.codigo.push("write(" + valor + ")");
+        salida.codigo.push(nodo.resultado + " = " + nodo.resultado + " + 1");
+        salida.codigo.push(Auxiliar.saltoIncondicional(s));
         salida.codigo.push(f + ":");
         salida.codigo.push("exit(0)");
         return salida;

@@ -3,6 +3,7 @@ class Ambito{
     public Stack : any;
     public Heap : any;
     entornos : any;
+    cadena:String = null;
 
     /**
      * CONSTRUCTOR DE LA CLASEs

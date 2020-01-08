@@ -54,6 +54,9 @@
 "then"                                      return 'THEN'
 "var"                                       return 'VAR'
 
+"write"                                     return 'WRITE'
+"exit"                                      return 'EXIT'
+
 
 "T"[0-9]+                                   return 'TEMPORAL'
 "L"[0-9]+                                   return 'ETIQUETA'
@@ -88,6 +91,8 @@ instruccion : asignacion                             {$$ = $1;}
             | funcion                                {$$ = $1;}
             | callFuncion                            {$$ = $1;}
             | declaracion                            {$$ = $1;}
+            | write_sentence                         {$$ = $1;}
+            | exit_sentence                          {$$ = $1;}
             ;
             
 declaracion : VAR ID IGUAL e                         {$$ = new Declaracion3D($2,$4,@1.first_line,@1.first_column,parser.linea); }
@@ -105,6 +110,8 @@ instruccionF : asignacion                             {$$ = $1;}
              | condicional                            {$$ = $1;}
              | imprimir                               {$$ = $1;}
              | callFuncion                            {$$ = $1;}
+             | write_sentence                         {$$ = $1;}
+             | exit_sentence                          {$$ = $1;}
             ;
 
 asignacion : var IGUAL e operacion e                        {$$ = new Asignacion3D($3,$5,$4,$1,@1.first_line,@1.first_column,parser.linea);} 
@@ -176,6 +183,11 @@ callFuncion : CALL  ID                                   {$$ = new CallFuncion($
             ;
 
 
+write_sentence : WRITE PARIZQ e PARDER             { $$ = new Write3D($3,@1.first_line,@1.first_column,parser.linea); }
+               ;
+
+exit_sentence : EXIT PARIZQ e PARDER              { $$ = new Exit($3,@1.first_line,@1.first_column,parser.linea); }
+              ;
 
 %%
 

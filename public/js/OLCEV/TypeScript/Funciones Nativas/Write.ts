@@ -37,9 +37,12 @@ class Write implements Instruccion{
         let s:String = Auxiliar.generarEtiqueta();
         let valor:String = Auxiliar.generarTemporal();
 
+        salida.codigo.push(s + ":");
         salida.codigo.push(valor + " = Heap[" + nodo.resultado + "]");
         salida.codigo.push(Auxiliar.saltoCondicional(valor + " == 0",f));
-        
+        salida.codigo.push("write(" + valor + ")");
+        salida.codigo.push(nodo.resultado + " = " + nodo.resultado + " + 1");
+        salida.codigo.push(Auxiliar.saltoIncondicional(s)); 
 
         salida.codigo.push(f + ":");
         salida.codigo.push("exit(0)");

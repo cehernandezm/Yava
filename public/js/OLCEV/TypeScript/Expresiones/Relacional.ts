@@ -74,7 +74,7 @@ class Relacional implements Instruccion {
             nodo.tipo = Tipo.BOOLEAN;
             let v: String = Auxiliar.generarEtiqueta();
             let f: String = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + this.signo + " " + nodoDer.resultado + " then goto " + v, "Si es verdadero salta a " + v));
             nodo.codigo.push(Auxiliar.crearLinea("goto " + f, "si no se cumple salta a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);
@@ -106,7 +106,7 @@ class Relacional implements Instruccion {
             nodo.tipo = Tipo.BOOLEAN;
             let v: String = Auxiliar.generarEtiqueta();
             let f: String = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " goto " + v, "Si es verdadero salta a " + v));
+            nodo.codigo.push(Auxiliar.crearLinea("if " + nodoIzq.resultado + " " + signo + " " + nodoDer.resultado + " then goto " + v, "Si es verdadero salta a " + v));
             nodo.codigo.push(Auxiliar.crearLinea("goto " + f, "si no se cumple salta a: " + f));
             nodo.verdaderas = [];
             nodo.verdaderas.push(v);

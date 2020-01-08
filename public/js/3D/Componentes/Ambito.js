@@ -6,6 +6,7 @@ var Ambito = /** @class */ (function () {
      * @param Heap
      */
     function Ambito() {
+        this.cadena = null;
         this.Temporales = [];
         this.Stack = [];
         this.Heap = [{ tipo: "number", valor: -11 }];
