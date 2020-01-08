@@ -123,7 +123,7 @@ class Auxiliar {
      * @param etiqueta ETIQUETA DONDE SE REALIZARA EL SALTO
      */
     public static saltoCondicional(condicion: String, etiqueta: String): String {
-        return "if " + condicion + " goto " + etiqueta;
+        return "if " + condicion + " then goto " + etiqueta;
     }
 
     /**

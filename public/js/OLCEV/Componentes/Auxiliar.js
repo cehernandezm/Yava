@@ -102,7 +102,7 @@ var Auxiliar = /** @class */ (function () {
      * @param etiqueta ETIQUETA DONDE SE REALIZARA EL SALTO
      */
     Auxiliar.saltoCondicional = function (condicion, etiqueta) {
-        return "if " + condicion + " goto " + etiqueta;
+        return "if " + condicion + " then goto " + etiqueta;
     };
     /**
      * METODO QUE GENERA SALTOS INCONDICIONALES

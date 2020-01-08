@@ -51,6 +51,7 @@
 "if"                                        return 'IF'
 "ifFalse"                                   return 'IFFALSE'
 "goto"                                      return 'GOTO'
+"then"                                      return 'THEN'
 
 
 "T"[0-9]+                                   return 'TEMPORAL'
@@ -142,7 +143,7 @@ etiqueta : ETIQUETA DSPUNTOS                 {$$ = new Etiqueta($1,@1.first_line
 incondicional : GOTO ETIQUETA                   { $$ = new Incondicional(parser.linea,@1.first_line,@1.first_column, $2);}
               ;
 
-condicional : IF e operador e GOTO ETIQUETA              {$$ = new Condicional(parser.linea,@1.first_line,@1.first_column,$3,$2,$4,$6,0);}
+condicional : IF e operador e THEN GOTO ETIQUETA              {$$ = new Condicional(parser.linea,@1.first_line,@1.first_column,$3,$2,$4,$7,0);}
             | IFFALSE e operador e GOTO ETIQUETA         {$$ = new Condicional(parser.linea,@1.first_line,@1.first_column,$3,$2,$4,$6,1);}
             ;
 

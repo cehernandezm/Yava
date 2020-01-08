@@ -102,6 +102,7 @@
 "equals"                                        return "EQUALS"
 "getClass"                                      return 'GETCLASS'
 "import"                                        return 'IMPORT'
+"write_file"                                    return 'WRITEFILE'
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
@@ -236,6 +237,7 @@ instruccion : declaracionVariable PNTCOMA                                       
             | while_statement                                                             { $$ = []; $$.push($1); }
             | continue_statement PNTCOMA                                                  { $$ = []; $$.push($1); }
             | dowhile_statement PNTCOMA                                                   { $$ = []; $$.push($1); }
+            | write_file PNTCOMA                                                          { $$ = []; $$.push($1); }
             | for_statement                                                               { $$ = []; $$.push($1); }
             | call_function PNTCOMA                                                       { $$ = []; $$.push($1); }
             | return_statement PNTCOMA                                                    { $$ = []; $$.push($1); }
@@ -576,6 +578,13 @@ call_function : ID PARIZQ PARDER                                                
 //#######################################################################################
 return_statement : RETURN expresion                                             { $$ = new Return($2,@1.first_line,@1.first_column); }
                  ;
+
+//#########################################################################################
+//################################# WRITE FILE #####################################
+//#######################################################################################
+write_file : WRITEFILE PARIZQ CADENA COMA expresion PARDER                      {$$ = new Write($5,@1.first_line,@1.first_column); }
+           ;
+
 
 %%
 

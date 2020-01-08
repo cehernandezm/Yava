@@ -33,7 +33,7 @@ class Regla3 {
                     falsa = falsa.split(";")[0].trim();
                     let verdadera:String = linea.substring(linea.indexOf("goto") + 4,linea.length);
                     verdadera = verdadera.trim();
-                    let condicion:String = linea.substring(linea.indexOf("if") + 2,linea.indexOf("goto"));
+                    let condicion:String = linea.substring(linea.indexOf("if") + 2,linea.indexOf("then"));
                     condicion = condicion.trim();
                     let simbolo:any = this.getSimbolo(condicion);
                     let izquierda:String = this.operadorIzq(condicion,simbolo);
