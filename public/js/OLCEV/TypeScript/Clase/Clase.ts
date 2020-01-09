@@ -12,6 +12,7 @@ class Clase implements Instruccion {
     atributos: Object;
     constructores: Array<String> = [];
     flagMain: number = 0;
+    codigo:Array<String> = [];
 
 
     /**
@@ -167,8 +168,14 @@ class Clase implements Instruccion {
             else if (element instanceof Asignacion) {
                 let resultado: Object = element.ejecutar(entorno);
                 if (resultado instanceof MensajeError) return resultado;
+                
+                let simbolo:Simbolo = entorno.buscarSimbolo(element.id);
+                let atributo:Object = simbolo.atributo;
+                let isStatic:Boolean = atributo['isStatic'];
+                
                 let nodo: Nodo = resultado as Nodo;
-                salida.codigo = salida.codigo.concat(nodo.codigo);
+                if(isStatic) salida.codigo = salida.codigo.concat(nodo.codigo);
+                else this.codigo = this.codigo.concat(nodo.codigo);
 
             }
             if (element instanceof FuncionOLCEV) element.primeraPasada(entorno);
@@ -186,6 +193,7 @@ class Clase implements Instruccion {
                 let e: Entorno = Auxiliar.clonarEntorno(entorno);
                 e.localizacion = Localizacion.STACK;
                 e.posRelativaStack = 1;
+                element.codigo = element.codigo.concat(this.codigo);
                 element.primeraPasada(e); //----- Realizamos la primera pasada obteniendo el tamaño total del constructor
                 let resultado: Object = element.ejecutar(e);
                 if (!(resultado instanceof MensajeError)) {
@@ -217,13 +225,16 @@ class Clase implements Instruccion {
                     else {
                         let pos: String = Auxiliar.generarTemporal();
                         nodo.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                        nodo.codigo.push(pos + " = Stack[" + pos + "]");
                         nodo.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
+                        
                         nodo.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
                     }
                 }
 
                 s.isNull = false;
             });
+            nodo.codigo = nodo.codigo.concat(this.codigo);
             nodo.codigo.push("}");
             salida.codigo = salida.codigo.concat(nodo.codigo);
             this.constructores.push(this.nombre + "_");

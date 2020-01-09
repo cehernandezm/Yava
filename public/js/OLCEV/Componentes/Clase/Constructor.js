@@ -8,6 +8,7 @@ var Constructor = /** @class */ (function () {
      * @param c columna de la instruccion
      */
     function Constructor(id, parametros, instrucciones, l, c) {
+        this.codigo = [];
         this.id = id;
         this.parametros = parametros;
         this.instrucciones = instrucciones;
@@ -39,6 +40,7 @@ var Constructor = /** @class */ (function () {
         salida.codigo.push(";########CONSTRUCTOR " + this.identificador);
         salida.codigo.push(";#############################");
         salida.codigo.push("proc constructor_" + this.identificador + "{");
+        salida.codigo = salida.codigo.concat(this.codigo);
         this.instrucciones.forEach(function (element) {
             var resultado = element.ejecutar(entorno);
             if (!(resultado instanceof MensajeError)) {

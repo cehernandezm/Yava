@@ -56,7 +56,7 @@ class callConstructor implements Instruccion {
         let temporal: String = Auxiliar.generarTemporal();
         let posicion: String = Auxiliar.generarTemporal();
         salida.codigo.push(Auxiliar.crearLinea(temporal + " = H", "Inicio del Objeto"));
-        salida.codigo.push(Auxiliar.crearLinea("H = H +" + (clase.tamaño + 1), "Apartamos el espacio de los atributos"));
+        salida.codigo.push(Auxiliar.crearLinea("H = H +" + (clase.tamaño), "Apartamos el espacio de los atributos"));
         salida.codigo.push(Auxiliar.crearLinea("P = P + " + entorno.tamaño, "Simulacion de cambio de ambito"));
         salida.codigo.push(Auxiliar.crearLinea(posicion + " = P + 0", "Posicion del this"));
         salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + temporal, "This tendra el valor del inicio del Objeto"));

@@ -5,6 +5,7 @@ class Constructor implements Instruccion {
     l: number;
     c: number;
     identificador:String;
+    codigo:Array<String> = [];
 
     /**
      * CONSTRUCTOR DE LA CLASE
@@ -49,7 +50,7 @@ class Constructor implements Instruccion {
         salida.codigo.push("proc constructor_" + this.identificador + "{");
 
 
-
+        salida.codigo = salida.codigo.concat(this.codigo);
         this.instrucciones.forEach(element => {
             let resultado: Object = element.ejecutar(entorno);
             if (!(resultado instanceof MensajeError)) {

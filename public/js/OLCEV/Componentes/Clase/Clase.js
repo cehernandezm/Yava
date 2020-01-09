@@ -12,6 +12,7 @@ var Clase = /** @class */ (function () {
         this.tamaño = 0;
         this.constructores = [];
         this.flagMain = 0;
+        this.codigo = [];
         this.modificador = modificiador;
         this.nombre = nombre;
         this.instrucciones = instrucciones;
@@ -146,8 +147,14 @@ var Clase = /** @class */ (function () {
                 var resultado = element.ejecutar(entorno);
                 if (resultado instanceof MensajeError)
                     return resultado;
+                var simbolo = entorno.buscarSimbolo(element.id);
+                var atributo = simbolo.atributo;
+                var isStatic_1 = atributo['isStatic'];
                 var nodo_1 = resultado;
-                salida.codigo = salida.codigo.concat(nodo_1.codigo);
+                if (isStatic_1)
+                    salida.codigo = salida.codigo.concat(nodo_1.codigo);
+                else
+                    _this.codigo = _this.codigo.concat(nodo_1.codigo);
             }
             if (element instanceof FuncionOLCEV)
                 element.primeraPasada(entorno);
@@ -165,6 +172,7 @@ var Clase = /** @class */ (function () {
                 var e = Auxiliar.clonarEntorno(entorno);
                 e.localizacion = Localizacion.STACK;
                 e.posRelativaStack = 1;
+                element.codigo = element.codigo.concat(_this.codigo);
                 element.primeraPasada(e); //----- Realizamos la primera pasada obteniendo el tamaño total del constructor
                 var resultado = element.ejecutar(e);
                 if (!(resultado instanceof MensajeError)) {
@@ -197,12 +205,14 @@ var Clase = /** @class */ (function () {
                     else {
                         var pos = Auxiliar.generarTemporal();
                         nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = P + 0", "Obtenemos la posicion de referencia this"));
+                        nodo_3.codigo.push(pos + " = Stack[" + pos + "]");
                         nodo_3.codigo.push(Auxiliar.crearLinea(pos + " = " + pos + " + " + s.posRelativa, "Nos movemos hacia la variable que necesitamos"));
                         nodo_3.codigo.push(Auxiliar.crearLinea("Heap[" + pos + "] = 0", "Iniciando variable: " + s.id));
                     }
                 }
                 s.isNull = false;
             });
+            nodo_3.codigo = nodo_3.codigo.concat(this.codigo);
             nodo_3.codigo.push("}");
             salida.codigo = salida.codigo.concat(nodo_3.codigo);
             this.constructores.push(this.nombre + "_");

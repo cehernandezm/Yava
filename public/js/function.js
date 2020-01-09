@@ -529,9 +529,11 @@ function analizarCodigoOLCEV() {
     }
     else {
         let nodo = analizar.ejecutar("principal");
-
-        let texto = obtenerCodigo(nodo.codigo);
-        new3D(texto);
+        if (nodo instanceof MensajeError) { }
+        else {
+            let texto = obtenerCodigo(nodo.codigo);
+            new3D(texto);
+        }
     }
 
 }
@@ -600,6 +602,9 @@ function inicializarDatos() {
     H = 0;
     P = 0;
     document.getElementById("consolaTarget").innerHTML = "";
+    Auxiliar.posicion = 0;
+    Auxiliar.temporal = 0;
+    Auxiliar.etiqueta = 0;
 }
 
 /**
