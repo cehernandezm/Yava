@@ -62,6 +62,10 @@ var For = /** @class */ (function () {
             salida.continue = salida.continue.concat(nodo.continue);
             salida.saltos = salida.saltos.concat(nodo.saltos);
             salida.retornos = salida.retornos.concat(nodo.retornos);
+            if (nodo.retornos.length > 0) {
+                salida.tipo = nodo.tipo;
+                salida.valor = nodo.valor;
+            }
         });
         salida.codigo.push(";#################################### CONTINUE | SALTO  ##################");
         salida.codigo = salida.codigo.concat(Auxiliar.escribirEtiquetas(salida.continue).codigo);

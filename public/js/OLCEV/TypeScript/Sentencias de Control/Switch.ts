@@ -35,6 +35,10 @@ class Switch implements Instruccion{
             salida.breaks = salida.breaks.concat(nodo.breaks);
             salida.continue = salida.continue.concat(nodo.continue);
             salida.retornos = salida.retornos.concat(nodo.retornos);
+            if(nodo.retornos.length > 0){
+                salida.tipo = nodo.tipo;
+                salida.valor = nodo.valor;
+            }
         });
 
         salida.codigo.push(";##################### SALTOS DE SALIDA ###############");

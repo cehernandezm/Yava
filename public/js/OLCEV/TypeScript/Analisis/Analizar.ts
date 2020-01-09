@@ -19,6 +19,7 @@ class Analizar {
         nodo.codigo = nodo.codigo.concat(Auxiliar.toUpperCase().codigo);
         nodo.codigo = nodo.codigo.concat(Auxiliar.toLoweCase().codigo);
         
+        let tam:number  = 1;
         this.instrucciones.forEach(clase => {
             let entorno: Entorno = new Entorno(id);
             if(clase instanceof Import){
@@ -31,6 +32,8 @@ class Analizar {
             if (clase instanceof Clase) {
                 
                 let resultado:Object = clase.primeraPasada(entorno);
+                let f:FuncionOLCEV = clase.entorno.buscarFuncion("main_ARREGLO_",[]);
+                if(f != null) tam = clase.tamaño;
                 if(!(resultado instanceof MensajeError)){
                     let res:Nodo = resultado as Nodo;
                     nodo.codigo = nodo.codigo.concat(res.codigo);
@@ -42,7 +45,7 @@ class Analizar {
         let temporal:String = Auxiliar.generarTemporal();
         nodo.codigo.push(temporal + " = P + 0");
         nodo.codigo.push("Stack[" + temporal + "] = H");
-        nodo.codigo.push("H = H + 1");
+        nodo.codigo.push("H = H + " + tam);
         nodo.codigo.push("call main_ARREGLO_");
         return nodo;
     }
