@@ -501,7 +501,10 @@ $("#playButton").on("click", function (e) {
  * OBTENER EL REPORTE ATRAVEZ DE SOCKETS
  */
 $("#reportButton").on('click', function (e) {
-    socket.emit("getReporte", "");
+    let analisis = new Reporte();
+    let resultado = analisis.generarReporte();
+    document.getElementById("bodyModalStack").innerHTML = resultado;
+    $("#modalStack").modal();
 });
 
 /**

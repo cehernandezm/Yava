@@ -61,6 +61,7 @@ var FuncionOLCEV = /** @class */ (function (_super) {
         nuevo.localizacion = Localizacion.STACK;
         nuevo.tamaño = this.tamaño;
         nuevo.posRelativaStack = 1;
+        this.padre = nuevo;
         this.parametros.forEach(function (element) {
             var d = element;
             d.parametro = true;

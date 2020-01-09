@@ -14,6 +14,8 @@ class FuncionOLCEV extends Valor implements Instruccion {
     override: number;
     identificador: String;
     objeto:String;
+    padre:Entorno;
+
 
     /**
      * CONSTRUCTOR DE LA CLASEs
@@ -60,6 +62,7 @@ class FuncionOLCEV extends Valor implements Instruccion {
         nuevo.localizacion = Localizacion.STACK;
         nuevo.tamaño = this.tamaño;
         nuevo.posRelativaStack = 1;
+        this.padre = nuevo;
 
         this.parametros.forEach(element => {
             let d: Declaracion = element as Declaracion;
