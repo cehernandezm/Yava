@@ -54,6 +54,7 @@
 "abstract"                                      return 'ABSTRACT'
 "final"                                         return 'FINAL'   
 "extends"                                       return 'EXTENDS' 
+"@Override"                                     return 'OVERRIDE'
 
 "int"                                           return 'INT'
 "double"                                        return 'DOUBLE'
@@ -107,7 +108,7 @@
 
 [A-Za-z_\ñ\Ñ][A-Za-z_0-9\ñ\Ñ]*                  return 'ID'
 <<EOF>>                                         {}
-.                                               { console.log("Error"); }//ERRORES
+.                                               { parser.arbol.errores.push({tipo : 'Lexico', mensaje: yytext , linea: yylloc.first_line , columna: yylloc.first_column}); }//ERRORES LEXICOS
 /lex
 
 
@@ -170,6 +171,7 @@ import : IMPORT CADENA PNTCOMA                                  { $$ = new Impor
 contenido : contenido declaracionClase                          { $$ = $1; $$.push($2);}
           | contenido import
           | declaracionClase                                    { $$ = []; $$.push($1); } 
+          | error                                               { parser.arbol.errores.push({tipo: 'Sintactico', mensaje : yytext , linea : this._$.first_line , columna: this._$.first_column}); }
           ;
 
 // ##############################################################
@@ -210,6 +212,7 @@ bloqueClase : bloqueClase bloque                            { $$ = $1; $$ = $$.c
 bloque : declaracionVariable PNTCOMA                                { $$ = $1; }
        | declaracionConstructor                                     { $$ = []; $$.push($1); }
        | funcion_statement                                          { $$ = []; $$.push($1); }
+       | OVERRIDE funcion_statement                                 { $$ = []; $2.override = 1; $$.push($2); }
        ;
 
 
@@ -246,6 +249,7 @@ instruccion : declaracionVariable PNTCOMA                                       
             | expresion PUNTO ID PARIZQ listaExpresiones PARDER PNTCOMA                   { $$ = []; $$.push(new accederAFunciones($1,$3,$5,@1.first_line,@1.first_column)); }
             | SUPER PARIZQ listaExpresiones PARDER PNTCOMA                                { $$ = []; $$.push(new super_sentece($3,@1.first_line,@1.first_column)); }
             | SUPER PARIZQ  PARDER PNTCOMA                                                { $$ = []; $$.push(new super_sentece([],@1.first_line,@1.first_column)); }
+            | error                                                                       { parser.arbol.errores.push({tipo: 'Sintactico', mensaje : yytext , linea : this._$.first_line , columna: this._$.first_column}); }
             ;
 
 
@@ -593,5 +597,6 @@ write_file : WRITEFILE PARIZQ CADENA COMA expresion PARDER                      
 
 
 parser.arbol ={
-    raiz: null
+    raiz: null,
+    errores: []
 };

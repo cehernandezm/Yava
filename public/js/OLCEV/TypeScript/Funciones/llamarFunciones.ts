@@ -61,9 +61,8 @@ class llamarFunciones implements Instruccion{
             salida.codigo.push(Auxiliar.crearLinea("Stack[" + posicion + "] = " + element.resultado,"Valor del parametro: " + i));
             i++;
         });
-
-
-        salida.codigo.push(Auxiliar.crearLinea("call " + identificador,"Llamamos a la funcion: " + this.id));
+        if(f.override === 1) salida.codigo.push(Auxiliar.crearLinea("call override_" + identificador,"Llamamos a la funcion: " + this.id));
+        else salida.codigo.push(Auxiliar.crearLinea("call " + identificador,"Llamamos a la funcion: " + this.id));
 
         if(f.tipo != Tipo.VOID){
             let posicion:String = Auxiliar.generarTemporal();

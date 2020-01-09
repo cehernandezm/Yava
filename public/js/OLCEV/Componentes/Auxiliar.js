@@ -30,7 +30,7 @@ var Auxiliar = /** @class */ (function () {
      * @param error clase error con toda la informacion del error
      */
     Auxiliar.agregarError = function (error) {
-        console.error(error);
+        addMensajeError(error.tipo, error.detalle + ", Archivo: " + error.archivo, error.l, error.c);
     };
     /**
      * METOODO QUE LLEVA EL CONTROL DE LAS POSICIONES ABSOLUTAS

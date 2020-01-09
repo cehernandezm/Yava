@@ -13,6 +13,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var FuncionOLCEV = /** @class */ (function (_super) {
     __extends(FuncionOLCEV, _super);
+    /**
+     * CONSTRUCTOR DE LA CLASEs
+     * @param id
+     * @param modificadores
+     * @param dimensiones
+     * @param tipo
+     * @param valor
+     * @param cuerpo
+     * @param parametros
+     * @param l
+     * @param c
+     * @param override
+     */
     function FuncionOLCEV(id, modificadores, dimensiones, tipo, valor, cuerpo, parametros, l, c, override) {
         var _this = _super.call(this, tipo, valor) || this;
         _this.tamaño = 0;
@@ -40,7 +53,10 @@ var FuncionOLCEV = /** @class */ (function (_super) {
         salida.codigo.push(";##########################################################################");
         salida.codigo.push(";################################# METODO " + this.id + " ######################");
         salida.codigo.push(";##########################################################################");
-        salida.codigo.push("proc " + this.identificador + "{");
+        if (this.override === 1)
+            salida.codigo.push("proc override_" + this.identificador + "{");
+        else
+            salida.codigo.push("proc " + this.identificador + "{");
         var nuevo = Auxiliar.clonarEntorno(entorno);
         nuevo.localizacion = Localizacion.STACK;
         nuevo.tamaño = this.tamaño;
@@ -200,7 +216,17 @@ var FuncionOLCEV = /** @class */ (function (_super) {
             visibilidad = Modificador.PUBLIC;
         this.atributos = Auxiliar.crearObjectoAtributos(visibilidad, isFinal, isStatic, isAbstract);
         this.construirIdentificador();
-        entorno.metodos.push(this); //------------------ AGREGAMOS LA FUNCION A LA LISTA DE METODOS
+        var re = entorno.buscarFuncion(this.identificador, []);
+        if (re !== null) {
+            if (this.override === 1)
+                entorno.metodos.push(this);
+            else {
+                var mensaje = new MensajeError("Semantico", "La funcion: " + this.id + " ya existe", entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+            }
+        }
+        else
+            entorno.metodos.push(this); //------------------ AGREGAMOS LA FUNCION A LA LISTA DE METODOS
         return 0;
     };
     /**

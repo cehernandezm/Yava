@@ -232,7 +232,6 @@ function new3D(texto) {
     editor.on("gutterClick", function (cm, n) {
         var info = cm.lineInfo(n);
         addBreakPoint(objectEditor.breakpoins, info.line);
-        console.log(objectEditor.breakpoins);
         cm.setGutterMarker(
             n,
             "breakpoints",
@@ -512,13 +511,29 @@ $("#reportButton").on('click', function (e) {
 function analizarCodigoOLCEV() {
     let ed = editorActual.editor;
     let codigo = ed.getValue();
+    inicializarDatos();
     listaClases = [];
     GramaticaOLCEV.parse(codigo);
     let analizar = GramaticaOLCEV.arbol.raiz;
-    let nodo = analizar.ejecutar("principal");
+    if (GramaticaOLCEV.arbol.errores.length > 0) {
+        GramaticaOLCEV.arbol.errores.forEach(element => {
+            addMensajeError(
+                element.tipo,
+                element.mensaje + ", Archivo: Principal",
+                element.linea,
+                element.columna
+            );
+        });
+        if (!$("#consolaTarget").is(":visible")) $("#consolaTarget").toggle();
+        GramaticaOLCEV.arbol.errores = [];
+    }
+    else {
+        let nodo = analizar.ejecutar("principal");
 
-    let texto = obtenerCodigo(nodo.codigo);
-    new3D(texto);
+        let texto = obtenerCodigo(nodo.codigo);
+        new3D(texto);
+    }
+
 }
 
 /**
@@ -606,6 +621,7 @@ function addMensajeError(tipo, mensaje, linea, columna) {
         columna +
         "</p>";
     $("#consolaTarget").append(salida);
+    if (!$("#consolaTarget").is(":visible")) $("#consolaTarget").toggle();
 }
 
 /**
@@ -629,22 +645,22 @@ $("#optimizarButton").on('click', function (e) {
         let primeraRegla = new Regla1(codigo);
         let optimizado = primeraRegla.optimizar();
 
-        
+
         let segundaRegla = new Regla2(optimizado);
         optimizado = segundaRegla.optimizar();
-        
+
         let R3 = new Regla3(optimizado);
         optimizado = R3.optimizar();
-        
+
         let R4 = new Regla4(optimizado);
         optimizado = R4.optimizar();
-        
+
         let sextaRegla = new Regla6(optimizado);
         optimizado = sextaRegla.optimizar();
 
 
 
-        
+
         let codigoFinal = "";
         optimizado.forEach(element => {
 
@@ -717,7 +733,7 @@ function isCuadruplo(linea) {
  * METODO PARA OBTENER UN TEMPORAL Y NO TIENE UN COMENTARIO ADYACENTE EJEMPLO T1//OPERACION
  */
 function limpiarTemporal(temp) {
-    if(temp === undefined) return "";
+    if (temp === undefined) return "";
     return temp.split(';')[0].trim();
 }
 
@@ -749,18 +765,18 @@ function isComentario(linea) {
  */
 function isOperacion(linea) {
     linea = linea.toLowerCase();
-    if(linea === "\n") return false;
-    if(linea.indexOf("l") === 0) return false;
-    if(linea.includes("if")) return false;
-    if(linea.indexOf("heap") === 0) return false;
-    if(linea.indexOf("stack") === 0) return false;
-    if(linea.includes("proc")) return false;
-    if(linea.includes("}")) return false;
-    if(linea.includes("call")) return false;
-    if(linea.includes("write")) return false;
-    if(linea.includes("goto")) return false;
-    if(linea.includes("print")) return false;
-    if(linea.includes("iffalse")) return false;
+    if (linea === "\n") return false;
+    if (linea.indexOf("l") === 0) return false;
+    if (linea.includes("if")) return false;
+    if (linea.indexOf("heap") === 0) return false;
+    if (linea.indexOf("stack") === 0) return false;
+    if (linea.includes("proc")) return false;
+    if (linea.includes("}")) return false;
+    if (linea.includes("call")) return false;
+    if (linea.includes("write")) return false;
+    if (linea.includes("goto")) return false;
+    if (linea.includes("print")) return false;
+    if (linea.includes("iffalse")) return false;
 
     return true;
 }

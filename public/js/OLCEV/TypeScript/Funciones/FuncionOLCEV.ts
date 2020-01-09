@@ -15,6 +15,19 @@ class FuncionOLCEV extends Valor implements Instruccion {
     identificador: String;
     objeto:String;
 
+    /**
+     * CONSTRUCTOR DE LA CLASEs
+     * @param id 
+     * @param modificadores 
+     * @param dimensiones 
+     * @param tipo 
+     * @param valor 
+     * @param cuerpo 
+     * @param parametros 
+     * @param l 
+     * @param c 
+     * @param override 
+     */
     constructor(id: String, modificadores: Array<Modificador>, dimensiones: number, tipo: Tipo, valor: Object, cuerpo: Array<Instruccion>, parametros: Array<Instruccion>, l: number, c: number, override: number) {
         super(tipo, valor);
         this.id = id;
@@ -41,7 +54,8 @@ class FuncionOLCEV extends Valor implements Instruccion {
         salida.codigo.push(";##########################################################################");
         salida.codigo.push(";################################# METODO " + this.id + " ######################");
         salida.codigo.push(";##########################################################################");
-        salida.codigo.push("proc " + this.identificador + "{");
+        if(this.override === 1) salida.codigo.push("proc override_" + this.identificador + "{");
+        else salida.codigo.push("proc " + this.identificador + "{");
         let nuevo: Entorno = Auxiliar.clonarEntorno(entorno);
         nuevo.localizacion = Localizacion.STACK;
         nuevo.tamaño = this.tamaño;
@@ -217,7 +231,14 @@ class FuncionOLCEV extends Valor implements Instruccion {
 
 
         this.construirIdentificador();
-        entorno.metodos.push(this); //------------------ AGREGAMOS LA FUNCION A LA LISTA DE METODOS
+        let re:FuncionOLCEV = entorno.buscarFuncion(this.identificador,[]);
+        if(re !== null){
+            if(this.override === 1) entorno.metodos.push(this);
+            else{
+                let mensaje:MensajeError = new MensajeError("Semantico","La funcion: " + this.id + " ya existe",entorno.archivo,this.l,this.c);
+                Auxiliar.agregarError(mensaje);
+            }
+        }else entorno.metodos.push(this); //------------------ AGREGAMOS LA FUNCION A LA LISTA DE METODOS
         return 0;
     }
 

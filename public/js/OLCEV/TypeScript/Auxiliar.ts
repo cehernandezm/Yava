@@ -1,3 +1,5 @@
+declare function addMensajeError(tipo:String, mensaje:String, linea:any, columna:any);
+
 class Auxiliar {
     public static temporal: number = 0;
     public static posicion: number = 0;
@@ -35,7 +37,7 @@ class Auxiliar {
      * @param error clase error con toda la informacion del error
      */
     public static agregarError(error: MensajeError) {
-        console.error(error);
+        addMensajeError(error.tipo,error.detalle + ", Archivo: " + error.archivo,error.l,error.c);
     }
 
 
