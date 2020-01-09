@@ -1,0 +1,57 @@
+class Nodo{
+    public String id;
+    public Nodo siguiente;
+    public Nodo anterior;
+	
+  	public Nodo(String id){
+      this.id = id;
+      siguiente = null;
+      anterior = null;
+    }
+    
+}
+
+class coso {
+    Nodo primero;
+    Nodo ultimo;
+    public static void main(String[] args){
+      	primero = null;
+        insertar("como");
+        insertar("hola");
+        
+        insertar("estas");
+       Nodo temp = buscar("comos");
+      if(temp == null){
+        println("No se encontro hola");
+      }
+    }
+	
+    void insertar(String id){
+      Nodo nuevo = crearNodo(id);
+      
+      if(primero == null){
+        primero = nuevo;
+        ultimo = nuevo;
+      }
+      else{
+        ultimo.siguiente = nuevo;
+        nuevo.anterior = ultimo;
+        ultimo = nuevo;
+      }
+    }
+  
+  	Nodo crearNodo(String id){
+      return new Nodo(id);
+    }
+  
+    Nodo buscar(String id){
+      Nodo temp = this.primero;
+      while(temp != null){
+        if(temp.id == id){
+          return temp;
+        }
+        temp = temp.siguiente;
+      }
+      return null;
+    }
+}

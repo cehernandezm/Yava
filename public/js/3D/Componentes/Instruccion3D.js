@@ -42,6 +42,8 @@ var Instruccion3D = /** @class */ (function () {
         this.almacenarDatosIniciales(this.listaInstrucciones);
         for (var i = 0; i < this.listaInstrucciones.length; i++) {
             var element = this.listaInstrucciones[i];
+            if (element === undefined)
+                return -777;
             //---------------------------- donde tenemos que parar --------------------------------------
             if (element.l >= para) {
                 this.listaDebugger.push({ linea: i, instrucciones: this.listaInstrucciones });
@@ -83,7 +85,9 @@ var Instruccion3D = /** @class */ (function () {
     Instruccion3D.prototype.siguienteDebug = function () {
         var _this = this;
         var lastNodo = this.listaDebugger[this.listaDebugger.length - 1];
-        if (lastNodo == null)
+        if (lastNodo === null)
+            return -777;
+        if (lastNodo === undefined)
             return -777;
         var element = lastNodo.instrucciones[lastNodo.linea];
         if (element instanceof Etiqueta || element instanceof Funcion) { }
@@ -117,8 +121,11 @@ var Instruccion3D = /** @class */ (function () {
                     return element.l;
                 }
             }
-            else
+            else {
+                if (element === undefined)
+                    return -777;
                 element.ejecutar(this.ambito);
+            }
         }
         if (lastNodo.linea + 1 >= lastNodo.instrucciones.length) {
             this.ambito.entornos.pop();

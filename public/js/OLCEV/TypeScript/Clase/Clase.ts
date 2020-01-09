@@ -135,6 +135,13 @@ class Clase implements Instruccion {
                 Auxiliar.agregarError(mensaje);
                 return mensaje;
             }
+            let atributos:Object = claseTemp.atributos;
+            let isFinal:Boolean = atributos['isFinal'] as Boolean;
+            if(isFinal){
+                let mensaje: MensajeError = new MensajeError("Semantico", "La clase " + this.extender + " es final no se puede extender", entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
             this.tamaño = claseTemp.tamaño;
             entorno.listaSimbolos = entorno.listaSimbolos.concat(claseTemp.entorno.listaSimbolos);
             entorno.metodos = entorno.metodos.concat(claseTemp.entorno.metodos);

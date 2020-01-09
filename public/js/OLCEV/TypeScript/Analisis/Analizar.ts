@@ -32,6 +32,7 @@ class Analizar {
             if (clase instanceof Clase) {
                 
                 let resultado:Object = clase.primeraPasada(entorno);
+                if(resultado instanceof MensajeError) return resultado;
                 let f:FuncionOLCEV = clase.entorno.buscarFuncion("main_ARREGLO_",[]);
                 if(f != null) tam = clase.tamaño;
                 if(!(resultado instanceof MensajeError)){

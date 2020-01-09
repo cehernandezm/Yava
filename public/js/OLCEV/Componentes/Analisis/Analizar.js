@@ -25,6 +25,8 @@ var Analizar = /** @class */ (function () {
             }
             if (clase instanceof Clase) {
                 var resultado = clase.primeraPasada(entorno);
+                if (resultado instanceof MensajeError)
+                    return resultado;
                 var f = clase.entorno.buscarFuncion("main_ARREGLO_", []);
                 if (f != null)
                     tam = clase.tamaño;

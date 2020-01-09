@@ -118,6 +118,13 @@ var Clase = /** @class */ (function () {
                 Auxiliar.agregarError(mensaje);
                 return mensaje;
             }
+            var atributos = claseTemp.atributos;
+            var isFinal_1 = atributos['isFinal'];
+            if (isFinal_1) {
+                var mensaje = new MensajeError("Semantico", "La clase " + this.extender + " es final no se puede extender", entorno.archivo, this.l, this.c);
+                Auxiliar.agregarError(mensaje);
+                return mensaje;
+            }
             this.tamaño = claseTemp.tamaño;
             entorno.listaSimbolos = entorno.listaSimbolos.concat(claseTemp.entorno.listaSimbolos);
             entorno.metodos = entorno.metodos.concat(claseTemp.entorno.metodos);

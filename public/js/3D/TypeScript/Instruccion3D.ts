@@ -48,6 +48,7 @@ class Instruccion3D {
         this.almacenarDatosIniciales(this.listaInstrucciones);
         for (let i = 0; i < this.listaInstrucciones.length; i++) {
             let element = this.listaInstrucciones[i];
+            if(element === undefined) return -777;
             //---------------------------- donde tenemos que parar --------------------------------------
             if (element.l >= para) {
                 this.listaDebugger.push({ linea: i, instrucciones: this.listaInstrucciones });
@@ -91,7 +92,8 @@ class Instruccion3D {
 
     siguienteDebug() {
         let lastNodo = this.listaDebugger[this.listaDebugger.length - 1];
-        if(lastNodo == null) return -777;
+        if(lastNodo === null) return -777;
+        if(lastNodo === undefined) return -777;
         let element = lastNodo.instrucciones[lastNodo.linea];
         if (element instanceof Etiqueta || element instanceof Funcion) { }
         else if (element instanceof CallFuncion) {
@@ -125,7 +127,10 @@ class Instruccion3D {
                     lastNodo.linea = redirigir(lastNodo.instrucciones, posicion, lastNodo.linea);
                     return element.l;
                 }
-            } else element.ejecutar(this.ambito);
+            } else {
+                if(element === undefined) return -777;
+                element.ejecutar(this.ambito);
+            }
         }
 
 

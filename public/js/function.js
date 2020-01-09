@@ -122,7 +122,7 @@ function handleFilePascal() {
     let fileReader = new FileReader();
     fileReader.onload = function (fileLoadedEvent) {
         let text = fileLoadedEvent.target.result;
-        newPascal(text);
+        newOLCEV(text);
     };
     fileReader.readAsText(file, "UTF-8");
 }
@@ -149,7 +149,7 @@ function handleFile3D() {
 }
 
 /**
- * ARCHIVO PARA CREAR UN NUEVO ARCHIVO DE PASCAL
+ * ARCHIVO PARA CREAR UN NUEVO ARCHIVO DE OLCEV
  */
 function newOLCEV(texto) {
     $("#nav-tab").append(
