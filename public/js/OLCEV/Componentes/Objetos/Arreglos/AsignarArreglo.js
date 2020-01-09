@@ -95,11 +95,15 @@ var AsignarArreglo = /** @class */ (function () {
         salida.codigo.push(";######################## ACCEDIENDO AL ARREGLO ####################################");
         var posDinamica = Auxiliar.generarTemporal();
         salida.codigo.push(posDinamica + " = " + nodo.resultado);
+        var saltoError = Auxiliar.generarEtiqueta();
+        var saltoV = Auxiliar.generarEtiqueta();
         for (var i = 0; i < lista.length; i++) {
             var valor = Auxiliar.generarTemporal();
             var limite = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(posiciones[i] + " < 0", saltoError), "Si es un limite negativo"));
             salida.codigo.push(Auxiliar.crearLinea(posDinamica + " = " + posDinamica + " + 1", "Nos movemos al limite inferior"));
             salida.codigo.push(Auxiliar.crearLinea(limite + " = Heap[" + posDinamica + "]", "Obtenemos el limite inferior"));
+            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(posiciones[i] + " > " + limite, saltoError), "Si es mayor al limite"));
             salida.codigo.push(posDinamica + " = " + posDinamica + " + 1");
             salida.codigo.push(valor + " = " + posiciones[i]);
             salida.codigo.push(posDinamica + " = " + posDinamica + " + " + valor);
@@ -107,6 +111,10 @@ var AsignarArreglo = /** @class */ (function () {
                 salida.codigo.push(posDinamica + " = Heap[" + posDinamica + "]");
             }
         }
+        salida.codigo.push(Auxiliar.saltoIncondicional(saltoV));
+        salida.codigo.push(saltoError + ":");
+        salida.codigo.push("exit(1)");
+        salida.codigo.push(saltoV + ":");
         salida.resultado = posDinamica;
         salida.id = nodo.id;
         return salida;

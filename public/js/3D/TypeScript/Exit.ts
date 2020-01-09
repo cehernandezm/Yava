@@ -40,6 +40,11 @@ class Exit {
             a.removeNode();
             ambito.cadena = null;
         }
+        else if(opcion === 1){
+            addMensajeError("Semantico","IndexOutofbounds Exception",this.l,this.c);
+            return new MensajeError("", "", 0, 0);
+            
+        }
 
         return -1;
     }

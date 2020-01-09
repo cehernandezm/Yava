@@ -231,7 +231,7 @@ case 69:
  this.$ = []; this.$.push(new Declaracion($$[$0-3],$$[$0-5],Tipo.ARREGLO,new Arreglo($$[$0-4].tipo,$$[$0-4].valor),_$[$0-5].first_line,_$[$0-5].first_column,$$[$0-2])); this.$.push(new Asignacion($$[$0-3],$$[$0],_$[$0-5].first_line,_$[$0-5].first_column,0)); 
 break;
 case 70:
- this.$ = []; this.$.push(new Declaracion($$[$0-1],null,Tipo.ARREGLO,new Arreglo($$[$0-4].tipo,$$[$0-4].valor),_$[$0-4].first_line,_$[$0-4].first_column,$$[$0-2])); this.$.push(new Asignacion($$[$0-3],$$[$0],_$[$0-4].first_line,_$[$0-4].first_column,0)); 
+ this.$ = []; this.$.push(new Declaracion($$[$0-3],null,Tipo.ARREGLO,new Arreglo($$[$0-4].tipo,$$[$0-4].valor),_$[$0-4].first_line,_$[$0-4].first_column,$$[$0-2])); this.$.push(new Asignacion($$[$0-3],$$[$0],_$[$0-4].first_line,_$[$0-4].first_column,0)); 
 break;
 case 71:
  this.$ = []; this.$.push(new Declaracion($$[$0-2],null,Tipo.ID,$$[$0-3],_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-2])); this.$.push(new Asignacion($$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column,0)); 

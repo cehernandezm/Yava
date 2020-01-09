@@ -115,11 +115,15 @@ class AsignarArreglo implements Instruccion{
         salida.codigo.push(";######################## ACCEDIENDO AL ARREGLO ####################################");
         let posDinamica:String = Auxiliar.generarTemporal();
         salida.codigo.push(posDinamica + " = " + nodo.resultado);
+        let saltoError:String = Auxiliar.generarEtiqueta();
+        let saltoV:String = Auxiliar.generarEtiqueta();
         for(let i = 0; i < lista.length; i++){
             let valor:String = Auxiliar.generarTemporal();
             let limite:String = Auxiliar.generarTemporal();
+            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(posiciones[i] + " < 0",saltoError),"Si es un limite negativo"));
             salida.codigo.push(Auxiliar.crearLinea(posDinamica + " = " + posDinamica + " + 1","Nos movemos al limite inferior"));
             salida.codigo.push(Auxiliar.crearLinea(limite + " = Heap[" + posDinamica + "]","Obtenemos el limite inferior"));
+            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(posiciones[i] + " > " + limite,saltoError),"Si es mayor al limite"));
             salida.codigo.push(posDinamica + " = " + posDinamica + " + 1");
             salida.codigo.push(valor +  " = " + posiciones[i] );
             salida.codigo.push(posDinamica + " = " + posDinamica + " + " + valor);
@@ -127,6 +131,11 @@ class AsignarArreglo implements Instruccion{
                 salida.codigo.push(posDinamica + " = Heap[" + posDinamica + "]");
             }
         }
+        salida.codigo.push(Auxiliar.saltoIncondicional(saltoV));
+        salida.codigo.push(saltoError + ":");
+        salida.codigo.push("exit(1)");
+
+        salida.codigo.push(saltoV + ":");
         salida.resultado = posDinamica;
         salida.id = nodo.id;
         return salida;
