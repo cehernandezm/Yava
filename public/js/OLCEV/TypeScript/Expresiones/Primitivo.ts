@@ -158,15 +158,7 @@ class Primitivo extends Valor implements Instruccion {
             nodo.posicion = posHeap;
 
         }
-        if (s.tipo === Tipo.ID) {
-            let saltoError: String = Auxiliar.generarEtiqueta();
-            let salto: String = Auxiliar.generarEtiqueta();
-            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(temporal + " == 0",saltoError),"Verificamos si es null la variable: " + s.id));
-            nodo.codigo.push(Auxiliar.saltoIncondicional(salto));
-            nodo.codigo.push(saltoError + ":");
-            nodo.codigo.push("exit(2)");
-            nodo.codigo.push(salto + ":");
-        }
+        
         return nodo;
     }
 
