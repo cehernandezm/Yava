@@ -64,7 +64,7 @@ class AsignarArreglo implements Instruccion{
         }
         salida.id = nodoID.id;
 
-        salida.codigo.push(Auxiliar.crearLinea("Heap[" + acceso.resultado + "] = " + value.resultado,"Seteamos el valor en la posicion indicada"));
+        salida.codigo.push(Auxiliar.crearLinea("Heap[" + acceso.posicion + "] = " + value.resultado,"Seteamos el valor en la posicion indicada"));
         return salida;
 
         
@@ -114,6 +114,7 @@ class AsignarArreglo implements Instruccion{
 
         salida.codigo.push(";######################## ACCEDIENDO AL ARREGLO ####################################");
         let posDinamica:String = Auxiliar.generarTemporal();
+        let posFinal:String  = Auxiliar.generarTemporal();
         salida.codigo.push(posDinamica + " = " + nodo.resultado);
         let saltoError:String = Auxiliar.generarEtiqueta();
         let saltoV:String = Auxiliar.generarEtiqueta();
@@ -127,9 +128,10 @@ class AsignarArreglo implements Instruccion{
             salida.codigo.push(posDinamica + " = " + posDinamica + " + 1");
             salida.codigo.push(valor +  " = " + posiciones[i] );
             salida.codigo.push(posDinamica + " = " + posDinamica + " + " + valor);
-            if( i + 1 < lista.length){
-                salida.codigo.push(posDinamica + " = Heap[" + posDinamica + "]");
-            }
+            salida.codigo.push(posFinal + " = " + posDinamica);
+            salida.codigo.push(posDinamica + " = Heap[" + posDinamica + "]");
+            
+            
         }
         salida.codigo.push(Auxiliar.saltoIncondicional(saltoV));
         salida.codigo.push(saltoError + ":");
@@ -138,6 +140,7 @@ class AsignarArreglo implements Instruccion{
         salida.codigo.push(saltoV + ":");
         salida.resultado = posDinamica;
         salida.id = nodo.id;
+        salida.posicion =posFinal;
         return salida;
     }
 

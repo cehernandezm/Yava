@@ -1,3 +1,4 @@
+declare function getClase(id:any):any;
 class crearArreglo extends Valor implements Instruccion {
     tipo: Tipo;
     valor: Object;
@@ -45,8 +46,12 @@ class crearArreglo extends Valor implements Instruccion {
         salida.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentamos el Heap"));
         salida.codigo.push(salto + ":");
         salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(contador + " >= " + dimension0.resultado, falsa), ""));
+        
+        
         salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0", "valor inicial de la dimension 0"));
         salida.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentamos el Heap"));
+        
+
         salida.codigo.push(Auxiliar.crearLinea(contador + " = " + contador + " + 1", "Aumentamos el contador"));
         salida.codigo.push(Auxiliar.saltoIncondicional(salto));
         salida.codigo.push(falsa + ":");
@@ -64,7 +69,7 @@ class crearArreglo extends Valor implements Instruccion {
             let falsah: String = Auxiliar.generarEtiqueta();
             let saltoh: String = Auxiliar.generarEtiqueta();
 
-            
+
             resultado = this.dimensiones[i].ejecutar(entorno);
             if (resultado instanceof MensajeError) return resultado;
             let di: Nodo = resultado as Nodo;
@@ -75,9 +80,9 @@ class crearArreglo extends Valor implements Instruccion {
             }
 
             let limdi: String = Auxiliar.generarTemporal();
-            let forb:String = Auxiliar.generarTemporal();
-            let falsab:String = Auxiliar.generarEtiqueta();
-            let saltob:String = Auxiliar.generarEtiqueta();
+            let forb: String = Auxiliar.generarTemporal();
+            let falsab: String = Auxiliar.generarEtiqueta();
+            let saltob: String = Auxiliar.generarEtiqueta();
             let posActual: String = Auxiliar.generarTemporal();
 
             salida.codigo.push(";################################### FOR QUE RECORRE LOS HIJOS DEL ARREGLO ########################");
@@ -92,9 +97,9 @@ class crearArreglo extends Valor implements Instruccion {
             salida.codigo.push(posActual + "= H + 0");
 
             salida.codigo = salida.codigo.concat(di.codigo);
-            
-            
-            
+
+
+
 
             salida.codigo.push(Auxiliar.crearLinea(limdi + " = " + di.resultado + " - 1", "Calculamos el limite de la dimension"));
             salida.codigo.push(Auxiliar.crearLinea("Heap[H] = " + di.resultado, "Almacenamos su tamanio"));
@@ -105,7 +110,7 @@ class crearArreglo extends Valor implements Instruccion {
             salida.codigo.push(";##################################### FOR QUE INICIALIZARA LOS VALORES ###########################");
             salida.codigo.push(forb + " = 0");
             salida.codigo.push(saltob + ":");
-            salida.codigo.push(Auxiliar.saltoCondicional(forb + " >= " + di.resultado,falsab));
+            salida.codigo.push(Auxiliar.saltoCondicional(forb + " >= " + di.resultado, falsab));
             salida.codigo.push("Heap[H] = 0");
             salida.codigo.push("H = H + 1");
             salida.codigo.push(forb + "  = " + forb + " + 1");
@@ -121,7 +126,7 @@ class crearArreglo extends Valor implements Instruccion {
             salida.codigo.push(falsah + ":");
             salida.codigo.push(";###################### FIN FOR QUE SE ENCARGARA DE RELACION EL PADRE CON SUS HIJOS #####################");
 
-            salida.codigo.push(Auxiliar.crearLinea(posDinamica + " = " + posDinamica + " + 2","Nos movemos 2 espacios (tamanio y limite)"));
+            salida.codigo.push(Auxiliar.crearLinea(posDinamica + " = " + posDinamica + " + 2", "Nos movemos 2 espacios (tamanio y limite)"));
             salida.codigo.push(fori + " = " + fori + " + 1");
             salida.codigo.push(Auxiliar.saltoIncondicional(saltoi));
             salida.codigo.push(falsai + ":");

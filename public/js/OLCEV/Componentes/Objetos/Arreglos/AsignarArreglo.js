@@ -49,7 +49,7 @@ var AsignarArreglo = /** @class */ (function () {
             return mensaje;
         }
         salida.id = nodoID.id;
-        salida.codigo.push(Auxiliar.crearLinea("Heap[" + acceso.resultado + "] = " + value.resultado, "Seteamos el valor en la posicion indicada"));
+        salida.codigo.push(Auxiliar.crearLinea("Heap[" + acceso.posicion + "] = " + value.resultado, "Seteamos el valor en la posicion indicada"));
         return salida;
     };
     /**
@@ -94,6 +94,7 @@ var AsignarArreglo = /** @class */ (function () {
         }
         salida.codigo.push(";######################## ACCEDIENDO AL ARREGLO ####################################");
         var posDinamica = Auxiliar.generarTemporal();
+        var posFinal = Auxiliar.generarTemporal();
         salida.codigo.push(posDinamica + " = " + nodo.resultado);
         var saltoError = Auxiliar.generarEtiqueta();
         var saltoV = Auxiliar.generarEtiqueta();
@@ -107,9 +108,8 @@ var AsignarArreglo = /** @class */ (function () {
             salida.codigo.push(posDinamica + " = " + posDinamica + " + 1");
             salida.codigo.push(valor + " = " + posiciones[i]);
             salida.codigo.push(posDinamica + " = " + posDinamica + " + " + valor);
-            if (i + 1 < lista.length) {
-                salida.codigo.push(posDinamica + " = Heap[" + posDinamica + "]");
-            }
+            salida.codigo.push(posFinal + " = " + posDinamica);
+            salida.codigo.push(posDinamica + " = Heap[" + posDinamica + "]");
         }
         salida.codigo.push(Auxiliar.saltoIncondicional(saltoV));
         salida.codigo.push(saltoError + ":");
@@ -117,6 +117,7 @@ var AsignarArreglo = /** @class */ (function () {
         salida.codigo.push(saltoV + ":");
         salida.resultado = posDinamica;
         salida.id = nodo.id;
+        salida.posicion = posFinal;
         return salida;
     };
     /**

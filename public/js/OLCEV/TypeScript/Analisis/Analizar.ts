@@ -35,6 +35,7 @@ class Analizar {
                 if(resultado instanceof MensajeError) return resultado;
                 let f:FuncionOLCEV = clase.entorno.buscarFuncion("main_ARREGLO_",[]);
                 if(f != null) claseActual = clase;
+                console.log(clase);
                 if(!(resultado instanceof MensajeError)){
                     let res:Nodo = resultado as Nodo;
                     nodo.codigo = nodo.codigo.concat(res.codigo);
@@ -51,6 +52,7 @@ class Analizar {
         nodo.codigo.push("P = P + " + Auxiliar.posicion);
         nodo.codigo.push(temporal + " = P + 0");
         nodo.codigo.push("Stack[" + temporal + "] = H");
+        nodo.codigo.push("H = H + " + claseActual.tamaño);
         nodo.codigo = nodo.codigo.concat(claseActual.codigo);
         nodo.codigo.push("call main_ARREGLO_");
         return nodo;

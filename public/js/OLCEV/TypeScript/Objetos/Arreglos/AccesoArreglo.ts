@@ -51,7 +51,7 @@ class AccesoArreglo implements Instruccion{
         salida.valor = acceso.valor;
         salida.id = acceso.id;
         
-        salida.codigo.push(Auxiliar.crearLinea(temporal + " = Heap[" + acceso.resultado + "]","Obtenemos el valor de la posicion"));
+        salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + acceso.resultado  ,"Obtenemos el valor de la posicion"));
         salida.resultado = temporal;
         salida.localizacion = Localizacion.HEAP;
         salida.posicion = acceso.resultado;

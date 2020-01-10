@@ -30,6 +30,7 @@ var Analizar = /** @class */ (function () {
                 var f = clase.entorno.buscarFuncion("main_ARREGLO_", []);
                 if (f != null)
                     claseActual = clase;
+                console.log(clase);
                 if (!(resultado instanceof MensajeError)) {
                     var res = resultado;
                     nodo.codigo = nodo.codigo.concat(res.codigo);
@@ -45,6 +46,7 @@ var Analizar = /** @class */ (function () {
         nodo.codigo.push("P = P + " + Auxiliar.posicion);
         nodo.codigo.push(temporal + " = P + 0");
         nodo.codigo.push("Stack[" + temporal + "] = H");
+        nodo.codigo.push("H = H + " + claseActual.tamaño);
         nodo.codigo = nodo.codigo.concat(claseActual.codigo);
         nodo.codigo.push("call main_ARREGLO_");
         return nodo;
