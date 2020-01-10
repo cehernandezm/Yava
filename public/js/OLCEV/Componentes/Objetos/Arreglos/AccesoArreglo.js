@@ -38,18 +38,7 @@ var AccesoArreglo = /** @class */ (function () {
         salida.tipo = acceso.tipo;
         salida.valor = acceso.valor;
         salida.id = acceso.id;
-        if (salida.tipo === Tipo.ID) {
-            var saltoError = Auxiliar.generarEtiqueta();
-            var salto = Auxiliar.generarEtiqueta();
-            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(acceso.resultado + " == 0", saltoError), "Verificamos si es null pos arreglo"));
-            salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + acceso.resultado, "Obtenemos el valor de la posicion"));
-            salida.codigo.push(Auxiliar.saltoIncondicional(salto));
-            salida.codigo.push(saltoError + ":");
-            salida.codigo.push("exit(2)");
-            salida.codigo.push(salto + ":");
-        }
-        else
-            salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + acceso.resultado, "Obtenemos el valor de la posicion"));
+        salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + acceso.resultado, "Obtenemos el valor de la posicion"));
         salida.resultado = temporal;
         salida.localizacion = Localizacion.HEAP;
         salida.posicion = acceso.resultado;

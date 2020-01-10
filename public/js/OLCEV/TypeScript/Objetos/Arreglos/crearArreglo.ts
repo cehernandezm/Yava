@@ -47,8 +47,8 @@ class crearArreglo extends Valor implements Instruccion {
         salida.codigo.push(salto + ":");
         salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(contador + " >= " + dimension0.resultado, falsa), ""));
         
-        
-        salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0", "valor inicial de la dimension 0"));
+        if(this.tipo === Tipo.ID)  salida.codigo.push(Auxiliar.crearLinea("Heap[H] = -1", "valor inicial de la dimension 0"));
+        else  salida.codigo.push(Auxiliar.crearLinea("Heap[H] = 0", "valor inicial de la dimension 0"));
         salida.codigo.push(Auxiliar.crearLinea("H = H + 1", "Aumentamos el Heap"));
         
 
@@ -111,7 +111,8 @@ class crearArreglo extends Valor implements Instruccion {
             salida.codigo.push(forb + " = 0");
             salida.codigo.push(saltob + ":");
             salida.codigo.push(Auxiliar.saltoCondicional(forb + " >= " + di.resultado, falsab));
-            salida.codigo.push("Heap[H] = 0");
+            if(this.tipo === Tipo.ID)  salida.codigo.push(Auxiliar.crearLinea("Heap[H] = -1", "valor inicial de la dimension 0"));
+            else salida.codigo.push("Heap[H] = 0");
             salida.codigo.push("H = H + 1");
             salida.codigo.push(forb + "  = " + forb + " + 1");
             salida.codigo.push(Auxiliar.saltoIncondicional(saltob));
