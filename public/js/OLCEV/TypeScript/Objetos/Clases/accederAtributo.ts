@@ -62,11 +62,16 @@ class accederAtributo implements Instruccion{
             let posicion:String = Auxiliar.generarTemporal();
             let posicionHeap:String = Auxiliar.generarTemporal();
             let temporal:String = Auxiliar.generarTemporal();
-            
+            let saltoError:String = Auxiliar.generarEtiqueta();
+            let salto:String = Auxiliar.generarEtiqueta();
             salida.codigo.push(Auxiliar.crearLinea(posicion + " = " + nodo.resultado,"Posicion del objeto"));
+            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(nodo.resultado + " == 0",saltoError),"Verificar si es null atributo"));
             salida.codigo.push(Auxiliar.crearLinea(posicionHeap + " = " + posicion + " + " + simbolo.posRelativa,"Nos movemos a la posicion del atributo"));
             salida.codigo.push(Auxiliar.crearLinea(temporal + " = Heap[" + posicionHeap + "]","Obtenemos el valor del atributo: " + simbolo.id));
-
+            salida.codigo.push(Auxiliar.saltoIncondicional(salto));
+            salida.codigo.push(saltoError + ":");
+            salida.codigo.push("exit(2)");
+            salida.codigo.push(salto + ":");
             salida.tipo = simbolo.tipo;
             salida.atributos = simbolo.atributo;
             salida.verdaderas = simbolo.verdaderas;

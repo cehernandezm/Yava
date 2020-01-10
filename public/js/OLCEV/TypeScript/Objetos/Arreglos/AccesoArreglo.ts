@@ -50,8 +50,18 @@ class AccesoArreglo implements Instruccion{
         salida.tipo = acceso.tipo;
         salida.valor = acceso.valor;
         salida.id = acceso.id;
-        
+        if (salida.tipo === Tipo.ID) {
+            let saltoError: String = Auxiliar.generarEtiqueta();
+            let salto: String = Auxiliar.generarEtiqueta();
+            salida.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(acceso.resultado + " == 0",saltoError),"Verificamos si es null pos arreglo"));
+            salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + acceso.resultado  ,"Obtenemos el valor de la posicion"));
+            salida.codigo.push(Auxiliar.saltoIncondicional(salto));
+            salida.codigo.push(saltoError + ":");
+            salida.codigo.push("exit(2)");
+            salida.codigo.push(salto + ":");
+        }else
         salida.codigo.push(Auxiliar.crearLinea(temporal + " = " + acceso.resultado  ,"Obtenemos el valor de la posicion"));
+        
         salida.resultado = temporal;
         salida.localizacion = Localizacion.HEAP;
         salida.posicion = acceso.resultado;

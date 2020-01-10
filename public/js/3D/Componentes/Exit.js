@@ -33,6 +33,11 @@ var Exit = /** @class */ (function () {
             addMensajeError("Semantico", "IndexOutofbounds Exception", this.l, this.c);
             return new MensajeError("", "", 0, 0);
         }
+        else if (opcion === 2) {
+            console.log("error");
+            addMensajeError("Semantico", "NullException", this.l, this.c);
+            return new MensajeError("", "", 0, 0);
+        }
         return -1;
     };
     return Exit;

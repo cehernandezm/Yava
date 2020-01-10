@@ -47,7 +47,7 @@ class Primitivo extends Valor implements Instruccion {
                         return mensaje;
                     }
 
-                    let salida:Nodo = new Nodo([]);
+                    let salida: Nodo = new Nodo([]);
                     salida.tipo = Tipo.CLASE;
                     salida.id = this.valor.toString();
                     salida.valor = this.valor.toString();
@@ -133,6 +133,8 @@ class Primitivo extends Valor implements Instruccion {
         }
 
 
+
+
         if (s.atributo['isStatic']) {
             nodo.codigo.push(Auxiliar.crearLinea(temporal + " = Stack[" + s.posAbsoluta + "]", "Accedemos a la variable estatica " + s.id));
             nodo.localizacion = Localizacion.STACK;
@@ -155,6 +157,15 @@ class Primitivo extends Valor implements Instruccion {
             nodo.localizacion = Localizacion.HEAP;
             nodo.posicion = posHeap;
 
+        }
+        if (s.tipo === Tipo.ID) {
+            let saltoError: String = Auxiliar.generarEtiqueta();
+            let salto: String = Auxiliar.generarEtiqueta();
+            nodo.codigo.push(Auxiliar.crearLinea(Auxiliar.saltoCondicional(temporal + " == 0",saltoError),"Verificamos si es null la variable: " + s.id));
+            nodo.codigo.push(Auxiliar.saltoIncondicional(salto));
+            nodo.codigo.push(saltoError + ":");
+            nodo.codigo.push("exit(2)");
+            nodo.codigo.push(salto + ":");
         }
         return nodo;
     }
